@@ -28,7 +28,7 @@ class MessageHandler {
 
     if (!isRegistered) return;
 
-    if (message === "Chizu"){
+    if (message === "/chizu"){
       res.send(
         responFormatter.line("Chizu ready for duty sir!").responAsText()
       );
