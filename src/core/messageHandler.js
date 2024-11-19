@@ -1,5 +1,6 @@
 const { checkContact, saveContact, removeContact } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
+const Iklan = require("./IklanChizu");
 const GeminiAi = require("./geminiAi");
 const OpenAiLocal = require("./openAi");
 const StickerWa = require("./stickerWa");
@@ -10,6 +11,13 @@ class MessageHandler {
     const isRegistered = await checkContact(from);
 
     const responFormatter = new ResponFormatter();
+    const iklan = new Iklan();
+    
+    if (message.includes("revandastore")) {
+      res.send(
+        responFormatter.line(iklan.getIklan()).responAsText()
+      );
+    }
 
     if (message === "/start") {
       if (!isRegistered) await saveContact(from);
@@ -109,12 +117,6 @@ Baik kak, ada yang bisa chizu bantu?
 
       return res.send(
         responFormatter.responSticker(await StickerWa.create(bufferImage))
-      );
-    }
-
-    if (message.includes("revandastore")) {
-      res.send(
-        responFormatter.line("Terdeteksi ngirim link").responAsText()
       );
     }
 
