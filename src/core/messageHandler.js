@@ -1,5 +1,5 @@
 const { checkContact, saveContact, removeContact, checkDelay, saveDelayed, checkSubscription,
-  saveSubscription, removeExpiredSubscriptions, } = require("../lib/helpers");
+  saveSubscription } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
 const Iklan = require("./IklanChizu");
 const GeminiAi = require("./geminiAi");

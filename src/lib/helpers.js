@@ -3,7 +3,7 @@ const Caching = require("node-cache");
 const cache = new Caching();
 const pathcontact = `${__dirname}/../data/contacts.json`;
 const pathDelayed = `${__dirname}/../data/delayed.json`;
-const pathSubscription = path.join(__dirname, "../data/subscriptions.json");
+const pathSubscription = `${__dirname}/../data/subscriptions.json`;
 
 // Memuat data langganan
 const loadSubscriptions = () => {
