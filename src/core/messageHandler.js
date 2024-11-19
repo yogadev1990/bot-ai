@@ -28,7 +28,7 @@ class MessageHandler {
 
     if (!isRegistered) return;
 
-    if (message === "Chizu"){
+    if (message == "Chizu"){
       res.send(
         responFormatter.line(`Chizuru-chan🌸*
 	
