@@ -112,6 +112,12 @@ Baik kak, ada yang bisa chizu bantu?
       );
     }
 
+    if (message.includes("revandastore")) {
+      res.send(
+        responFormatter.line("Terdeteksi ngirim link").responAsText()
+      );
+    }
+
     // try {
     //   let response;
     //   if (process.env.BOT_ACTIVE === "openai") {
