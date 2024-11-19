@@ -28,9 +28,13 @@ class MessageHandler {
 
     if (!isRegistered) return;
 
-    if (message === "/chizu"){
+    if (message === "Chizu"){
       res.send(
-        responFormatter.line("Chizu ready for duty sir!").responAsText()
+        responFormatter.line(`Chizuru-chan🌸*
+	
+どうも ありがとう ございます ~~
+Iya tau, chizu cantik, makasih kak ${from}<3
+ketik *menu* untuk membuka list command yaa`).responAsText()
       );
     }
     //handle sticker command
