@@ -1,8 +1,22 @@
 class Iklan {
     constructor(pesanArray = []) {
       this.pesanArray = pesanArray.length ? pesanArray : [
-        `Pesan default 1`,
-        `Pesan default 2`
+        `> Mang bajirot jalan ke hora  
+> Bajirot pergi, sedihlah minato
+> Nyari tempat Top Up Terpercaya?
+> Ya cuma di Revanda Store bro`,
+        `👥 : Siapa namamu tuan? 
+👤 : Namaku Dis!
+👥 : Dis apa?
+👤 : Disini! Revanda Store tempat Top up Game Termurah & Terpercaya, serba otomatis, anti drama clone & scam🔥`,
+        `> Jalan-jalan ke penjara cuervo
+> Ke cuervo mengajak adala
+> Hari gini masih kena scam bro?
+> Top up di web Revanda Store aja laa`,
+        `> Iri dengan temen yang punya banyak skin? Tenang, kamu juga bisa kok. Top up termurah, legal, dan terpercaya hanya di Revanda Store🔥`,
+        `> Ke kota naga membeli Crysta
+> Crysta dibeli, spina habis
+Ga itu bukan pantun, cuma mau bilang: Spina mu abis? gasin ke Revanda Store, Anti drama scam & clone🔥`
       ];
       this.cachedIklan = null;
     }
@@ -15,12 +29,23 @@ class Iklan {
       const menit = waktuJakarta.getMinutes().toString().padStart(2, '0');
       const pesanAcak = this.pesanArray[Math.floor(Math.random() * this.pesanArray.length)];
   
-      return `🎮 *Revanda Store* 🎮
-  
-  ${pesanAcak}
-  
-  ╔ ${hari}, ${jam}:${menit} WIB
-  ╚〘 Revanda Store 〙`;
+      return `🎮 *Revanda Store: Toram Online* 🎮
+
+${pesanAcak}
+
+*Buy & Sell list:*
+- Buy Spina PM Rate, terima ecer
+- Sell Spina & Top up Orb Via Login (https://revandastore.com/games/toram-online)
+- Joki Main Quest NO MOD ft. Harriet
+- Akun 1k Stack SS II / SS I
+
+*Layanan Lain:*
+- Top Up ML (WDP 26k), FF, PUBG, Genshin, dll. termurah di revandastore.com
+- Sewa bot GC WA Guild Toram (https://revandastore.com/katalog/11)
+
+⚠ torampedia.my.id/scammerlist
+╔ ${hari}, ${jam}:${menit} WIB
+╚〘 Revanda Store 〙`;
     }
   
     getIklan() {
