@@ -24,7 +24,11 @@ class MessageHandler {
         responFormatter.line("Bot inactive, see you later!").responAsText()
       );
     }
-
+    if (message === "Chizu") {
+      return res.send(
+        responFormatter.line("Ya kak? ada yang bisa chizu bantu?").responAsText()
+      );
+    }
     if (!isRegistered) return;
 
     // Command untuk menambahkan grup berlangganan
