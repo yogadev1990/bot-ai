@@ -1,4 +1,5 @@
-const { checkContact, saveContact, removeContact, checkDelay, saveDelayed } = require("../lib/helpers");
+const { checkContact, saveContact, removeContact, checkDelay, saveDelayed, checkSubscription,
+  saveSubscription, removeExpiredSubscriptions, } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
 const Iklan = require("./IklanChizu");
 const GeminiAi = require("./geminiAi");
@@ -9,11 +10,12 @@ class MessageHandler {
   async process(req, res) {
     const { message, bufferImage, from, participant } = req.body;
     const isRegistered = await checkContact(from);
+    const isSubscribed = await checkSubscription(from);
 
     const responFormatter = new ResponFormatter();
     const iklan = new Iklan();
     
-    if (message.includes("revandastore")) {
+    if (message.includes("revandastore") && !isSubscribed) {
       const canSendAd = checkDelay(from); // Cek delay pengiriman
 
       if (canSendAd) {
@@ -22,11 +24,7 @@ class MessageHandler {
 
         // Simpan waktu pengiriman terakhir
         saveDelayed(from);
-      } else {
-        res.send(
-          responFormatter.line("Iklan sudah dikirim, tunggu beberapa saat lagi.").responAsText()
-        );
-      }
+      } else {}
     }
 
     if (message === "/start") {
@@ -46,73 +44,33 @@ class MessageHandler {
 
     if (!isRegistered) return;
 
-    if (message == "/chizu"){
-      res.send(
-        responFormatter.line(`*Chizuru-chan🌸*
-	
-どうも ありがとう ございます ~~
-Iya tau, chizu cantik, makasih kak @${participant}<3
-ketik *menu* untuk membuka list command yaa`).responAsText()
-      );
-    }
-    if (message == "/menu"){
-      res.send(
-        responFormatter.line(`*Chizuru-chan🌸*
-		
-Baik kak, ada yang bisa chizu bantu?
+    if (message === "/menu") {
+      const isSubscribed = checkSubscription(from);
 
-╔══〘 *TORAM MENU* 〙══
-╠➥ lvling char *miniboss/boss* [lvl]
-╠➥ lvling bs *tec/non*
-╠➥ lvling alche
-╠➥ cari item [item]
-╠➥ cari monster [monster]
-╠➥ racik rumus fill 
-╠➥ cari registlet [regist] 
-╠➥ harga slot [eq]
-╠➥ bahan tas
-╠➥ bahan mq
-╠➥ kode live
-╠➥ info farm mats
-╠➥ info dye
-╠➥ info ailment 
-╠➥ ninja scroll
-╠➥ kalkulator quest
-╠➥ buff food
-╠➥ kamus besar toram
-╠➥ pet lvling
-╠➥ arrow elemental
-╠➥ build toram
-╠➥ mt terbaru
-║
-╠══〘 *GENERAL MENU* 〙══
-╠➥ cari anime [anime]
-╠➥ cari manga [manga]
-╠➥ anime *top/random/recommendations*
-╠➥ manga *top/random/recommendations*
-╠➥ on going anime
-╠➥ random anime quotes
-╠➥ AI chat [pesan]
-╠➥ tiktok dl [link]
-╠➥ fb dl [link]
-╠➥ ig dl [link]
-╠➥ stikerin (reply foto)
-╠➥ req fitur [pesan]
-╠➥ info bot
-╠➥ help
-║
-╠══〘 *ADMIN MENU* 〙══
-╠➥ add [@628xx]
-╠➥ kick [@tag member]
-╠➥ promote [@tag member]
-╠➥ demote [@tag member]
-╠➥ anti toxic *on/off*
-╠➥ anti link *on/off*
-╠➥ welcome msg *on/off*
-╠➥ out msg *on/off*
-╠➥ grup status
-║
-╠═〘 *ANTI VIRTEX ON* 〙═`).responAsText()
+      if (isSubscribed) {
+        res.send(
+          responFormatter.line("Anda memiliki akses ke menu ini.").responAsText()
+        );
+      } else {
+        res.send(
+          responFormatter
+            .line("Maaf, grup Anda tidak berlangganan atau masa langganan telah habis.")
+            .responAsText()
+        );
+      }
+    }
+
+    // Tambahkan langganan baru
+    if (message === "/register") {
+      const durationInDays = 30; // Misalnya, 30 hari
+      saveSubscription(from, durationInDays);
+
+      res.send(
+        responFormatter
+          .line(
+            `Grup Anda telah berlangganan selama ${durationInDays} hari. Terima kasih!`
+          )
+          .responAsText()
       );
     }
     //handle sticker command
