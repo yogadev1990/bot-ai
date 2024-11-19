@@ -2,36 +2,6 @@ const fs = require("fs");
 const Caching = require("node-cache");
 const cache = new Caching();
 const pathcontact = `${__dirname}/../data/contacts.json`;
-const gruplangganan = `${__dirname}/../data/subscribed.json`;
-
-// Fungsi untuk memuat data grup berlangganan
-const loadSubscribedGroups = async () => {
-  const fileBuffer = fs.readFileSync(gruplangganan, "utf-8");
-  const subscribedGroups = JSON.parse(fileBuffer);
-  return subscribedGroups;
-};
-
-// Fungsi untuk memeriksa apakah grup sudah berlangganan
-const isGroupSubscribed = async (from) => {
-  const subscribedGroups = await loadSubscribedGroups();
-  return subscribedGroups.includes(from);
-};
-
-// Fungsi untuk menambahkan grup ke daftar berlangganan
-const addGroupSubscription = async (from) => {
-  const subscribedGroups = await loadSubscribedGroups();
-  if (!subscribedGroups.includes(from)) {
-    subscribedGroups.push(from);
-    fs.writeFileSync(gruplangganan, JSON.stringify(subscribedGroups));
-  }
-};
-
-// Fungsi untuk menghapus grup dari daftar berlangganan
-const removeGroupSubscription = async (from) => {
-  const subscribedGroups = await loadSubscribedGroups();
-  const updatedGroups = subscribedGroups.filter((group) => group !== from);
-  fs.writeFileSync(gruplangganan, JSON.stringify(updatedGroups));
-};
 
 const loadContact = async () => {
   const fileBuffer = fs.readFileSync(pathcontact, "utf-8");
@@ -49,12 +19,16 @@ const saveContact = async (from) => {
 const checkContact = async (from) => {
   const contacts = await loadContact();
   const contact = contacts.find((contact) => contact.from === from);
-  return !!contact; // Mengembalikan true jika kontak ditemukan
+  if (!contact) {
+    return false;
+  }
+  return true;
 };
 
 const removeContact = async (from) => {
   const contacts = await loadContact();
   const contactsNew = contacts.filter((contact) => contact.from != from);
+  console.log(contactsNew);
   fs.writeFileSync(pathcontact, JSON.stringify(contactsNew));
 };
 
@@ -84,8 +58,4 @@ module.exports = {
   checkContact,
   removeContact,
   manageMessagesCache,
-  isGroupSubscribed,
-  addGroupSubscription,
-  removeGroupSubscription,
 };
-
