@@ -1,4 +1,4 @@
-const { checkContact, saveContact, removeContact } = require("../lib/helpers");
+const { checkContact, saveContact, removeContact, checkDelay, saveDelayed } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
 const Iklan = require("./IklanChizu");
 const GeminiAi = require("./geminiAi");
@@ -14,9 +14,19 @@ class MessageHandler {
     const iklan = new Iklan();
     
     if (message.includes("revandastore")) {
-      res.send(
-        responFormatter.line(iklan.getIklan()).responAsText()
-      );
+      const canSendAd = checkDelay(from); // Cek delay pengiriman
+
+      if (canSendAd) {
+        // Kirim iklan jika sudah 4 jam sejak pesan terakhir
+        res.send(responFormatter.line(iklan.getIklan()).responAsText());
+
+        // Simpan waktu pengiriman terakhir
+        saveDelayed(from);
+      } else {
+        res.send(
+          responFormatter.line("Iklan sudah dikirim, tunggu beberapa saat lagi.").responAsText()
+        );
+      }
     }
 
     if (message === "/start") {

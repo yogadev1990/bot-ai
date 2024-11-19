@@ -44,8 +44,8 @@ ${pesanAcak}
 - Sewa bot GC WA Guild Toram (https://revandastore.com/katalog/11)
 
 ⚠ torampedia.my.id/scammerlist
-╔ ${hari}, ${jam}:${menit} WIB
-╚〘 Revanda Store 〙`;
+╔ >> ${hari}, ${jam}:${menit} WIB <<
+╚〘 Revanda Store x Chizuru 〙`;
     }
   
     getIklan() {

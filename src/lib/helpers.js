@@ -2,6 +2,47 @@ const fs = require("fs");
 const Caching = require("node-cache");
 const cache = new Caching();
 const pathcontact = `${__dirname}/../data/contacts.json`;
+const pathDelayed = `${__dirname}/../data/delayed.json`;
+
+// Memuat data delay dari file
+const loadDelayed = () => {
+  if (!fs.existsSync(pathDelayed)) {
+    fs.writeFileSync(pathDelayed, JSON.stringify([])); // Buat file jika belum ada
+  }
+  const fileBuffer = fs.readFileSync(pathDelayed, "utf-8");
+  return JSON.parse(fileBuffer);
+};
+
+// Simpan atau perbarui waktu delay untuk grup
+const saveDelayed = (from) => {
+  const delayedData = loadDelayed();
+  const now = new Date();
+  const existing = delayedData.find((item) => item.from === from);
+
+  if (existing) {
+    existing.lastSent = now;
+  } else {
+    delayedData.push({ from, lastSent: now });
+  }
+
+  fs.writeFileSync(pathDelayed, JSON.stringify(delayedData));
+};
+
+// Cek apakah pesan sudah bisa dikirim (4 jam delay)
+const checkDelay = (from) => {
+  const delayedData = loadDelayed();
+  const existing = delayedData.find((item) => item.from === from);
+
+  if (!existing) {
+    return true; // Jika belum ada, boleh kirim
+  }
+
+  const lastSent = new Date(existing.lastSent);
+  const now = new Date();
+  const fourHours = 4 * 60 * 60 * 1000;
+
+  return now - lastSent >= fourHours; // Jika sudah lebih dari 4 jam, boleh kirim
+};
 
 const loadContact = async () => {
   const fileBuffer = fs.readFileSync(pathcontact, "utf-8");
@@ -58,4 +99,7 @@ module.exports = {
   checkContact,
   removeContact,
   manageMessagesCache,
+  loadDelayed,
+  saveDelayed,
+  checkDelay,
 };
