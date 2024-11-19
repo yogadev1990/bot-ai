@@ -15,7 +15,7 @@ class MessageHandler {
     const responFormatter = new ResponFormatter();
     const iklan = new Iklan();
     
-    if (message.includes("revandastore") && !isSubscribed) {
+    if (message.includes("http") && !isSubscribed) {
       const canSendAd = checkDelay(from); // Cek delay pengiriman
 
       if (canSendAd) {

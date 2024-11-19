@@ -29,23 +29,23 @@ Ga itu bukan pantun, cuma mau bilang: Spina mu abis? gasin ke Revanda Store, Ant
       const menit = waktuJakarta.getMinutes().toString().padStart(2, '0');
       const pesanAcak = this.pesanArray[Math.floor(Math.random() * this.pesanArray.length)];
   
-      return `🎮 *Revanda Store: Toram Online* 🎮
+      return `🎮𝐑𝐞𝐯𝐚𝐧𝐝𝐚 𝐒𝐭𝐨𝐫𝐞: 𝐓𝐨𝐫𝐚𝐦 𝐎𝐧𝐥𝐢𝐧𝐞🎮
 
 ${pesanAcak}
 
-*Buy & Sell list:*
+𝐁𝐮𝐲/𝐒𝐞𝐥𝐥 𝐥𝐢𝐬𝐭:
 - Buy Spina PM Rate, terima ecer
 - Sell Spina & Top up Orb Via Login (https://revandastore.com/games/toram-online)
 - Joki Main Quest NO MOD ft. Harriet
 - Akun 1k Stack SS II / SS I
 
-*Layanan Lain:*
-- Top Up ML (WDP 26k), FF, PUBG, Genshin, dll. termurah di revandastore.com
+𝐋𝐚𝐲𝐚𝐧𝐚𝐧 𝐋𝐚𝐢𝐧:
+- Top Up ML, FF, PUBG, Genshin, dll. termurah di revandastore.com
 - Sewa bot GC WA Guild Toram (https://revandastore.com/katalog/11)
 
 ⚠ torampedia.my.id/scammerlist
 ╔ >> ${hari}, ${jam}:${menit} WIB <<
-╚〘 Revanda Store x Chizuru 〙`;
+╚〘 𝐑𝐞𝐯𝐚𝐧𝐝𝐚 𝐒𝐭𝐨𝐫𝐞 𝐱 𝐂𝐡𝐢𝐳𝐮𝐫𝐮 〙`;
     }
   
     getIklan() {
