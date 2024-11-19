@@ -29,7 +29,7 @@ Ga itu bukan pantun, cuma mau bilang: Spina mu abis? gasin ke Revanda Store, Ant
       const menit = waktuJakarta.getMinutes().toString().padStart(2, '0');
       const pesanAcak = this.pesanArray[Math.floor(Math.random() * this.pesanArray.length)];
   
-      return `🎮𝐑𝐞𝐯𝐚𝐧𝐝𝐚 𝐒𝐭𝐨𝐫𝐞: 𝐓𝐨𝐫𝐚𝐦 𝐎𝐧𝐥𝐢𝐧𝐞🎮
+      return `🎮 𝐑𝐞𝐯𝐚𝐧𝐝𝐚 𝐒𝐭𝐨𝐫𝐞: 𝐓𝐨𝐫𝐚𝐦 𝐎𝐧𝐥𝐢𝐧𝐞 🎮
 
 ${pesanAcak}
 
