@@ -1,4 +1,4 @@
-const { checkContact, saveContact, removeContact } = require("../lib/helpers");
+const { checkContact, saveContact, removeContact, addGroupSubscription, removeGroupSubscription, isGroupSubscribed } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
 const GeminiAi = require("./geminiAi");
 const OpenAiLocal = require("./openAi");
@@ -8,7 +8,6 @@ class MessageHandler {
   async process(req, res) {
     const { message, bufferImage, from } = req.body;
     const isRegistered = await checkContact(from);
-
     const responFormatter = new ResponFormatter();
 
     if (message === "/start") {
@@ -21,14 +20,45 @@ class MessageHandler {
 
     if (message === "/stop") {
       if (isRegistered) await removeContact(from);
-      res.send(
+      return res.send(
         responFormatter.line("Bot inactive, see you later!").responAsText()
       );
     }
 
     if (!isRegistered) return;
 
-    //handle sticker command
+    // Command untuk menambahkan grup berlangganan
+    if (message.startsWith("/subscribe")) {
+      const groupId = message.split(" ")[1]; // Mengambil ID grup dari pesan
+      if (!groupId) {
+        return res.send(responFormatter.line("Please provide a group ID to subscribe.").responAsText());
+      }
+      await addGroupSubscription(groupId);
+      return res.send(responFormatter.line(`Successfully subscribed to group: ${groupId}`).responAsText());
+    }
+
+    // Command untuk menghapus grup berlangganan
+    if (message.startsWith("/unsubscribe")) {
+      const groupId = message.split(" ")[1]; // Mengambil ID grup dari pesan
+      if (!groupId) {
+        return res.send(responFormatter.line("Please provide a group ID to unsubscribe.").responAsText());
+      }
+      await removeGroupSubscription(groupId);
+      return res.send(responFormatter.line(`Successfully unsubscribed from group: ${groupId}`).responAsText());
+    }
+
+    // Command untuk memeriksa status berlangganan grup
+    if (message.startsWith("/check_subscription")) {
+      const groupId = message.split(" ")[1]; // Mengambil ID grup dari pesan
+      if (!groupId) {
+        return res.send(responFormatter.line("Please provide a group ID to check subscription status.").responAsText());
+      }
+      const subscribed = await isGroupSubscribed(groupId);
+      const statusMessage = subscribed ? `You are subscribed to group: ${groupId}` : `You are not subscribed to group: ${groupId}`;
+      return res.send(responFormatter.line(statusMessage).responAsText());
+    }
+
+    // Handle sticker command
     if (message === "/sticker") {
       if (!bufferImage) {
         return res.send(
