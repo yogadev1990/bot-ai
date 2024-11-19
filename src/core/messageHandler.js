@@ -33,7 +33,7 @@ class MessageHandler {
         responFormatter.line(`Chizuru-chan🌸*
 	
 どうも ありがとう ございます ~~
-Iya tau, chizu cantik, makasih kak ${from}<3
+Iya tau, chizu cantik, makasih kak<3
 ketik *menu* untuk membuka list command yaa`).responAsText()
       );
     }
