@@ -28,12 +28,12 @@ class MessageHandler {
 
     if (!isRegistered) return;
 
-    if (message == "Chizu"){
+    if (message == "/chizu"){
       res.send(
         responFormatter.line(`Chizuru-chan🌸*
 	
 どうも ありがとう ございます ~~
-Iya tau, chizu cantik, makasih kak<3
+Iya tau, chizu cantik, makasih kak ${from}<3
 ketik *menu* untuk membuka list command yaa`).responAsText()
       );
     }
