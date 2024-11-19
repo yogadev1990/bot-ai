@@ -52,20 +52,20 @@ ketik *menu* untuk membuka list command yaa`).responAsText()
       );
     }
 
-    try {
-      let response;
-      if (process.env.BOT_ACTIVE === "openai") {
-        response = await OpenAiLocal.run(from, message);
-      } else if (process.env.BOT_ACTIVE === "geminiai") {
-        response = await GeminiAi.run(from, message);
-      } else {
-        throw new Error("Invalid BOT_ACTIVE value");
-      }
+    // try {
+    //   let response;
+    //   if (process.env.BOT_ACTIVE === "openai") {
+    //     response = await OpenAiLocal.run(from, message);
+    //   } else if (process.env.BOT_ACTIVE === "geminiai") {
+    //     response = await GeminiAi.run(from, message);
+    //   } else {
+    //     throw new Error("Invalid BOT_ACTIVE value");
+    //   }
 
-      return res.send(responFormatter.line(response).responAsText());
-    } catch (error) {
-      console.log("something went wrong in gemini ai", error);
-    }
+    //   return res.send(responFormatter.line(response).responAsText());
+    // } catch (error) {
+    //   console.log("something went wrong in gemini ai", error);
+    // }
   }
 }
 
