@@ -8,13 +8,13 @@ const StickerWa = require("./stickerWa");
 class MessageHandler {
   async process(req, res) {
     console.log("Request Body:", req.body);
-    const { message, bufferImage, from, participant } = req.body;
+    const { text, name, groupId, from, participant, media, location } = req.body;
     const isSubscribed = await checkSubscription(from);
 
     const responFormatter = new ResponFormatter();
     const iklan = new Iklan();
 
-    if (message.includes("revandastore") && !isSubscribed) {
+    if (text.includes("revandastore") && !isSubscribed) {
       const canSendAd = checkDelay(from);
 
       if (canSendAd) {
@@ -23,7 +23,7 @@ class MessageHandler {
       } else {}
     }
 
-    if (message === "/grupid") {
+    if (text === "/grupid") {
       res.send(responFormatter.line(`ID Grup ini adalah ${from}
 Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`).responAsText()
       );
@@ -34,11 +34,11 @@ Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11
           responFormatter.line(`*Chizuru-chan🌸*
 	
 どうも ありがとう ございます ~~
-Iya tau, chizu cantik, makasih kak<3
+Iya tau, chizu cantik, makasih kak ${name}<3
 ketik *menu* untuk membuka list command yaa.`).responAsText());
       } 
       
-      if (message === "/menu") {
+      if (text === "/menu") {
         res.send(
           responFormatter
           .line(`*Chizuru-chan🌸*
@@ -98,8 +98,8 @@ Iyaa kak, ada yang bisa chizu bantu?
 ╚═〘 *ANTI VIRTEX ON* 〙═`).responAsText());
       }
 
-    if (message === "/sticker") {
-      if (!bufferImage) {
+    if (text === "/sticker") {
+      if (!media) {
         return res.send(
           responFormatter
           .line("Please send image if using command /sticker")
@@ -108,7 +108,7 @@ Iyaa kak, ada yang bisa chizu bantu?
       }
 
       return res.send(
-        responFormatter.responSticker(await StickerWa.create(bufferImage))
+        responFormatter.responSticker(await StickerWa.create(media))
       );
     }
     
