@@ -22,7 +22,7 @@ class MessageHandler {
     const responFormatter = new ResponFormatter();
     const iklan = new Iklan();
 
-    if (message.includes("http") && !isSubscribed) {
+    if (message.includes("revandastore") && !isSubscribed) {
       const canSendAd = checkDelay(from);
 
       if (canSendAd) {
