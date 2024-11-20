@@ -1,45 +1,55 @@
-const { checkDelay, saveDelayed, checkSubscription } = require("../lib/helpers");
+const {
+  checkDelay,
+  saveDelayed,
+  checkSubscription,
+} = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
 const Iklan = require("./IklanChizu");
-const Sender = require("../lib/sender");
-// const GeminiAi = require("./geminiAi");
-// const OpenAiLocal = require("./openAi");
-// const StickerWa = require("./stickerWa");
+const GeminiAi = require("./geminiAi");
+const OpenAiLocal = require("./openAi");
+const StickerWa = require("./stickerWa");
 
 class MessageHandler {
-  async process(req) {
-    console.log("Request Body:", req.body);
-    const { text, name, groupId, from, participant, media, location } = req.body;
-    const isSubscribed = await checkSubscription(groupId);
+  async process(req, res) {
+    const {
+      message,
+      bufferImage,
+      from,
+      participant
+    } = req.body;
+    const isSubscribed = await checkSubscription(from);
+
+    const responFormatter = new ResponFormatter();
     const iklan = new Iklan();
 
-    if (groupId !== null){
+    if (message.includes("revanda") && !isSubscribed) {
+      const canSendAd = checkDelay(from);
 
-      if (text.includes("revandastore") && !isSubscribed) {
-        const canSendAd = await checkDelay(groupId);
-        if (canSendAd) {
-          await saveDelayed(groupId);
-          Sender.send(groupId, iklan.getIklan());
-        } else {
-        }
-      }      
-
-    if (text === "/grupid") {
-      Sender.send(groupId, `ID Grup ini adalah ${groupId}
-Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`);
+      if (canSendAd) {
+        res.send(responFormatter.line(iklan.getIklan()).responAsText());
+        saveDelayed(from);
+      } else {}
     }
 
+    if (message === "/grupid") {
+      res.send(responFormatter.line(`ID Grup ini adalah ${from}
+Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`).responAsText()
+      );
+    }
     if (isSubscribed) {
-      if (text === "/chizu") {
-        Sender.send(groupId, `*Chizuru-chan🌸*
+      if (message === "/chizu") {
+        res.send(
+          responFormatter.line(`*Chizuru-chan🌸*
 	
 どうも ありがとう ございます ~~
-Iya tau, chizu cantik, makasih kak ${name}<3
-ketik *menu* untuk membuka list command yaa.`);
+Iya tau, chizu cantik, makasih kak<3
+ketik *menu* untuk membuka list command yaa.`).responAsText());
       } 
       
-      if (text === "/menu") {
-        Sender.send(groupId, `*Chizuru-chan🌸*
+      if (message === "/menu") {
+        res.send(
+          responFormatter
+          .line(`*Chizuru-chan🌸*
 Iyaa kak, ada yang bisa chizu bantu?
 
 ╔══〘 *TORAM MENU* 〙══
@@ -93,30 +103,26 @@ Iyaa kak, ada yang bisa chizu bantu?
 ╠ /out msg *on/off*
 ╠ /grup status
 ║
-╚═〘 *ANTI VIRTEX ON* 〙═`);
+╚═〘 *ANTI VIRTEX ON* 〙═`).responAsText());
       }
 
-    // if (text === "/sticker") {
-    //   if (!media) {
-    //     return Sender.send(from, responFormatter
-    //       .line("Please send image if using command /sticker")
-    //       .responAsText()
-    //     );
-    //   }
+    if (message === "/sticker") {
+      if (!bufferImage) {
+        return res.send(
+          responFormatter
+          .line("Please send image if using command /sticker")
+          .responAsText()
+        );
+      }
 
-    //   return res.send(
-    //     responFormatter.responSticker(await StickerWa.create(media))
-    //   );
-    // }
+      return res.send(
+        responFormatter.responSticker(await StickerWa.create(bufferImage))
+      );
+    }
     
   }
     if (!isSubscribed) return;
-    } else if (groupId == null) {
-      if (text === "/chizu") {
-        Sender.send(from, `*Chizuru-chan🌸*
-          you can use this bot in group only, please invite me to your group`);
-      }
-    }
+
     // try {
     //   let response;
     //   if (process.env.BOT_ACTIVE === "openai") {

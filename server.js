@@ -10,7 +10,6 @@ const handlerMessage = new MessageHandler();
 
 //create src/data/contacts.json if not exist
 const fs = require("fs");
-const Sender = require("./src/lib/sender");
 const pathcontact = `${__dirname}/src/data/contacts.json`;
 if (!fs.existsSync(pathcontact)) {
   fs.writeFileSync(pathcontact, "[]");
@@ -23,9 +22,10 @@ app.get("/", (req, res) => {
 });
 app.post("/bot", handlerMessage.process);
 app.post("/addsubs", async (req, res) => {
-  const { groupId, duration } = req.body;
+  const { from, duration } = req.body;
+  const responFormatter = new ResponFormatter();
 
-  if (!groupId || !duration) {
+  if (!from || !duration) {
     return res.status(400).json({ message: "Parameter 'from' dan 'duration' wajib diisi." });
   }
 
@@ -36,7 +36,7 @@ app.post("/addsubs", async (req, res) => {
     }
     
     await saveSubscription(from, durationInDays);
-    return Sender.send(groupId, `Langganan untuk grup ini telah ditambahkan selama ${durationInDays} hari.`);
+    return res.send(responFormatter.line(`Langganan untuk grup ini telah ditambahkan selama ${durationInDays} hari.`).responAsText());
   } catch (error) {
     console.error("Error menambahkan langganan:", error);
     return res.status(500).json({ message: "Terjadi kesalahan saat menambahkan langganan." });
