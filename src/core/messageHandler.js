@@ -111,6 +111,11 @@ Iyaa kak, ada yang bisa chizu bantu?
     
   }
     if (!isSubscribed) return;
+    } else if (groupId == null) {
+      if (text === "/chizu") {
+        Sender.send(from, `*Chizuru-chan🌸*
+          you can use this bot in group only, please invite me to your group`);
+      }
     }
     // try {
     //   let response;
