@@ -15,14 +15,17 @@ class MessageHandler {
 
     if (groupId !== null){
 
-    if (text.includes("revandastore") && !isSubscribed) {
-      const canSendAd = checkDelay(groupId);
-      if (canSendAd) {
-        saveDelayed(groupId);
-        Sender.send(groupId, iklan.getIklan());
-      } else {
-      }
-    }
+      if (text.includes("revandastore") && !isSubscribed) {
+        const canSendAd = checkDelay(groupId);
+        console.log("Can send ad:", canSendAd, "for group:", groupId);
+        if (canSendAd) {
+          saveDelayed(groupId);
+          console.log("Saved delay for group:", groupId);
+          Sender.send(groupId, iklan.getIklan());
+        } else {
+          console.log("Ad not sent, still in delay period for group:", groupId);
+        }
+      }      
 
     if (text === "/grupid") {
       Sender.send(groupId, `ID Grup ini adalah ${groupId}
