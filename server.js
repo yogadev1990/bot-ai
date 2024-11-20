@@ -4,7 +4,7 @@ const MessageHandler = require("./src/core/messageHandler");
 const helpers = require("./src/lib/helpers");
 const app = express();
 require("dotenv").config();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3210;
 const handlerMessage = new MessageHandler();
 
 //create src/data/contacts.json if not exist
