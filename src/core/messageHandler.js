@@ -10,23 +10,22 @@ class MessageHandler {
   async process(req) {
     console.log("Request Body:", req.body);
     const { text, name, groupId, from, participant, media, location } = req.body;
-    const isSubscribed = await checkSubscription(from);
-    const responFormatter = new ResponFormatter();
+    const isSubscribed = await checkSubscription(groupId);
     const iklan = new Iklan();
 
     if (groupId !== null){
 
     if (text.includes("revandastore") && !isSubscribed) {
-      const canSendAd = checkDelay(from);
-
+      const canSendAd = checkDelay(groupId);
       if (canSendAd) {
+        saveDelayed(groupId);
         Sender.send(groupId, iklan.getIklan());
-        saveDelayed(from);
-      } else {}
+      } else {
+      }
     }
 
     if (text === "/grupid") {
-      Sender.send(groupId, `ID Grup ini adalah ${from}
+      Sender.send(groupId, `ID Grup ini adalah ${groupId}
 Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`);
     }
 
