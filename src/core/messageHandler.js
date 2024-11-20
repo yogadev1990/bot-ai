@@ -16,14 +16,11 @@ class MessageHandler {
     if (groupId !== null){
 
       if (text.includes("revandastore") && !isSubscribed) {
-        const canSendAd = checkDelay(groupId);
-        console.log("Can send ad:", canSendAd, "for group:", groupId);
+        const canSendAd = await checkDelay(groupId);
         if (canSendAd) {
-          saveDelayed(groupId);
-          console.log("Saved delay for group:", groupId);
+          await saveDelayed(groupId);
           Sender.send(groupId, iklan.getIklan());
         } else {
-          console.log("Ad not sent, still in delay period for group:", groupId);
         }
       }      
 
