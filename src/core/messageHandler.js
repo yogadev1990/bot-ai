@@ -1,8 +1,4 @@
-const {
-  checkDelay,
-  saveDelayed,
-  checkSubscription,
-} = require("../lib/helpers");
+const { checkDelay, saveDelayed, checkSubscription } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
 const Iklan = require("./IklanChizu");
 const GeminiAi = require("./geminiAi");
@@ -11,12 +7,8 @@ const StickerWa = require("./stickerWa");
 
 class MessageHandler {
   async process(req, res) {
-    const {
-      message,
-      bufferImage,
-      from,
-      participant
-    } = req.body;
+    console.log("Request Body:", req.body);
+    const { message, bufferImage, from, participant } = req.body;
     const isSubscribed = await checkSubscription(from);
 
     const responFormatter = new ResponFormatter();
