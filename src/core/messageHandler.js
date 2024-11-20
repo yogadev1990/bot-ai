@@ -14,22 +14,25 @@ class MessageHandler {
     const responFormatter = new ResponFormatter();
     const iklan = new Iklan();
 
+    if (groupId !== null){
+
     if (text.includes("revandastore") && !isSubscribed) {
       const canSendAd = checkDelay(from);
 
       if (canSendAd) {
-        Sender.send(from, responFormatter.line(iklan.getIklan()));
+        Sender.send(groupId, responFormatter.line(iklan.getIklan()));
         saveDelayed(from);
       } else {}
     }
 
     if (text === "/grupid") {
-      Sender.send(from, responFormatter.line(`ID Grup ini adalah ${from}
+      Sender.send(groupId, responFormatter.line(`ID Grup ini adalah ${from}
 Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`));
     }
+
     if (isSubscribed) {
       if (text === "/chizu") {
-        Sender.send(from, responFormatter.line(`*Chizuru-chan🌸*
+        Sender.send(groupId, responFormatter.line(`*Chizuru-chan🌸*
 	
 どうも ありがとう ございます ~~
 Iya tau, chizu cantik, makasih kak ${name}<3
@@ -37,7 +40,7 @@ ketik *menu* untuk membuka list command yaa.`));
       } 
       
       if (text === "/menu") {
-        Sender.send(from, responFormatter
+        Sender.send(groupId, responFormatter
           .line(`*Chizuru-chan🌸*
 Iyaa kak, ada yang bisa chizu bantu?
 
@@ -110,7 +113,7 @@ Iyaa kak, ada yang bisa chizu bantu?
     
   }
     if (!isSubscribed) return;
-
+    }
     // try {
     //   let response;
     //   if (process.env.BOT_ACTIVE === "openai") {
