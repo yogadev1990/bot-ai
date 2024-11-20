@@ -6,17 +6,17 @@ const pathDelayed = `${__dirname}/../data/delayed.json`;
 const pathSubscription = `${__dirname}/../data/subscriptions.json`;
 
 // Memuat data langganan
-const loadSubscriptions = () => {
+const loadSubscriptions = async () => {
   if (!fs.existsSync(pathSubscription)) {
-    fs.writeFileSync(pathSubscription, JSON.stringify([])); // Buat file jika belum ada
+    fs.writeFileSync(pathSubscription, JSON.stringify([]));
   }
   const fileBuffer = fs.readFileSync(pathSubscription, "utf-8");
   return JSON.parse(fileBuffer);
 };
 
 // Menyimpan data langganan baru atau memperbarui grup yang sudah ada
-const saveSubscription = (from, durationInDays) => {
-  const subscriptions = loadSubscriptions();
+const saveSubscription = async (from, durationInDays) => {
+  const subscriptions = await loadSubscriptions();
   const now = new Date();
   const existing = subscriptions.find((item) => item.from === from);
 
@@ -35,8 +35,8 @@ const saveSubscription = (from, durationInDays) => {
 };
 
 // Mengecek apakah grup masih berlangganan
-const checkSubscription = (from) => {
-  const subscriptions = loadSubscriptions();
+const checkSubscription = async (from) => {
+  const subscriptions = await loadSubscriptions();
   const existing = subscriptions.find((item) => item.from === from);
 
   if (!existing) return false;
@@ -45,18 +45,8 @@ const checkSubscription = (from) => {
   return now <= new Date(existing.expiryDate); // Langganan masih berlaku jika waktu saat ini <= waktu kedaluwarsa
 };
 
-// Menghapus langganan setelah masa berlaku habis (opsional)
-const removeExpiredSubscriptions = () => {
-  const subscriptions = loadSubscriptions();
-  const now = new Date();
-  const updatedSubscriptions = subscriptions.filter(
-    (item) => new Date(item.expiryDate) > now
-  );
-
-  fs.writeFileSync(pathSubscription, JSON.stringify(updatedSubscriptions));
-};
 // Memuat data delay dari file
-const loadDelayed = () => {
+const loadDelayed = async () => {
   if (!fs.existsSync(pathDelayed)) {
     fs.writeFileSync(pathDelayed, JSON.stringify([])); // Buat file jika belum ada
   }
@@ -65,8 +55,8 @@ const loadDelayed = () => {
 };
 
 // Simpan atau perbarui waktu delay untuk grup
-const saveDelayed = (from) => {
-  const delayedData = loadDelayed();
+const saveDelayed = async (from) => {
+  const delayedData = await loadDelayed();
   const now = new Date();
   const existing = delayedData.find((item) => item.from === from);
 
@@ -80,8 +70,8 @@ const saveDelayed = (from) => {
 };
 
 // Cek apakah pesan sudah bisa dikirim (4 jam delay)
-const checkDelay = (from) => {
-  const delayedData = loadDelayed();
+const checkDelay = async (from) => {
+  const delayedData = await loadDelayed();
   const existing = delayedData.find((item) => item.from === from);
 
   if (!existing) {
@@ -156,5 +146,4 @@ module.exports = {
   loadSubscriptions,
   saveSubscription,
   checkSubscription,
-  removeExpiredSubscriptions,
 };
