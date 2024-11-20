@@ -11,6 +11,7 @@ const StickerWa = require("./stickerWa");
 
 class MessageHandler {
   async process(req, res) {
+    console.log("incoming message", req.body);
     const {
       message,
       bufferImage,
