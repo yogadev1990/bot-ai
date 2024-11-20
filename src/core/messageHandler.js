@@ -29,7 +29,7 @@ Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11
       );
     }
     if (isSubscribed) {
-      if (message === "/chizu") {
+      if (text === "/chizu") {
         res.send(
           responFormatter.line(`*Chizuru-chan🌸*
 	
