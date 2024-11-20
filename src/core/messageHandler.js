@@ -1,16 +1,16 @@
 const { checkDelay, saveDelayed, checkSubscription } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
 const Iklan = require("./IklanChizu");
-const GeminiAi = require("./geminiAi");
-const OpenAiLocal = require("./openAi");
-const StickerWa = require("./stickerWa");
+const Sender = require("../lib/sender");
+// const GeminiAi = require("./geminiAi");
+// const OpenAiLocal = require("./openAi");
+// const StickerWa = require("./stickerWa");
 
 class MessageHandler {
-  async process(req, res) {
+  async process(req) {
     console.log("Request Body:", req.body);
     const { text, name, groupId, from, participant, media, location } = req.body;
     const isSubscribed = await checkSubscription(from);
-
     const responFormatter = new ResponFormatter();
     const iklan = new Iklan();
 
@@ -18,29 +18,26 @@ class MessageHandler {
       const canSendAd = checkDelay(from);
 
       if (canSendAd) {
-        res.send(responFormatter.line(iklan.getIklan()).responAsText());
+        Sender.send(from, responFormatter.line(iklan.getIklan()));
         saveDelayed(from);
       } else {}
     }
 
     if (text === "/grupid") {
-      res.send(responFormatter.line(`ID Grup ini adalah ${from}
-Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`).responAsText()
-      );
+      Sender.send(from, responFormatter.line(`ID Grup ini adalah ${from}
+Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`));
     }
     if (isSubscribed) {
       if (text === "/chizu") {
-        res.send(
-          responFormatter.line(`*Chizuru-chan🌸*
+        Sender.send(from, responFormatter.line(`*Chizuru-chan🌸*
 	
 どうも ありがとう ございます ~~
 Iya tau, chizu cantik, makasih kak ${name}<3
-ketik *menu* untuk membuka list command yaa.`).responAsText());
+ketik *menu* untuk membuka list command yaa.`));
       } 
       
       if (text === "/menu") {
-        res.send(
-          responFormatter
+        Sender.send(from, responFormatter
           .line(`*Chizuru-chan🌸*
 Iyaa kak, ada yang bisa chizu bantu?
 
@@ -95,22 +92,21 @@ Iyaa kak, ada yang bisa chizu bantu?
 ╠ /out msg *on/off*
 ╠ /grup status
 ║
-╚═〘 *ANTI VIRTEX ON* 〙═`).responAsText());
+╚═〘 *ANTI VIRTEX ON* 〙═`));
       }
 
-    if (text === "/sticker") {
-      if (!media) {
-        return res.send(
-          responFormatter
-          .line("Please send image if using command /sticker")
-          .responAsText()
-        );
-      }
+    // if (text === "/sticker") {
+    //   if (!media) {
+    //     return Sender.send(from, responFormatter
+    //       .line("Please send image if using command /sticker")
+    //       .responAsText()
+    //     );
+    //   }
 
-      return res.send(
-        responFormatter.responSticker(await StickerWa.create(media))
-      );
-    }
+    //   return res.send(
+    //     responFormatter.responSticker(await StickerWa.create(media))
+    //   );
+    // }
     
   }
     if (!isSubscribed) return;

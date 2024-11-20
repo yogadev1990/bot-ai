@@ -1,7 +1,6 @@
 const fs = require("fs");
 const Caching = require("node-cache");
 const cache = new Caching();
-const pathcontact = `${__dirname}/../data/contacts.json`;
 const pathDelayed = `${__dirname}/../data/delayed.json`;
 const pathSubscription = `${__dirname}/../data/subscriptions.json`;
 
@@ -85,35 +84,6 @@ const checkDelay = async (from) => {
   return now - lastSent >= fourHours; // Jika sudah lebih dari 4 jam, boleh kirim
 };
 
-const loadContact = async () => {
-  const fileBuffer = fs.readFileSync(pathcontact, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
-  return contacts;
-};
-
-const saveContact = async (from) => {
-  const contact = { from };
-  const contacts = await loadContact();
-  contacts.push(contact);
-  fs.writeFileSync(pathcontact, JSON.stringify(contacts));
-};
-
-const checkContact = async (from) => {
-  const contacts = await loadContact();
-  const contact = contacts.find((contact) => contact.from === from);
-  if (!contact) {
-    return false;
-  }
-  return true;
-};
-
-const removeContact = async (from) => {
-  const contacts = await loadContact();
-  const contactsNew = contacts.filter((contact) => contact.from != from);
-  console.log(contactsNew);
-  fs.writeFileSync(pathcontact, JSON.stringify(contactsNew));
-};
-
 const manageMessagesCache = (number, role, content, isGemini = true) => {
   const newContent = isGemini
     ? { parts: [{ text: content }] }
@@ -135,10 +105,6 @@ const manageMessagesCache = (number, role, content, isGemini = true) => {
 };
 
 module.exports = {
-  loadContact,
-  saveContact,
-  checkContact,
-  removeContact,
   manageMessagesCache,
   loadDelayed,
   saveDelayed,
