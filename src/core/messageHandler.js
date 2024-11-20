@@ -20,28 +20,27 @@ class MessageHandler {
       const canSendAd = checkDelay(from);
 
       if (canSendAd) {
-        Sender.send(groupId, responFormatter.line(iklan.getIklan()));
+        Sender.send(groupId, iklan.getIklan());
         saveDelayed(from);
       } else {}
     }
 
     if (text === "/grupid") {
-      Sender.send(groupId, responFormatter.line(`ID Grup ini adalah ${from}
-Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`));
+      Sender.send(groupId, `ID Grup ini adalah ${from}
+Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`);
     }
 
     if (isSubscribed) {
       if (text === "/chizu") {
-        Sender.send(groupId, responFormatter.line(`*Chizuru-chan🌸*
+        Sender.send(groupId, `*Chizuru-chan🌸*
 	
 どうも ありがとう ございます ~~
 Iya tau, chizu cantik, makasih kak ${name}<3
-ketik *menu* untuk membuka list command yaa.`));
+ketik *menu* untuk membuka list command yaa.`);
       } 
       
       if (text === "/menu") {
-        Sender.send(groupId, responFormatter
-          .line(`*Chizuru-chan🌸*
+        Sender.send(groupId, `*Chizuru-chan🌸*
 Iyaa kak, ada yang bisa chizu bantu?
 
 ╔══〘 *TORAM MENU* 〙══
@@ -95,7 +94,7 @@ Iyaa kak, ada yang bisa chizu bantu?
 ╠ /out msg *on/off*
 ╠ /grup status
 ║
-╚═〘 *ANTI VIRTEX ON* 〙═`));
+╚═〘 *ANTI VIRTEX ON* 〙═`);
       }
 
     // if (text === "/sticker") {

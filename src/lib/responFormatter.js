@@ -51,8 +51,7 @@ class ResponFormatter {
 
   responAsText() {
     const js = JSON.stringify({
-      text: this.convertLines(),
-      quoted: this.quoted,
+      text: this.convertLines()
     });
     this.reset();
     return js;
