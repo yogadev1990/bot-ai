@@ -12,18 +12,13 @@ const StickerWa = require("./stickerWa");
 class MessageHandler {
   async process(req, res) {
     console.log("incoming message", req.body);
-    const {
-      message,
-      bufferImage,
-      from,
-      participant
-    } = req.body;
+    const { message, bufferImage, from, participant } = req.body;
     const isSubscribed = await checkSubscription(from);
 
     const responFormatter = new ResponFormatter();
     const iklan = new Iklan();
 
-    if (message.includes("revanda") && !isSubscribed) {
+    if ('participant' in req.body && !isSubscribed) {
       const canSendAd = checkDelay(from);
 
       if (canSendAd) {
