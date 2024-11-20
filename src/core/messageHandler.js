@@ -18,36 +18,32 @@ class MessageHandler {
     const responFormatter = new ResponFormatter();
     const iklan = new Iklan();
 
-    if ('participant' in req.body && !isSubscribed) {
-      const canSendAd = await checkDelay(from);
-
-      if (canSendAd) {
-        await saveDelayed(from);
-        res.send(responFormatter.line(iklan.getIklan()).responAsText());
-      } else {}
-    }
-
-    if (message === "/grupid") {
-      res.send(responFormatter.line(`ID Grup ini adalah ${from}
+    if ('participant' in req.body) { // the message is from a group
+      if (message === "/grupid") {
+        res.send(responFormatter.line(`ID Grup ini adalah:
+${from}
 Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`).responAsText()
-      );
-    }
-    if (isSubscribed) {
-      if (message === "/chizu") {
-        res.send(
-          responFormatter.line(`*Chizuru-chan🌸*
-	
+        );
+      } else if (message === "/chizu") {
+        res.send(responFormatter.line(`Grup Ini Belum Berlangganan Chizu.`).responAsText()
+        );
+      }
+      if (isSubscribed) {
+          if (message === "/chizu") {
+            res.send(
+              responFormatter.line(`*Chizuru-chan🌸*
+      
 どうも ありがとう ございます ~~
 Iya tau, chizu cantik, makasih kak<3
-ketik *menu* untuk membuka list command yaa.`).responAsText());
-      } 
-      
-      if (message === "/menu") {
-        res.send(
-          responFormatter
-          .line(`*Chizuru-chan🌸*
+ketik */menu* untuk membuka list command yaa.`).responAsText());
+          } 
+          
+          if (message === "/menu") {
+            res.send(
+              responFormatter
+              .line(`*Chizuru-chan🌸*
 Iyaa kak, ada yang bisa chizu bantu?
-
+    
 ╔══〘 *TORAM MENU* 〙══
 ╠ /lvling char *miniboss/boss* [lvl]
 ╠ /lvling bs *tec/non*
@@ -100,24 +96,30 @@ Iyaa kak, ada yang bisa chizu bantu?
 ╠ /grup status
 ║
 ╚═〘 *ANTI VIRTEX ON* 〙═`).responAsText());
-      }
-
-    if (message === "/sticker") {
-      if (!bufferImage) {
-        return res.send(
-          responFormatter
-          .line("Please send image if using command /sticker")
-          .responAsText()
-        );
-      }
-
-      return res.send(
-        responFormatter.responSticker(await StickerWa.create(bufferImage))
-      );
-    }
+          }
     
-  }
-    if (!isSubscribed) return;
+        if (message === "/sticker") {
+          if (!bufferImage) {
+            return res.send(
+              responFormatter
+              .line("Please send image if using command /sticker")
+              .responAsText()
+            );
+          }
+    
+          return res.send(
+            responFormatter.responSticker(await StickerWa.create(bufferImage))
+          );
+        }
+        
+        } else if (!isSubscribed) {
+      const canSendAd = await checkDelay(from);
+      if (canSendAd) {
+        await saveDelayed(from);
+        res.send(responFormatter.line(iklan.getIklan()).responAsText());
+      } else {}
+    }
+  } else return;
 
     // try {
     //   let response;
