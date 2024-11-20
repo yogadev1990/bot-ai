@@ -19,11 +19,11 @@ class MessageHandler {
     const iklan = new Iklan();
 
     if ('participant' in req.body && !isSubscribed) {
-      const canSendAd = checkDelay(from);
+      const canSendAd = await checkDelay(from);
 
       if (canSendAd) {
+        await saveDelayed(from);
         res.send(responFormatter.line(iklan.getIklan()).responAsText());
-        saveDelayed(from);
       } else {}
     }
 
