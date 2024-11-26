@@ -1,11 +1,16 @@
 const express = require("express");
+const axios = require("axios");
 const bodyParser = require("body-parser");
-const MessageHandler = require("./src/core/messageHandler");
+const Revandabot = require("./src/core/Revandabot");
+const RevandaBot = new Revandabot();
+const Chizurubot = require("./src/core/Chizurubot")
+const ChizuruBot = new Chizurubot();
+const Amamiyabot = require("./src/core/Amamiyabot");
+const AmamiyaBot = new Amamiyabot();
 const helpers = require("./src/lib/helpers");
 const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 3210;
-const handlerMessage = new MessageHandler();
 
 //create src/data/contacts.json if not exist
 const fs = require("fs");
@@ -19,7 +24,10 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.get("/", (req, res) => {
   res.send("Ngapain kesini?");
 });
-app.post("/bot", handlerMessage.process);
+app.post("/revanda", RevandaBot.process);
+app.post("/chizuru", ChizuruBot.process);
+app.post("/chizuru_grup", ChizuruBot.processGrup);
+app.post("/amamiya", AmamiyaBot.process);
 app.post("/addsubs", async (req, res) => {
   const { from, duration } = req.body;
 
@@ -34,6 +42,11 @@ app.post("/addsubs", async (req, res) => {
     }
 
     await helpers.saveSubscription(from, durationInDays);
+    axios.post(`${process.env.WA_BOT_URL}/send-message`, {
+      to: from,
+      type: "text",
+      content: `Langganan untuk nomor ${from} telah ditambahkan selama ${durationInDays} hari.`
+    });
     return res.status(200).json({ message: `Langganan untuk ${from} telah ditambahkan selama ${durationInDays} hari.` });
   } catch (error) {
     console.error("Error menambahkan langganan:", error);

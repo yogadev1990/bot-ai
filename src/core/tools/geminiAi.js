@@ -1,15 +1,23 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { manageMessagesCache } = require("../lib/helpers");
+const {
+  GoogleGenerativeAI
+} = require("@google/generative-ai");
+const {
+  manageMessagesCache
+} = require("../../lib/helpers");
 
 class GeminiAi {
   static async run(from, message) {
     const genAi = new GoogleGenerativeAI(process.env.GEMINI_KEY);
-    const model = genAi.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAi.getGenerativeModel({
+      model: "gemini-1.5-flash"
+    });
 
     const history = manageMessagesCache(from, "user", message);
     const chat = model.startChat({
       history: history,
-      generationConfig: { maxOutputTokens: 100 },
+      generationConfig: {
+        maxOutputTokens: 100
+      },
     });
     const result = await chat.sendMessage(message);
     const response = await result.response;

@@ -1,10 +1,16 @@
-const { OpenAI } = require("openai");
-const { manageMessagesCache } = require("../lib/helpers");
+const {
+  OpenAI
+} = require("openai");
+const {
+  manageMessagesCache
+} = require("../../lib/helpers");
 
 
 class OpenAiLocal {
   static async run(from, message) {
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_KEY });
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_KEY
+    });
     const messages = manageMessagesCache(from, "user", message, false);
 
     const completion = await openai.chat.completions.create({

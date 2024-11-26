@@ -4,15 +4,20 @@ const {
   checkSubscription,
 } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
-const Iklan = require("./IklanChizu");
-const GeminiAi = require("./geminiAi");
-const OpenAiLocal = require("./openAi");
-const StickerWa = require("./stickerWa");
+const Iklan = require("./tools/IklanChizu");
+const GeminiAi = require("./tools/geminiAi");
+const OpenAiLocal = require("./tools/openAi");
+const StickerWa = require("./tools/stickerWa");
 
-class MessageHandler {
+class Amamiyabot {
   async process(req, res) {
     console.log("incoming message", req.body);
-    const { message, bufferImage, from, participant } = req.body;
+    const {
+      message,
+      bufferImage,
+      from,
+      participant
+    } = req.body;
     const isSubscribed = await checkSubscription(from);
 
     const responFormatter = new ResponFormatter();
@@ -22,26 +27,24 @@ class MessageHandler {
       if (message === "/grupid") {
         res.send(responFormatter.line(`ID Grup ini adalah:
 ${from}
-Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`).responAsText()
-        );
+Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`).responAsText());
       } else if (message === "/chizu") {
-        res.send(responFormatter.line(`Grup Ini Belum Berlangganan Chizu.`).responAsText()
-        );
+        res.send(responFormatter.line(`Grup Ini Belum Berlangganan Chizu.`).responAsText());
       }
       if (isSubscribed) {
-          if (message === "/chizu") {
-            res.send(
-              responFormatter.line(`*Chizuru-chan🌸*
+        if (message === "/chizu") {
+          res.send(
+            responFormatter.line(`*Chizuru-chan🌸*
       
 どうも ありがとう ございます ~~
 Iya tau, chizu cantik, makasih kak<3
 ketik */menu* untuk membuka list command yaa.`).responAsText());
-          } 
-          
-          if (message === "/menu") {
-            res.send(
-              responFormatter
-              .line(`*Chizuru-chan🌸*
+        }
+
+        if (message === "/menu") {
+          res.send(
+            responFormatter
+            .line(`*Chizuru-chan🌸*
 Iyaa kak, ada yang bisa chizu bantu?
     
 ╔══〘 *TORAM MENU* 〙══
@@ -96,8 +99,8 @@ Iyaa kak, ada yang bisa chizu bantu?
 ╠ /grup status
 ║
 ╚═〘 *ANTI VIRTEX ON* 〙═`).responAsText());
-          }
-    
+        }
+
         if (message === "/sticker") {
           if (!bufferImage) {
             return res.send(
@@ -106,20 +109,20 @@ Iyaa kak, ada yang bisa chizu bantu?
               .responAsText()
             );
           }
-    
+
           return res.send(
             responFormatter.responSticker(await StickerWa.create(bufferImage))
           );
         }
-        
-        } else if (!isSubscribed) {
-      const canSendAd = await checkDelay(from);
-      if (canSendAd) {
-        await saveDelayed(from);
-        res.send(responFormatter.line(iklan.getIklan()).responAsText());
-      } else {}
-    }
-  } else return;
+
+      } else if (!isSubscribed) {
+        const canSendAd = await checkDelay(from);
+        if (canSendAd) {
+          await saveDelayed(from);
+          res.send(responFormatter.line(iklan.getIklan()).responAsText());
+        } else {}
+      }
+    } else return;
 
     // try {
     //   let response;
@@ -138,4 +141,4 @@ Iyaa kak, ada yang bisa chizu bantu?
   }
 }
 
-module.exports = MessageHandler;
+module.exports = Amamiyabot;
