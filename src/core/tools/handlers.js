@@ -1,5 +1,6 @@
 const { formatMenu } = require("./formatmenu");
 const StickerWa = require("./stickerWa");
+const GeminiAi = require("./geminiAi");
 const axios = require("axios");
 const token = "17|2bjIThBL1nVrE8fDjPTygHbp8GtTyuTO8NMdmsmx";
 const auth = { headers: { Authorization: `Bearer ${token}` } };
@@ -62,6 +63,15 @@ const handlers = {
       return "Terjadi kesalahan dalam pencarian.";
     }
   },
+
+  async ai({ message }) {
+    if (!message) {
+      return "Tuliskan pesan anda setelah /ai.";
+    }
+    const response = await GeminiAi.send(message);
+    return response;
+  },
+
   async default() {
     return "Masih dalam tahap pengembangan.";
   },

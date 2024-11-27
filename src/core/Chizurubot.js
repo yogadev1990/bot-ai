@@ -64,6 +64,9 @@ class Chizurubot {
       case "lvlingchar":
         response = await handlers.lvlingChar({ args });
         break;
+      case "ai":
+        response = await handlers.ai({ message });
+        break;
       default:
         response = await handlers.default();
         break;
