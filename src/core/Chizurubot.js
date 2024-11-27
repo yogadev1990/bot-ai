@@ -47,6 +47,11 @@ class Chizurubot {
       case "status":
         response = await handlers.status(context);
         break;
+    }
+
+    if (isActive) {
+    let response;
+    switch (command) {
       case "menu":
         response = await handlers.menu();
         break;
@@ -72,6 +77,12 @@ class Chizurubot {
         res.send(responFormatter.line(response).responAsText());
       }
     }
+  } else {
+    res.send(
+      responFormatter.line(
+        "Mohon maaf, layanan ini hanya untuk grup VIP. Silahkan langganan di revandastore.com"
+      ).responAsText()
+    );}
   };
   async processGrup(req, res) {
 
