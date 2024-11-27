@@ -64,13 +64,15 @@ const handlers = {
     }
   },
 
-  async ai({ args }) {
-    if (!args) {
-      return "Tuliskan pesan anda setelah /ai.";
+  async ai({ from, args }) {
+    if (!args || args.length === 0) {
+      return "Tuliskan pesan Anda setelah /ai.";  // Prompt if no input is provided
     }
-    const response = await GeminiAi.send(args.join(" "));
-    return response;
-  },
+  
+    const userMessage = args.join(" ");  // Join arguments into a single message
+    const response = await GeminiAi.send(from, userMessage);  // Pass 'from' and the message to Gemini AI
+    return response;  // Return the AI's response
+  },  
 
   async default() {
     return "Masih dalam tahap pengembangan.";
