@@ -1,6 +1,6 @@
-const { checkDelay, saveDelayed } = require("../lib/helpers");
-const ResponFormatter = require("../lib/responFormatter");
-const Iklan = require("./tools/IklanChizu");
+const { checkDelay, saveDelayed } = require("../lib/helpers.js");
+const ResponFormatter = require("../lib/responFormatter.js");
+const Iklan = require("./tools/IklanChizu.js");
 
 class Revandabot {
   async process(req, res) {
