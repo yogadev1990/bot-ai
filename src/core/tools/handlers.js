@@ -70,7 +70,7 @@ const handlers = {
     }
   
     const userMessage = args.join(" ");  // Join arguments into a single message
-    const response = await GeminiAi.send(from, userMessage);  // Pass 'from' and the message to Gemini AI
+    const response = await GeminiAi.run(from, userMessage);  // Pass 'from' and the message to Gemini AI
     return response;  // Return the AI's response
   },  
 
