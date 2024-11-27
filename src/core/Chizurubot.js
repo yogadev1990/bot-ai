@@ -277,7 +277,7 @@ ketik */menu* untuk membuka list command yaa.`;
             responFormatter
             .line("Masih dalam tahap pengembangan").responAsText());
         }
-      } else if (!isSubscribed) {
+      } else if (!isActive) {
         if (message === "/chizu") {
           res.send(responFormatter.line(`Grup ini belum berlangganan Bot Chizuru`).responAsText());
         } else {}
