@@ -4,9 +4,7 @@ const Iklan = require("./tools/IklanChizu");
 
 class Revandabot {
   async process(req, res) {
-    console.log("incoming message", req.body);
     const { from } = req.body;
-
     const responFormatter = new ResponFormatter();
     const iklan = new Iklan();
 
@@ -17,11 +15,13 @@ class Revandabot {
           res.send(responFormatter.line(iklan.getIklan()).responAsText());
         } else return;
       } else {
-        res.send(responFormatter.line(`𝐑𝐞𝐯𝐚𝐧𝐝𝐚 𝐒𝐭𝐨𝐫𝐞 - Auto Respon
+        res.send(responFormatter.line(`𝐑𝐞𝐯𝐚𝐧𝐝𝐚 𝐒𝐭𝐨𝐫𝐞 - 𝐀𝐮𝐭𝐨 𝐑𝐞𝐬𝐩𝐨𝐧
 
 Mohon izin kak, ini adalah nomor bot Revanda Store,
+
 Untuk melakukan pembelian silahkan order di:
 > https://revandastore.com
+
 Untuk bisnis dan kerjasama silahkan kontak: 
 > https://wa.me/6281271481561
 

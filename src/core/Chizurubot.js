@@ -1,96 +1,215 @@
-const { checkDelay, saveDelayed, checkSubscription } = require("../lib/helpers");
+const { checkSubscription } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
-const Iklan = require("./tools/IklanChizu");
+const {formatMenu} = require("./tools/formatmenu");
 const GeminiAi = require("./tools/geminiAi");
 const StickerWa = require("./tools/stickerWa");
 
 class Chizurubot {
   async process(req, res) {
-    console.log("incoming message", req.body);
-    const { message, bufferImage, from, participant } = req.body;
-    const isSubscribed = await checkSubscription(from);
-
+    const { 
+      device,
+      message, 
+      bufferImage, 
+      from, 
+      name, 
+      participant, 
+      admin, 
+      botadmin, 
+      participantCount, 
+      groupname} = req.body;
+    const { isActive, remainingTime } = await checkSubscription(from);
+    const statusVIP = isActive ? "Aktif" : "Tidak Aktif";
+    const sisaLangganan = isActive ? remainingTime : "Tidak ada";
+    const menu = formatMenu();
     const responFormatter = new ResponFormatter();
-    const iklan = new Iklan();
 
+const status = `*𝐂𝐡𝐢𝐳𝐮𝐫𝐮-𝐜𝐡𝐚𝐧🌸*
+
+*${groupname}* (${from}@g.us)
+Status VIP: ${statusVIP}
+Sisa Langganan: ${sisaLangganan}
+Jumlah Member: ${participantCount}
+
+Perpanjang durasi layanan Chizu hanya di revandastore.com`;
+const chizu = `*𝐂𝐡𝐢𝐳𝐮𝐫𝐮-𝐜𝐡𝐚𝐧🌸*
+      
+どうも ありがとう ございます ~~
+Iya tau, chizu cantik, makasih kak ${name}<3
+ketik */menu* untuk membuka list command yaa.`;
     if ('participant' in req.body) { // the message is from a group
-      if (message === "/grupid") {
-        res.send(responFormatter.line(`ID Grup ini adalah:
-${from}
-Untuk mengaktifkan bot, silakan baca panduan https://revandastore.com/katalog/11`).responAsText());
-      } else if (message === "/chizu") {
-        res.send(responFormatter.line(`Grup Ini Belum Berlangganan Chizu.`).responAsText());
+      if (message === "/status") {
+        res.send(responFormatter.line(status).responAsText());
       }
       if (isSubscribed) {
         if (message === "/chizu") {
           res.send(
-            responFormatter.line(`*Chizuru-chan🌸*
-      
-どうも ありがとう ございます ~~
-Iya tau, chizu cantik, makasih kak<3
-ketik */menu* untuk membuka list command yaa.`).responAsText());
+            responFormatter.line(chizu).responAsText());
         }
-
         if (message === "/menu") {
           res.send(
             responFormatter
-            .line(`*Chizuru-chan🌸*
-Iyaa kak, ada yang bisa chizu bantu?
-    
-╔══〘 *TORAM MENU* 〙══
-╠ /lvling char *miniboss/boss* [lvl]
-╠ /lvling bs *tec/non*
-╠ /lvling alche
-╠ /cari item [item]
-╠ /cari monster [monster]
-╠ /racik rumus fill 
-╠ /cari registlet [regist] 
-╠ /harga slot [eq]
-╠ /bahan tas
-╠ /bahan mq
-╠ /kode live
-╠ /info farm mats
-╠ /info dye
-╠ /info ailment 
-╠ /ninja scroll
-╠ /kalkulator quest
-╠ /buff food
-╠ /kamus besar toram
-╠ /pet lvling
-╠ /arrow elemental
-╠ /build toram
-╠ /mt terbaru
-║
-╠══〘 *GENERAL MENU* 〙══
-╠ /cari anime [anime]
-╠ /cari manga [manga]
-╠ /anime *top/random/recommendations*
-╠ /manga *top/random/recommendations*
-╠ /on going anime
-╠ /random anime quotes
-╠ /AI chat [pesan]
-╠ /tiktok dl [link]
-╠ /fb dl [link]
-╠ /ig dl [link]
-╠ /stikerin (reply foto)
-╠ /req fitur [pesan]
-╠ /info bot
-╠ /help
-║
-╠══〘 *ADMIN MENU* 〙══
-╠ /add [@628xx]
-╠ /kick [@tag member]
-╠ /promote [@tag member]
-╠ /demote [@tag member]
-╠ /anti toxic *on/off*
-╠ /anti link *on/off*
-╠ /welcome msg *on/off*
-╠ /out msg *on/off*
-╠ /grup status
-║
-╚═〘 *ANTI VIRTEX ON* 〙═`).responAsText());
+            .line(menu).responAsText());
         }
-
+        if (message === "/lvling char") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/lvling bs") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/lvling alche") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/cari item") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/cari monster") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/racik rumus fill") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/cari registlet") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/harga slot") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/bahan tas") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/bahan mq") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/kode live") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/info farm mats") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/info dye") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/info ailment") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/ninja scroll") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/kalkulator quest") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/buff food") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/kamus besar toram") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/pet lvling") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/arrow elemental") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/build toram") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/mt terbaru") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/cari anime") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/cari manga") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/anime *top/random/recommendations*") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/manga *top/random/recommendations*") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/on going anime") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/random anime quotes") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/AI chat") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/tiktok dl") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/fb dl") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/ig dl") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
         if (message === "/sticker") {
           if (!bufferImage) {
             return res.send(
@@ -99,17 +218,68 @@ Iyaa kak, ada yang bisa chizu bantu?
               .responAsText()
             );
           }
-
           return res.send(
             responFormatter.responSticker(await StickerWa.create(bufferImage))
           );
         }
-
+        if (message === "/req fitur") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/info bot") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/help") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/add") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/kick") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/promote") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/demote") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/anti toxic") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/anti link") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/welcome msg") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
+        if (message === "/out msg") {
+          res.send(
+            responFormatter
+            .line("Masih dalam tahap pengembangan").responAsText());
+        }
       } else if (!isSubscribed) {
-        const canSendAd = await checkDelay(from);
-        if (canSendAd) {
-          await saveDelayed(from);
-          res.send(responFormatter.line(iklan.getIklan()).responAsText());
+        if (message === "/chizu") {
+          res.send(responFormatter.line(`Grup ini belum berlangganan Bot Chizuru`).responAsText());
         } else {}
       }
     } else return;

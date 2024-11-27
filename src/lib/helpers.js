@@ -33,15 +33,33 @@ const saveSubscription = async (from, durationInDays) => {
   fs.writeFileSync(pathSubscription, JSON.stringify(subscriptions));
 };
 
-// Mengecek apakah grup masih berlangganan
 const checkSubscription = async (from) => {
   const subscriptions = await loadSubscriptions();
   const existing = subscriptions.find((item) => item.from === from);
 
-  if (!existing) return false;
+  if (!existing) {
+    return { isActive: false, remainingTime: "Tidak ada langganan" }; // Jika tidak ditemukan langganan
+  }
 
   const now = new Date();
-  return now <= new Date(existing.expiryDate); // Langganan masih berlaku jika waktu saat ini <= waktu kedaluwarsa
+  const expiryDate = new Date(existing.expiryDate);
+
+  const isActive = now <= expiryDate;
+  const remainingTimeInMs = expiryDate - now; // Selisih waktu dalam milidetik
+
+  if (!isActive) {
+    return { isActive: false, remainingTime: "Tidak ada waktu tersisa" };
+  }
+
+  // Hitung waktu tersisa
+  const seconds = Math.floor((remainingTimeInMs / 1000) % 60);
+  const minutes = Math.floor((remainingTimeInMs / (1000 * 60)) % 60);
+  const hours = Math.floor((remainingTimeInMs / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(remainingTimeInMs / (1000 * 60 * 60 * 24));
+
+  const remainingTime = `${days} hari, ${hours} jam, ${minutes} menit, ${seconds} detik`;
+
+  return { isActive, remainingTime };
 };
 
 // Memuat data delay dari file
