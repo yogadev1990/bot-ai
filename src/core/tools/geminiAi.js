@@ -4,10 +4,7 @@ const {
   HarmBlockThreshold,
 } = require("@google/generative-ai");
 
-class Gemini_Ai {
-  static async run(message) {
-    try {
-const apiKey = process.env.GEMINI_KEY;
+const apiKey = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 
 const model = genAI.getGenerativeModel({
@@ -22,15 +19,17 @@ const generationConfig = {
   maxOutputTokens: 8192,
   responseMimeType: "text/plain",
 };
+
+class GeminiAi {
+static async run(message) {
   const chatSession = model.startChat({
     generationConfig,
     history: [
     ],
   });
+
   const result = await chatSession.sendMessage(message);
-  return result.response.text();
-  }catch (error) {
-    console.error("Error:", error);
-    return `Terjadi kesalahan dalam mengakses AI. ${error.message}`;
-  }}}
-module.exports = Gemini_Ai;
+  console.log(result.response.text());
+}}
+
+module.exports = GeminiAi;
