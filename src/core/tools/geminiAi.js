@@ -1,27 +1,79 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { manageMessagesCache } = require("../../lib/helpers");
+const {
+  GoogleGenerativeAI,
+  HarmCategory,
+  HarmBlockThreshold,
+} = require("@google/generative-ai");
 
-class GeminiAi {
-  static async run(from, message) {
-    try{
-    const genAi = new GoogleGenerativeAI(process.env.GEMINI_KEY);
-    const model = genAi.getGenerativeModel({ model: "gemini-1.5-flash" });
+class Gemini_Ai {
+  static async run(message) {
+    try {
+const apiKey = process.env.GEMINI_KEY;
+const genAI = new GoogleGenerativeAI(apiKey);
 
-    const history = manageMessagesCache(from, "user", message);
-    const chat = model.startChat({
-      history: history,
-      generationConfig: { maxOutputTokens: 100 },
-    });
-    const result = await chat.sendMessage(message);
-    const response = await result.response;
-    const text = response.text();
-    manageMessagesCache(from, "model", text);
-    console.log("text", text);
+const model = genAI.getGenerativeModel({
+  model: "gemini-1.5-flash",
+});
 
-    return text;
-  } catch (error) {
-    return `Error: ${error.message}`;
-  }}
-}
-
-module.exports = GeminiAi;
+const generationConfig = {
+  temperature: 1,
+  topP: 0.95,
+  topK: 40,
+  maxOutputTokens: 8192,
+  responseMimeType: "text/plain",
+};
+  const parts = [
+    {text: "bahasa indonesia"},
+    {text: "input: base critical rate toram online"},
+    {text: "output: +25"},
+    {text: "input: base critical damage toram online"},
+    {text: "output: +150"},
+    {text: "input: rumus penghitungan critical rate toram online"},
+    {text: "output: Total critical rate = (25 * (total critical rate dalam % + 100%)) + critical rate flat"},
+    {text: "input: rumus perhitungan base critical damage toram"},
+    {text: "output: Base Critical Damage = check v\\nIF STR>AGI = 150 + (Total STR/5)\\nIF AGI>STR = 150 + ((Total STR + Total AGI)/10)\\n\\nTotal crit dmg(Cd) = Base critical dmg x (100%+CD%) + flat CD\\nBut there is a soft cap after 300 total crit dmg. Next Cd will be halved after Total Cd reaches 300.\\nSo, the formula like this if you have total cd over 300\\n300 + (Total Cd - 300)/2"},
+    {text: "input: hitung total critical rate toram jika aku punya 20% critical rate dan flat critical rate sebesar 60"},
+    {text: "output: Total critical rate = (25 * (20% + 100%)) + 60\n\nTotal critical rate = (25 * 120%) + 60\n\nTotal critical rate = 30 + 60\n\nTotal critical rate = 90"},
+    {text: "input: hitung total critical rate toram jika aku punya 5% critical rate dan flat critical rate sebesar 90"},
+    {text: "output: Total critical rate = (25 * (5% + 100%)) + 90\n\nTotal critical rate = (25 * 105%) + 90\n\nTotal critical rate = 26.25 + 90\n\nTotal critical rate = 116.25"},
+    {text: "input: hitung critical damage aku jika aku memiliki agi 247 str 500 cd flat 44 dan cd%22"},
+    {text: "output: Karena STR > AGI, rumusnya adalah:\n\nBase Critical Damage = 150 + (Total STR / 5) \nBase Critical Damage = 150 + (500 / 5)\nBase Critical Damage = 150 + 100\nBase Critical Damage = 250\n\nTotal Critical Damage = Base Critical Damage x (100% + CD%) + flat CD\nTotal Critical Damage = 250 x (100% + 22%) + 44\nTotal Critical Damage = 250 x 122% + 44\nTotal Critical Damage = 305 + 44\nTotal Critical Damage = 349\n\nKarena Total Critical Damage (349)  > 300, maka ada soft cap.  Rumus setelah soft cap adalah:\n\nTotal Critical Damage = 300 + (Total Critical Damage - 300) / 2\nTotal Critical Damage = 300 + (349 - 300) / 2\nTotal Critical Damage = 300 + 49 / 2\nTotal Critical Damage = 300 + 24.5\nTotal Critical Damage = 324.5\n\nJadi, total critical damage Anda adalah **324.5**.  Perlu diingat bahwa damage di Toram Online biasanya dibulatkan ke bawah."},
+    {text: "input: bagaimana perhitungan critical damage sihir toram online"},
+    {text: "output: Total Magic cd(MCD) = 100 + (total cd - 100) x (cdmg ratio) \nBase CDMG Ratio is 50%\n- If have <:spellburst:972002215449485312>Spell Burst lv 10 then (2.5 * SLvl) is 25% extra cdmg ratio, so with base 50% => 75% final cdmg ratio\n- If you're in <:_:1200814833298317404>Dual Bringer lv10 buff with your INT>STR, then your mw skills get more +25% extra cdmg ratio. So pair it with SB lv10 additively, then you get 100% final cdmg ratio.\n\nAbout total magic crit damage softcap, Total cd calculated and softcap first then convert to Total Magic cd. [Softcap = halves cd]"},
+    {text: "input: bagaimana penghitungan motion speed toram online"},
+    {text: "output: 1100ASPD removes the intervals between your auto attacks.\nEvery 180 ASPD, you get a Motion Speed boost. The boost is applied this way:\n(ASPD - 1000) ÷ 180\nMotion speed boost has a cap at 10k ASPD (+50% motion speed)\nThat is 50% animation speed time in total.\n(or \"That is 150% animation speed in total\")"},
+    {text: "input: apa itu prorate toram online"},
+    {text: "output: Defination Proration is a effect on boss/mob when you deal a type of attack to much make boss/mob become familiar with that type of attack. The result is make damage deal by that type of attack decrease and make damage deal by other type of attack increase."},
+    {text: "input: apa saja jenis prorate toram online"},
+    {text: "output: Proration type Each type of attack deal different type of proration. There are three type of proration: Normal proration(Normal attack), Physic proration(Physical skill) , Magic Proration (Magic Skill)."},
+    {text: "input: bagaimana batasan prorate toram online"},
+    {text: "output: Limit of proration. In defination we talk about make a type of attack to many time make it decrease damage and increase damage of other type of attack. So what is the limit of it? The smallest damage decrease to is 50% and the biggest damage can increase by proration is up to 250%. It mean when you use a type of attack to many time the damage come from it will decrease, but it will not decrease to under 50%, and damage of other type of attack will increase, but it will not increase to above 250%."},
+    {text: "input: bagaimana cara menghitung prorate toram online"},
+    {text: "output: How to calculate proration use boss/mini boss data. In boss/mini boss data, we have 3 values: Normal prorate(%), Physic prorate(%) and Magic prorate (%). Let’s use MoonLight Potum as a example. Normal prorate=50%, Physic prorate=100%, Magic prorate=5%. Normal prorate=50% mean normal attack damage will increase by 50% when boss receive 1 physic skill or 1 magic skill, and decrease by 50% when boss receive 1 normal attack. While, Physic prorate=100% mean physic attack damage will increase by 100% when boss receive 1 normal attack or 1 magic skill, and decrease by 100% (100%-100%=0% but arcoding to prorate limit it will become 50%) when boss receive 1 physic skill. Similarly for magic prorate. So to maximize physic damage we need 2 attack different type to physic attack(it can be 1 normal attack +1 magic skill or 2 magic skill or 2 normal attack)(100%+100%+100%=300% but arcoding to prorate limit it will become 250%). To maxmize normal attack damage we need 3 attack different type to normal attack( it can be 1 physic skill + 2 magic skill or 3 physic skill,….) (100%+50%+50%+50%=250%) Similarly, to maximize magic damage we need 30 attack different type to magic skill. (100%+30*5%=250%)"},
+    {text: "input: apa itu prorate"},
+    {text: "output: Prorate adalah efek pada boss/mob di Toram Online di mana jika Anda menggunakan satu jenis serangan terlalu banyak, boss/mob akan menjadi terbiasa dengan serangan tersebut.  Hasilnya adalah damage dari jenis serangan tersebut akan berkurang, dan damage dari jenis serangan lainnya akan meningkat."},
+    {text: "input: apakah ada analogi untuk menggambarkan mekanisme prorate agar lebih mudah dimengerti"},
+    {text: "output: Bayangkan sebuah monster memiliki tiga titik lemah: kepala (serangan normal), perut (serangan fisik), dan ekor (sihir).  \n\n* **Jika Anda terus-menerus memukul kepalanya**, monster akan melindungi kepalanya lebih baik, sehingga damage yang Anda berikan ke kepala akan berkurang (hingga minimal 50%).  Namun, karena monster mengabaikan perut dan ekornya, damage serangan fisik dan sihir ke bagian tersebut akan meningkat (hingga maksimal 250%).\n\n* **Jika Anda mencampur serangan**, misalnya, satu serangan ke kepala, satu ke perut, dan satu ke ekor,  maka damage Anda akan lebih seimbang dan lebih efektif.  Monster tidak akan memiliki kesempatan untuk meningkatkan pertahanannya terhadap satu jenis serangan tertentu.\n\nJadi, prorate mendorong pemain untuk menggunakan variasi jenis serangan agar tetap efektif dalam melawan boss/mob.  Tidak hanya bergantung pada satu jenis serangan saja."},
+    {text: "input: apakah ada perhitungan untuk critical damage sihir"},
+    {text: "output: Ya, ada perhitungan untuk Critical Damage Sihir (Magic Critical Damage) di Toram Online, namun rumusnya sedikit berbeda dari Critical Damage fisik.  Rumus dasarnya adalah:\n\n**Total Magic Critical Damage (MCD) = 100 + (Total Critical Damage - 100) x (Critical Damage Ratio)**\n\nDimana:\n\n* **Total Critical Damage:**  Ini adalah total Critical Damage yang Anda miliki, yang dihitung dengan cara yang sama seperti Critical Damage fisik (mempertimbangkan base critical damage, critical damage %, dan flat critical damage), tetapi angka ini akan terkena softcap terlebih dahulu sebelum dihitung ke rumus MCD.  Softcap berarti damage akan dikurangi 50% dari total critical damage jika melebihi batas tertentu.\n\n\n* **Critical Damage Ratio:** Ini adalah persentase yang menentukan seberapa besar peningkatan damage akibat critical hit sihir.  Nilai dasar biasanya 50%, tetapi dapat ditingkatkan oleh beberapa faktor:\n\n    * **Spell Burst (SB):**  Setiap level Spell Burst meningkatkan Critical Damage Ratio. Level 10 Spell Burst memberikan tambahan 25% Critical Damage Ratio, sehingga totalnya menjadi 75%.\n\n    * **Dual Bringer Buff:**  Jika Anda memiliki buff Dual Bringer level 10 dan Intelligence (INT) Anda lebih tinggi dari Strength (STR), Anda mendapatkan tambahan 25% Critical Damage Ratio.  Jika dikombinasikan dengan Spell Burst level 10, total Critical Damage Ratio menjadi 100%.\n\n\n**Contoh Perhitungan:**\n\nMisalkan Anda memiliki Total Critical Damage 250 setelah softcap diterapkan, dan menggunakan Spell Burst level 10:\n\n1. **Critical Damage Ratio:** 75% (50% base + 25% dari Spell Burst)\n2. **Total Magic Critical Damage:** 100 + (250 - 100) x 75% = 100 + 150 x 0.75 = 212.5\n\nJadi, Total Magic Critical Damage Anda dalam contoh ini adalah 212.5. Ingatlah bahwa angka damage biasanya dibulatkan ke bawah di Toram Online.  Perlu diingat bahwa softcap critical damage dihitung *sebelum* dikalikan dengan critical damage ratio."},
+    {text: "input: apa itu critical damage, dan dipengaruhi stat apa saja"},
+    {text: "output: Critical Damage (CD) di Toram Online adalah peningkatan damage yang terjadi ketika serangan Anda menghasilkan *critical hit*.  Critical hit adalah serangan yang berhasil melewati pertahanan musuh dengan peluang tertentu (Critical Rate).  Semakin tinggi Critical Damage Anda, semakin besar peningkatan damage tersebut saat *critical hit* terjadi.\n\nCritical Damage dipengaruhi oleh beberapa stat dan faktor, antara lain:\n\n* **Strength (STR):**  Stat ini berpengaruh besar pada Critical Damage fisik. Semakin tinggi STR, semakin tinggi base Critical Damage Anda.\n* **Agility (AGI):** Stat ini juga berpengaruh pada Critical Damage fisik, terutama jika AGI lebih tinggi dari STR. Rumus perhitungannya berbeda jika AGI lebih tinggi atau lebih rendah dari STR.\n* **Critical Damage % (CD%):**  Persentase ini meningkatkan Critical Damage secara langsung.  Semakin tinggi CD%, semakin besar peningkatan damage saat *critical hit*.\n* **Flat Critical Damage:**  Ini adalah nilai peningkatan Critical Damage tetap yang ditambahkan ke total Critical Damage Anda.  Berbeda dengan CD%, ini adalah angka tetap, bukan persentase.\n* **Spell Burst (untuk Magic Critical Damage):**  Skill ini meningkatkan *Critical Damage Ratio* untuk Magic Critical Damage.\n* **Dual Bringer Buff (untuk Magic Critical Damage):** Buff ini memberikan tambahan *Critical Damage Ratio* untuk Magic Critical Damage jika Intelligence (INT) lebih tinggi dari Strength (STR).\n\n\nPerlu diingat bahwa ada *soft cap* pada Critical Damage.  Setelah mencapai nilai tertentu (biasanya 300 untuk Critical Damage fisik), peningkatan selanjutnya akan dikurangi setengahnya.  Artinya, peningkatan Critical Damage di atas *soft cap* tidak seefektif peningkatan di bawah *soft cap*.  Mekanisme *soft cap* ini juga berlaku untuk Magic Critical Damage, tetapi batasannya mungkin berbeda."},
+    {text: "input: jika aku memiliki 7000 aspd maka berapa motion speed yang aku dapatkan"},
+    {text: "output: Dengan ASPD 7000, perhitungan Motion Speed boost adalah sebagai berikut:\n\n(ASPD - 1000) ÷ 180 = (7000 - 1000) ÷ 180 = 6000 ÷ 180 = 33.33\n\nIni berarti Anda mendapatkan peningkatan Motion Speed sebesar 33.33 kali.  Namun, ingat bahwa ada cap pada Motion Speed boost di Toram Online.  Capnya adalah 50% peningkatan kecepatan animasi (atau 150% dari kecepatan animasi normal).  Karena peningkatan 33.33 kali melebihi cap ini,  Motion Speed Anda akan dibatasi pada **50%**."},
+    {text: "input: berapa aspd yang aku perlukan untuk menghilangkan jeda delay pada serangan"},
+    {text: "output: Anda membutuhkan ASPD sebesar **1100** untuk menghilangkan jeda (delay) antara serangan auto-attack di Toram Online."},
+    {text: "input: adakah batasan dalam critical damage dan attack speed"},
+    {text: "output: Ya, ada batasan dalam Critical Damage dan Attack Speed di Toram Online:\n\n**Critical Damage:**\n\n* **Soft Cap:**  Ada *soft cap* pada Critical Damage, baik untuk Physical maupun Magic Critical Damage.  Setelah mencapai nilai tertentu (biasanya sekitar 300 untuk Physical CD), peningkatan selanjutnya akan dikurangi setengahnya.  Ini berarti peningkatan CD di atas *soft cap* tidak seefektif peningkatan di bawahnya.  Nilai *soft cap* pastinya bisa berbeda tergantung pada versi game dan mungkin juga dipengaruhi faktor lain yang belum diketahui secara pasti.\n\n* **Tidak Ada Hard Cap yang Diketahui:** Meskipun ada *soft cap*, belum ada informasi resmi tentang *hard cap* (batasan absolut) untuk Critical Damage di Toram Online.\n\n\n**Attack Speed (ASPD):**\n\n* **Motion Speed Cap:**  Peningkatan Attack Speed (melalui peningkatan ASPD) akan meningkatkan Motion Speed (kecepatan animasi).  Namun, ada *cap* pada peningkatan Motion Speed ini.  Cap-nya adalah 50% peningkatan kecepatan animasi (atau 150% kecepatan animasi normal).  Artinya, meningkatkan ASPD di atas titik tertentu tidak akan lagi meningkatkan Motion Speed secara signifikan.  Secara teoritis, 10000 ASPD akan memberikan maximum motion speed.\n\n* **Tidak Ada Hard Cap ASPD yang Diketahui:**  Meskipun ada cap pada peningkatan Motion Speed yang disebabkan oleh ASPD, belum ada informasi resmi tentang *hard cap* untuk ASPD itu sendiri di Toram Online.\n\n\nPenting untuk diingat bahwa informasi tentang batasan ini mungkin berubah seiring pembaruan game.  Selalu periksa informasi terbaru dari komunitas Toram Online untuk memastikan akurasi data."},
+    {text: "input: critical damage sihir"},
+    {text: "output: Critical Damage Sihir (Magic Critical Damage) di Toram Online adalah peningkatan damage yang terjadi ketika serangan sihir Anda menghasilkan *critical hit*.  Berbeda dengan Critical Damage fisik, perhitungannya melibatkan beberapa faktor tambahan.\n\n**Rumus Dasar:**\n\n**Total Magic Critical Damage (MCD) = 100 + (Total Critical Damage - 100) x (Critical Damage Ratio)**\n\n**Penjelasan Variabel:**\n\n* **Total Critical Damage:** Ini adalah total Critical Damage yang Anda miliki, *setelah soft cap diterapkan*.  Perhitungannya mirip dengan Critical Damage fisik, mempertimbangkan base critical damage, critical damage %, dan flat critical damage.  Namun, angka ini akan mengalami pengurangan 50% jika melebihi softcap (biasanya sekitar 300, tetapi bisa berbeda).  Softcap dihitung *sebelum* dikalikan dengan Critical Damage Ratio.\n\n* **Critical Damage Ratio:** Persentase yang menentukan seberapa besar peningkatan damage akibat critical hit sihir.  Nilai dasar biasanya 50%, tetapi dapat ditingkatkan dengan:\n\n    * **Spell Burst (SB):** Setiap level Spell Burst meningkatkan Critical Damage Ratio. Level 10 Spell Burst memberikan tambahan 25%, sehingga totalnya menjadi 75%.\n    * **Dual Bringer Buff:** Jika Anda memiliki buff Dual Bringer level 10 dan Intelligence (INT) > Strength (STR), Anda mendapatkan tambahan 25%.  Jika dikombinasikan dengan Spell Burst level 10, totalnya menjadi 100%.\n\n**Contoh Perhitungan:**\n\nMisalkan Total Critical Damage Anda setelah softcap adalah 250, dan Anda menggunakan Spell Burst level 10:\n\n1. **Critical Damage Ratio:** 75% (50% + 25% dari Spell Burst)\n2. **Total Magic Critical Damage:** 100 + (250 - 100) x 75% = 100 + 150 x 0.75 = 212.5\n\nJadi, Total Magic Critical Damage Anda adalah 212.5 (akan dibulatkan ke bawah di dalam game).\n\n**Kesimpulan:**\n\nPerhitungan Magic Critical Damage lebih kompleks daripada Physical Critical Damage karena melibatkan Critical Damage Ratio yang dapat ditingkatkan melalui skill dan buff.  Pastikan untuk memperhitungkan soft cap pada Total Critical Damage sebelum menghitung MCD."},
+    {text: message},
+  ];
+  const result = await model.generateContent({
+    contents: [{ role: "user", parts }],
+    generationConfig,
+  });
+  return result.response.text();
+  }catch (error) {
+    console.error("Error:", error);
+    return `Terjadi kesalahan dalam mengakses AI. ${error.message}`;
+  }}}
+module.exports = Gemini_Ai;
