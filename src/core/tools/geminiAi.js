@@ -8,14 +8,6 @@ class GeminiAi {
       const model = genAi.getGenerativeModel({ 
         model: "tunedModels/toram-online-model-2bpud9rs9i1b" 
       });
-      const generationConfig = {
-        temperature: 1,
-        topP: 0.95,
-        topK: 40,
-        maxOutputTokens: 8192,
-        responseMimeType: "text/plain",
-      };
-
       // Step 1: Manage user input in cache
       const history = manageMessagesCache(from, "user", message);
 
