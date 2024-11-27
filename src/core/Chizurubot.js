@@ -40,7 +40,7 @@ ketik */menu* untuk membuka list command yaa.`;
       if (message === "/status") {
         res.send(responFormatter.line(status).responAsText());
       }
-      if (isSubscribed) {
+      if (isActive) {
         if (message === "/chizu") {
           res.send(
             responFormatter.line(chizu).responAsText());
