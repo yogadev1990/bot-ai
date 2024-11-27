@@ -3,6 +3,7 @@ const { manageMessagesCache } = require("../../lib/helpers");
 
 class GeminiAi {
   static async run(from, message) {
+    try{
     const genAi = new GoogleGenerativeAI(process.env.GEMINI_KEY);
     const model = genAi.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -18,7 +19,9 @@ class GeminiAi {
     console.log("text", text);
 
     return text;
-  }
+  } catch (error) {
+    return `Error: ${error.message}`;
+  }}
 }
 
 module.exports = GeminiAi;
