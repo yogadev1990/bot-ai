@@ -72,6 +72,9 @@ class Chizurubot {
         res.send(responFormatter.line(response).responAsText());
       }
     }
+  };
+  async processGrup(req, res) {
+
   }
 }
 

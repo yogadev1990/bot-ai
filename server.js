@@ -1,13 +1,13 @@
 const express = require("express");
 const axios = require("axios");
 const bodyParser = require("body-parser");
-const Revandabot = require("./src/core/Revandabot");
+const Revandabot = require("./src/core/Revandabot.js");
 const RevandaBot = new Revandabot();
-const Chizurubot = require("./src/core/Chizurubot")
+const Chizurubot = require("./src/core/Chizurubot.js")
 const ChizuruBot = new Chizurubot();
-const Amamiyabot = require("./src/core/Amamiyabot");
+const Amamiyabot = require("./src/core/Amamiyabot.js");
 const AmamiyaBot = new Amamiyabot();
-const helpers = require("./src/lib/helpers");
+const helpers = require("./src/lib/helpers.js");
 const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 3210;
