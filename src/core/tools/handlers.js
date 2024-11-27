@@ -64,11 +64,11 @@ const handlers = {
     }
   },
 
-  async ai({ message }) {
-    if (!message) {
+  async ai({ args }) {
+    if (!args) {
       return "Tuliskan pesan anda setelah /ai.";
     }
-    const response = await GeminiAi.send(message);
+    const response = await GeminiAi.send(args.join(" "));
     return response;
   },
 
