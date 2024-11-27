@@ -22,6 +22,7 @@ const generationConfig = {
 
 class GeminiAi {
 static async run(message) {
+  try {
   const chatSession = model.startChat({
     generationConfig,
     history: [
@@ -29,7 +30,10 @@ static async run(message) {
   });
 
   const result = await chatSession.sendMessage(message);
-  console.log(result.response.text());
+  return result.response.text();
+} catch (error) {
+  return error.message;
+}
 }}
 
 module.exports = GeminiAi;
