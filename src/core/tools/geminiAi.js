@@ -14,7 +14,7 @@ class GeminiAi {
       // Step 2: Start chat and generate response
       const chat = model.startChat({
         history: history,
-        generationConfig: generationConfig,
+        generationConfig,
       });
 
       const result = await chat.sendMessage(message);
