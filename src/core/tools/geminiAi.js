@@ -6,7 +6,7 @@ class GeminiAi {
     try {
       const genAi = new GoogleGenerativeAI(process.env.GEMINI_KEY);
       const model = genAi.getGenerativeModel({ 
-        model: "tunedModels/toram-online-model-2bpud9rs9i1b" 
+        model: "gemini-1.5-flash" 
       });
       const generationConfig = {
         temperature: 1,
