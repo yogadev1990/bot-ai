@@ -3,21 +3,42 @@ const { manageMessagesCache } = require("../../lib/helpers");
 
 class GeminiAi {
   static async run(from, message) {
-    const genAi = new GoogleGenerativeAI(process.env.GEMINI_KEY);
-    const model = genAi.getGenerativeModel({ model: "tunedModels/toram-online-model-2bpud9rs9i1b" });
+    try {
+      const genAi = new GoogleGenerativeAI(process.env.GEMINI_KEY);
+      const model = genAi.getGenerativeModel({ 
+        model: "tunedModels/toram-online-model-2bpud9rs9i1b" 
+      });
+      const generationConfig = {
+        temperature: 1,
+        topP: 0.95,
+        topK: 40,
+        maxOutputTokens: 8192,
+        responseMimeType: "text/plain",
+      };
 
-    const history = manageMessagesCache(from, "user", message);
-    const chat = model.startChat({
-      history: history,
-      generationConfig,
-    });
-    const result = await chat.sendMessage(message);
-    const response = await result.response;
-    const text = response.text();
-    manageMessagesCache(from, "model", text);
-    console.log("text", text);
+      // Step 1: Manage user input in cache
+      const history = manageMessagesCache(from, "user", message);
 
-    return text;
+      // Step 2: Start chat and generate response
+      const chat = model.startChat({
+        history: history,
+        generationConfig: generationConfig,
+      });
+
+      const result = await chat.sendMessage(message);
+      const text = result.response.text();
+
+      // Step 3: Cache the AI response
+      manageMessagesCache(from, "model", text);
+
+      console.log("text", text);
+      return text;
+    } catch (error) {
+      console.error("Error in GeminiAi.run:", error);
+
+      // Return a meaningful error message
+      return `Terjadi kesalahan saat memproses permintaan Anda. ${error.message}`;
+    }
   }
 }
 
