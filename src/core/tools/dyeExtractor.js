@@ -1,38 +1,46 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-class DyeExtractor {
-  constructor() {
-    this.url = "https://tanaka0.work/AIO/en/DyePredictor/ColorWeapon";
-  }
-
-  // Fungsi untuk mengumpulkan data dye
+class DyeExtractor{
   async scrapeDye() {
-    try {
-      const { data } = await axios.get(this.url);
-      const $ = cheerio.load(data);
+  try {
+    console.log("Memulai permintaan ke URL...");
+    const { data } = await axios.get("https://tanaka0.work/AIO/en/DyePredictor/ColorWeapon");
+    console.log("Permintaan berhasil. Data HTML diterima.");
 
-      const bosses = [];
-      $('li').each((index, element) => {
-        const bossName = $(element).find('span.boss-name').text();
-        const colorCode = $(element).find('span.color-code').text();
-        if (bossName && colorCode) {
-          bosses.push({ boss_name: bossName, color_code: colorCode });
-        }
-      });
+    const $ = cheerio.load(data);
+    console.log("Data HTML berhasil diproses dengan cheerio.");
 
-      // Mengembalikan data dalam bentuk teks
-      let resultText = "";
-      bosses.forEach((boss, index) => {
-        resultText += `${index + 1}. Boss: ${boss.boss_name}, Color Code: ${boss.color_code}\n`;
-      });
+    const bosses = [];
+    $('table tr').each((index, row) => {
+      let bossName = $(row).find('td:nth-of-type(1)').text().trim();
+      let colorCode = $(row).find('td:nth-of-type(2)').text().trim();
 
-      return resultText; // Mengembalikan hasil sebagai teks
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return "Error fetching data.";
-    }
+      // Membersihkan teks bossName dan colorCode
+      bossName = bossName.replace(/\(Lv.\..*?\)/g, '').trim().replace(/\s+/g, ' '); // Menghapus level monster
+      colorCode = colorCode.replace(/\s+/g, ' '); // Menghapus spasi berlebih dalam kode warna
+
+      console.log(`Baris ${index + 1}: bossName="${bossName}", colorCode="${colorCode}"`);
+
+      if (bossName && colorCode) {
+        bosses.push({ boss_name: bossName, color_code: colorCode });
+      }
+    });
+
+    console.log(`Jumlah item yang ditemukan: ${bosses.length}`);
+
+    let resultText = "";
+    bosses.forEach((boss, index) => {
+      resultText += `${index + 1}. Boss: ${boss.boss_name}, Color Code: ${boss.color_code}\n`;
+    });
+
+    console.log("Hasil akhir:");
+    console.log(resultText || "Tidak ada data yang ditemukan.");
+    return resultText;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return "Error fetching data.";
   }
 }
-
+}
 module.exports = DyeExtractor;
