@@ -318,7 +318,6 @@ PRES% (Kekebalan Fisik%)`
       return "Maaf, kategori tersebut tidak ditemukan. Coba gunakan nama lain.";
     }
   
-    // Format pesan berdasarkan kategori yang ditemukan
     return `*Chizuru-chan🌸*\n\n${category.title}:\n- Prime: ${category.prime}\n- Piercer: ${category.piercer}\n\nPM chizu bila harga berubah kak^^`;
   },  
 

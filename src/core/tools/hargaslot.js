@@ -1,6 +1,6 @@
-class hargaslot {
-  constructor() {
-    this.prices = {
+class HargaSlot {
+    constructor() {
+      this.prices = {
         knuck: {
           title: "Senjata Knuckle",
           prime: "150m",
@@ -20,13 +20,15 @@ class hargaslot {
           aliases: ["ths", "two handed sword", "pedang 2 tangan"],
         },
       };
+    }
+  
+    async findCategory(input) {
+      const categoryKey = Object.keys(this.prices).find((key) =>
+        this.prices[key].aliases.includes(input)
+      );
+      return categoryKey ? this.prices[categoryKey] : null;
+    }
   }
-
- async findCategory(input) {
-    const categoryKey = Object.keys(prices).find((key) => 
-      prices[key].aliases.includes(input)
-    );
-    return categoryKey ? prices[categoryKey] : null;
-  }}
-
-module.exports = hargaslot;
+  
+  module.exports = HargaSlot;
+  
