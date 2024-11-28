@@ -22,7 +22,7 @@ class hargaslot {
       };
   }
 
-  static async findCategory(input) {
+ async findCategory(input) {
     const categoryKey = Object.keys(prices).find((key) => 
       prices[key].aliases.includes(input)
     );

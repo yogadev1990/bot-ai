@@ -10,6 +10,7 @@ const auth = { headers: { Authorization: `Bearer ${token}` } };
 
 const toramnews = new ToramNews();
 const dyeExtractor = new DyeExtractor();
+const hargaSlot = new hargaslot();
 
 const handlers = {
   async status({ groupname, from, statusVIP, sisaLangganan, participantCount }) {
@@ -311,7 +312,7 @@ PRES% (Kekebalan Fisik%)`
     }
   
     const input = args.join(" ").toLowerCase(); // Gabungkan argumen menjadi satu string
-    const category = await hargaslot.findCategory(input); // Cari kategori berdasarkan alias
+    const category = await hargaSlot.findCategory(input); // Cari kategori berdasarkan alias
   
     if (!category) {
       return "Maaf, kategori tersebut tidak ditemukan. Coba gunakan nama lain.";
