@@ -43,7 +43,15 @@ class Chizurubot {
       args,
     };
 
-    // Command Handler
+    if (message === "/status") {
+      res.send(
+        responFormatter
+          .line(
+            `Status langganan kamu: ${statusVIP}\nSisa waktu langganan: ${sisaLangganan}`
+          )
+          .responAsText()
+      );
+    }
     let response;
     if (statusVIP === "Aktif") {
     switch (command) {
@@ -193,13 +201,11 @@ class Chizurubot {
         break;
     }
     } else {
-      if (command === "status") {
-        response = await handlers.status(context);
-      } else {
-        response = responFormatter.line(
-          "Mohon maaf, layanan ini hanya untuk grup VIP. Silahkan langganan di revandastore.com"
-        ).responAsText();
-      }
+    res.send(
+      responFormatter.line(
+        "Mohon maaf, layanan ini hanya untuk grup VIP. Silahkan langganan di revandastore.com"
+      ).responAsText()
+    );
     }
   };
   async processGrup(req, res) {
