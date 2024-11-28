@@ -6,6 +6,8 @@ const axios = require("axios");
 const token = process.env.TORAM_API_TOKEN;
 const auth = { headers: { Authorization: `Bearer ${token}` } };
 
+const toramnews = new ToramNews();
+
 const handlers = {
   async status({ groupname, from, statusVIP, sisaLangganan, participantCount }) {
     return `*𝐂𝐡𝐢𝐳𝐮𝐫𝐮-𝐜𝐡𝐚𝐧🌸*\n\n*${groupname}* (${from}@g.us)\nStatus VIP: ${statusVIP}\nSisa Langganan: ${sisaLangganan}\nJumlah Member: ${participantCount}\n\nPerpanjang durasi layanan Chizu hanya di revandastore.com`;
@@ -952,7 +954,7 @@ https://drive.google.com/drive/folders/1CtXe-jDXEfsrpSwvrDbfBaA5un6X00ge`;
   },
 
   async mtTerbaru() {
-    const response = await ToramNews.fetchLatestNews();
+    const response = await toramnews.fetchLatestNews();
     return response;
   },
 
