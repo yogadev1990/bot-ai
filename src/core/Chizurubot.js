@@ -43,12 +43,13 @@ class Chizurubot {
       args,
     };
 
-    if (message === "/status") {
-      return await handlers.status(context);
-    }
+    // Command Handler
     let response;
-    if (statusVIP === "Aktif") {
+    if (!isActive) {
     switch (command) {
+      case "status":
+        response = await handlers.status(context);
+        break;
       case "menu":
         response = await handlers.menu();
         break;
@@ -192,6 +193,11 @@ class Chizurubot {
         break;
     }
     } else {
+      switch (command) {
+        case "status":
+          response = await handlers.status(context);
+          break;
+      }
     res.send(
       responFormatter.line(
         "Mohon maaf, layanan ini hanya untuk grup VIP. Silahkan langganan di revandastore.com"
