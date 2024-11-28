@@ -45,13 +45,11 @@ class Chizurubot {
 
     // Command Handler
     let response;
-    switch (command) {
-    case "status":
-      response = await handlers.status(context);
-      break;
-    }
     if (isActive) {
     switch (command) {
+      case "status":
+        response = await handlers.status(context);
+        break;
       case "menu":
         response = await handlers.menu();
         break;
