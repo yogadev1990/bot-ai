@@ -16,6 +16,7 @@ const bulan = namaBulan[waktuJakarta.getMonth()];
 const tahun = waktuJakarta.getFullYear();
 
 const toramnews = new ToramNews();
+const dyeExtractor = new DyeExtractor();
 
 const handlers = {
   async status({ groupname, from, statusVIP, sisaLangganan, participantCount }) {
@@ -591,7 +592,7 @@ Drop: Bola Mata Redup`;
   },
 
   async infoDye() {
-    const response = await DyeExtractor.scrapeDye();
+    const response = await dyeExtractor.scrapeDye();
     return response;
   },
 

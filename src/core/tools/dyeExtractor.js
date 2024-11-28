@@ -7,7 +7,7 @@ class DyeExtractor {
   }
 
   // Fungsi untuk mengumpulkan data dye
-  static async scrapeDye() {
+  async scrapeDye() {
     try {
       const { data } = await axios.get(this.url);
       const $ = cheerio.load(data);
