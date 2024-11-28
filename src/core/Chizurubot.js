@@ -193,12 +193,9 @@ class Chizurubot {
         break;
     }
     } else {
-      switch (command) {
-        case "status":
-          response = await handlers.status(context);
-          break;
-      }
-    res.send(
+      if (command === "status") {
+        response = await handlers.status(context);
+      } else res.send(
       responFormatter.line(
         "Mohon maaf, layanan ini hanya untuk grup VIP. Silahkan langganan di revandastore.com"
       ).responAsText()
