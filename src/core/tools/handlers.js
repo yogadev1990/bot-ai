@@ -2,9 +2,18 @@ const { formatMenu } = require("./formatmenu");
 const StickerWa = require("./stickerWa");
 const GeminiAi = require("./geminiAi");
 const ToramNews = require("./infoMT");
+const hargaslot = require("./hargaslot");
 const axios = require("axios");
+const DyeExtractor = require("./dyeExtractor");
 const token = process.env.TORAM_API_TOKEN;
 const auth = { headers: { Authorization: `Bearer ${token}` } };
+const namaBulan = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+];
+const waktuJakarta = new Date(waktu.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
+const bulan = namaBulan[waktuJakarta.getMonth()];
+const tahun = waktuJakarta.getFullYear();
 
 const toramnews = new ToramNews();
 
@@ -302,11 +311,21 @@ MRES% (Kekebalan Sihir%)
 PRES% (Kekebalan Fisik%)`
   },
 
-  async cariRegistlet ({ args }) {
-  },
-
-  async hargaSlot ({ args }) {
-  },
+  async hargaSlot({ args }) {
+    if (args.length < 1) {
+      return "Tuliskan kategori item yang ingin dicek harganya setelah perintah. Contoh: /hargaslot knuck";
+    }
+  
+    const input = args.join(" ").toLowerCase(); // Gabungkan argumen menjadi satu string
+    const category = await hargaslot.findCategory(input); // Cari kategori berdasarkan alias
+  
+    if (!category) {
+      return "Maaf, kategori tersebut tidak ditemukan. Coba gunakan nama lain.";
+    }
+  
+    // Format pesan berdasarkan kategori yang ditemukan
+    return `*Chizuru-chan🌸*\n\n${category.title}:\n- Prime: ${category.prime}\n- Piercer: ${category.piercer}\n\nPM chizu bila harga berubah kak^^`;
+  },  
 
   async bahanTas() {
     return `*Chizuru-chan🌸*
@@ -500,6 +519,17 @@ List bahan MQ:
   },
 
   async kodeLive() {
+    return `*Chizuru-chan🌸*
+
+*Kode Reward Live Streaming*
+Tanggal : 20 Mei 2024
+Kode : dl1400man
+Tipe Chat : Ucap
+Lokasi : Pakar Padu Kota Sofya
+Limit : 13.59 WIB
+Hadiah :
+- 100x Pecahan Orb
+- 3x Life Potion`;
   },
 
   async infoFarmMats() {
@@ -561,9 +591,133 @@ Drop: Bola Mata Redup`;
   },
 
   async infoDye() {
+    const response = await DyeExtractor.scrapeDye();
+    return response;
   },
 
   async infoAilment() {
+    return `*Chizuru-chan🌸*
+
+Berikut adalah daftar efek status buruk yang dapat diberikan kepada monster dan player:
+1) Bergidik
+- ke monster: Interupsi aksinya sejenak (Singkat)
+- ke player: Interupsi tindakan mereka sejenak (Singkat)
+
+2) Jatuh
+- ke monster: Interupsi aksinya sejenak (Sedang)
+- ke player: Interupsi tindakan mereka sejenak (Sedang)
+
+3) Pingsan
+- ke monster: Interupsi aksinya sejenak (Lama)
+- ke player: Interupsi tindakan mereka sejenak (Lama)
+
+4) Knock Back (Terpelanting)
+- ke monster: Interupsi aksinya sejenak, terpelanting ke belakang untuk beberapa jarak
+- ke player: Interupsi aksinya sejenak, terpelanting ke belakang untuk beberapa jarak
+
+5) Poison (Racun)
+- ke monster: Menimbulkan beberapa kerusakan untuk setiap tindakan selama 10 detik
+- ke player: Menimbulkan kerusakan sebesar 5% dari sisa HP pada setiap tindakan, kerusakan ini tidak dapat membunuh pemain
+
+6) Ignite (Terbakar)
+- ke monster: Menimbulkan beberapa kerusakan untuk setiap 1 detik (3 detik) selama 10 detik
+- ke player: Menimbulkan kerusakan sebesar 15% dari sisa HP terkini, kerusakan ini tidak dapat membunuh pemain
+
+7) Freeze (Beku)
+- ke monster: Mengurangi kecepatan gerak hingga 50%, berlangsung selama 10 detik. Dapat digunakan kembali saat durasi berakhir
+- ke player: Mengurangi 50% kecepatan gerak (moontion speed) dan Ayunan Dewa (Godspeed Wield), Memiliki durasi 10 detik.
+
+8) Slow (Lambat)
+- ke monster: Mengurangi kecepatan gerakan target sebesar 50% (25% untuk bos). Memiliki durasi 10 detik
+- ke player: Menurunkan 50% kecepatan berjalan (movement speed), durasi efek 10 detik. Evasion, Evasion recharge dan Shukuchi dinonaktifkan
+
+9) Stop (Berhenti)
+- ke monster: Mengikat musuh ke posisinya saat ini selama 10 detik, memiliki cooldown 60 detik. Lebih efektif untuk monster dan bos mini. Pola serangan seperti garis lurus atau serangan rapalan dapat digunakan saat mendapatkan debuff berhenti.
+- ke player: Tidak dapat berpindah tempat atau berjalan, durasi 10 detik. Masih bisa menggunakan skil gerak (motion) dan rapalan seperti slash dapat digunakan saat mendapatkan debuff berhenti. Tidak dapat Evasion, Evasion recharge dan Shukuchi terhenti.
+
+10) Dizzy (Pening)
+- ke monster: Menurunkan tingkat guard dan evasion sebesar 100% (Boss 50%)
+- ke player: Menonaktifkan Evasion dan Guard recharge
+
+11) Dazzled (Silau)
+- ke monster: Flee -50%
+- ke player: -
+
+12) Paralysis (Lumpuh)
+- ke monster: Tingkatkan penundaan tindakan
+- ke player: Mengurangi 50% ASPD (Attack Speed/Kecepatan Serangan)
+
+13) Blind (Buta)
+- ke monster: Mengurangi akurasi 50%
+- ke player: Penurunan Akurasi sebesar 20% untuk serangan dalam jarak 7m, dan 40% untuk 8m ke atas
+
+14) Fear (Takut)
+- ke monster: 30% kemungkinan untuk membatalkan tindakan
+- ke player: 30% peluang gagal mengeluarkan skill
+
+15) Lethargy (Lesu)
+- ke monster: Output kerusakan berkurang 30%
+- ke player: Output kerusakan berkurang 30%
+
+16) Weaken (Lemah)
+- ke monster: Mengurangi MDEF target sebesar 25%.
+- ke player: Menambah Biaya konsumsi MP untuk semua keterampilan +100
+
+17) Bleed (Berdarah)
+- ke monster: Tidak dapat menggunakan skill fisik
+- ke player: Tidak dapat menggunakan skill fisik
+
+18) Silence (Bisu)
+- ke monster: Tidak dapat menggunakan skill sihir
+- ke player: Tidak dapat menggunakan skill sihir
+
+19) Confused
+- ke monster: -
+- ke player: -
+
+20) Armor Break (Pecah Zirah)
+- ke monster: DEF & MDEF -50%
+- ke player: Mengurangi kekebalan fisik dan sihir hingga 50%, tidak dapat menggunakan Guard
+
+21) Fatigue (Lelah)
+- ke monster: Mengurangi stabilitas 50%, pada serangan durasi terakhir akan mengalami graze.
+- ke player: Mengurangi stabilitas 50%, pada serangan durasi terakhir akan mengalami graze.
+
+22) Sleep (Tidur)
+- ke monster: Melumpuhkan untuk waktu yang lama, bangun saat menerima serangan, Bos memulihkan 3% dari HP maksimal saat bangun
+- ke player: Melumpuhkan untuk waktu yang lama, bangun saat menerima serangan, mengaktifkan regenerasi alami
+
+23) Mana Explosion (Ledakan Mana)
+- ke monster: -
+- ke player: Setelah durasi berakhir, konsumsi semua mp menjadi 0 dan memberikan damage sama dengan konsumsi mp x10
+
+24) Sick (Sakit)
+- ke monster: Menurunkan resistensi status buruk sebesar -50% (masih dapat terkena bahkan jika Anda memiliki resistensi status buruk 100%)
+- ke player: Menurunkan resistensi status buruk sebesar -50% (masih dapat terkena bahkan jika Anda memiliki resistensi status buruk 100%)
+
+25) Curse (Terkutuk)
+- ke monster: Menurunkan CRT damage pemain sebesar -50%
+- ke player: Menurunkan CRT damage pemain sebesar -50%
+
+26) Item Disable
+- ke monster: -
+- ke player: Tidak dapat menggunakan barang
+
+27) Overdrive (Lari)
+- ke monster: -
+- ke player: Mengonsumsi HP saat MP tidak mencukupi untuk melakukan skill, juga menerapkan tenacity (Gigih) ke semua skill dalam kombo (tidak mengganti tag yang ada)
+
+28) Suction (Pengisapan)
+- ke monster: Menarik ke pusat serangan, 50% peluang tarik untuk Bos
+- ke player: Menarik ke pusat serangan, saat terkena menonaktifkan evasion dan Guard selama 1 detik
+
+29) Petrified (Kaku)
+- ke monster: Menghindar Mutlak +100%, & menghapus aggro saat ini sebesar 99%
+- ke player: Menghindar Mutlak +100%, & menghapus aggro saat ini sebesar 99%
+
+30) Inversion (Inversi)
+- ke monster: -
+- ke player: Mengganti HP% dan MP% Anda saat ini`;
   },
 
   async ninjaScroll() {

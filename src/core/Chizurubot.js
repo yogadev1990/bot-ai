@@ -53,30 +53,29 @@ class Chizurubot {
             response = await handlers.add(context);
             break;
           case "kick":
-            response = await handlers.kick({ args });
+            response = await handlers.kick(context);
             break;
           case "promote":
-            response = await handlers.promote({ args });
+            response = await handlers.promote(context);
             break;
           case "demote":
-            response = await handlers.demote({ args });
+            response = await handlers.demote(context);
             break;
           case "antitoxic":
-            response = await handlers.antiToxic({ args });
+            response = await handlers.antiToxic(context);
             break;
           case "antilink":
-            response = await handlers.antiLink({ args });
+            response = await handlers.antiLink(context);
             break;
           case "welcomemsg":
-            response = await handlers.welcomeMsg({ args });
+            response = await handlers.welcomeMsg(context);
             break;
           case "outmsg":
-            response = await handlers.outMsg({ args });
+            response = await handlers.outMsg(context);
             break;
           default:
             response = await handlers.default();
             break;
-
           case "menu":
             response = await handlers.menu();
             break;
@@ -195,9 +194,7 @@ class Chizurubot {
     } else {
       res.send(
         responFormatter
-          .line(
-            "Mohon maaf, layanan ini hanya untuk grup VIP. Silahkan langganan di revandastore.com"
-          )
+          .line("Mohon maaf, layanan ini hanya untuk grup VIP. Silahkan langganan di revandastore.com")
           .responAsText()
       );
     }
