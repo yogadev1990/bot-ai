@@ -7,13 +7,6 @@ const axios = require("axios");
 const DyeExtractor = require("./dyeExtractor");
 const token = process.env.TORAM_API_TOKEN;
 const auth = { headers: { Authorization: `Bearer ${token}` } };
-const namaBulan = [
-  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-  "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-];
-const waktuJakarta = new Date(waktu.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
-const bulan = namaBulan[waktuJakarta.getMonth()];
-const tahun = waktuJakarta.getFullYear();
 
 const toramnews = new ToramNews();
 const dyeExtractor = new DyeExtractor();
