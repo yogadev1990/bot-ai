@@ -44,20 +44,11 @@ class Chizurubot {
     };
 
     if (message === "/status") {
-      res.send(
-        responFormatter
-          .line(
-            `Status langganan kamu: ${statusVIP}\nSisa waktu langganan: ${sisaLangganan}`
-          )
-          .responAsText()
-      );
+      return await handlers.status(context);
     }
     let response;
     if (statusVIP === "Aktif") {
     switch (command) {
-      case "status":
-        response = await handlers.status(context);
-        break;
       case "menu":
         response = await handlers.menu();
         break;
