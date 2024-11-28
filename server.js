@@ -29,7 +29,7 @@ app.post("/chizuru", ChizuruBot.process);
 app.post("/chizuru_grup", ChizuruBot.processGrup);
 app.post("/amamiya", AmamiyaBot.process);
 app.post("/addsubs", async (req, res) => {
-  const { from, duration } = req.body;
+  const { device, from, duration } = req.body;
 
   if (!from || !duration) {
     return res.status(400).json({ message: "Parameter 'from' dan 'duration' wajib diisi." });
@@ -40,12 +40,13 @@ app.post("/addsubs", async (req, res) => {
     if (isNaN(durationInDays) || durationInDays <= 0) {
       return res.status(400).json({ message: "Durasi harus berupa angka positif." });
     }
-
-    await helpers.saveSubscription(from, durationInDays);
+    const fromNumber = from.replace("@c.us", "").replace("@s.whatsapp.net", "").replace("@g.us", "");
+    await helpers.saveSubscription(fromNumber, durationInDays);
     axios.post(`${process.env.WA_BOT_URL}/send-message`, {
-      to: from,
-      type: "text",
-      content: `Langganan untuk nomor ${from} telah ditambahkan selama ${durationInDays} hari.`
+      api_key: process.env.WA_BOT_API_KEY,
+      sender: device,
+      number: from,
+      message: `Langganan untuk nomor ${from} telah ditambahkan selama ${durationInDays} hari.`
     });
     return res.status(200).json({ message: `Langganan untuk ${from} telah ditambahkan selama ${durationInDays} hari.` });
   } catch (error) {
