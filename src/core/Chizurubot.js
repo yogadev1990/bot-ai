@@ -45,9 +45,12 @@ class Chizurubot {
 
     // Command Handler
     let response;
-    if (command === "status") {
+    switch (command) {
+    case "status":
       response = await handlers.status(context);
-    } else if (isActive) {
+      break;
+    }
+    if (isActive) {
     switch (command) {
       case "menu":
         response = await handlers.menu();
@@ -192,12 +195,13 @@ class Chizurubot {
         break;
     }
 
-  } else {
+    } else {
     res.send(
       responFormatter.line(
         "Mohon maaf, layanan ini hanya untuk grup VIP. Silahkan langganan di revandastore.com"
       ).responAsText()
-    );}
+    );
+    }
   };
   async processGrup(req, res) {
 
