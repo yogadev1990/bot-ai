@@ -88,7 +88,7 @@ class fillstat{
             url: `https://tanaka0.work/id/${properType}`,
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
-                "Cookie": "JSESSIONID=08D6228281542B6C3B8431F4F8361804",
+                "Cookie": "JSESSIONID=9C4CB3F3674603DFAFCA22054CC2B976",
             },
             data: data,
         };
