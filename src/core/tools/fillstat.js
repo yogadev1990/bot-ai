@@ -98,7 +98,7 @@ class fillstat{
             return this.processResponse(response.data, type);
         } catch (error) {
             console.error("Error:", error);
-            return null;
+            return `Terjadi kesalahan saat mengambil data. Error: ${error.message}`;
         }
     }    
     
