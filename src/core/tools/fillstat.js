@@ -37,7 +37,7 @@ class fillstat{
 		 "water": "Unsur+Air+%28no+matching%29",
 		 "earth": "Unsur+Bumi+%28no+matching%29",
 		 "wind": "Unsur+Angin+%28no+matching%29",
-		 "ligth": "Unsur+Cahaya+%28no+matching%29",
+		 "light": "Unsur+Cahaya+%28no+matching%29",
 		 "dark": "Unsur+Gelap+%28no+matching%29",
 		 "firem": "Unsur+Api+%28matching%29",
 		 "waterm": "Unsur+Air+%28matching%29",
@@ -95,7 +95,7 @@ class fillstat{
     
         try {
             const response = await axios.request(config);
-            return this.processResponse(response.data, type);
+            return this.processResponse(response.data, type, potValue);
         } catch (error) {
             console.error("Error:", error);
             return `Terjadi kesalahan saat mengambil data. Error: ${error.message}`;
@@ -124,7 +124,7 @@ class fillstat{
         return data;
     }
     
-    async processResponse(responseHtml, type) {
+    async processResponse(responseHtml, type, potValue) {
         const $ = cheerio.load(responseHtml);
     
         const stat = $('#main > div:nth-of-type(2)').clone();
@@ -145,6 +145,7 @@ class fillstat{
     
         return `*Chizuru-chan🌸*
 Jenis: ${type}
+Pot: ${potValue}
 Level Karakter: 290
     
 Stat akhir: 
