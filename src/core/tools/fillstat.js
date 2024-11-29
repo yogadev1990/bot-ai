@@ -36,7 +36,7 @@ class fillstat{
     
         const data = await this.buildData(positiveStats, negativeStats, potValue, type);
     
-        const properType = type === "Weapon" ? "BukiProper" : "BouguProper";
+        const properType = type === "weapon" ? "BukiProper" : "BouguProper";
         const config = {
             method: "post",
             maxBodyLength: Infinity,
