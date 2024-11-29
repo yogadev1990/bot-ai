@@ -236,7 +236,7 @@ function parseFillStatMessage(message) {
   const potValue = parseInt(potMatch[2], 10); // Nilai pot
 
   const parsedStats = stats.map(([, stat, value]) => ({
-    stat: stat.toUpperCase(),
+    stat, // Ubah stat menjadi uppercase
     value: parseInt(value, 10),
   }));
 

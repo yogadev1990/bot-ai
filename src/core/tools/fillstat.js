@@ -5,7 +5,7 @@ class fillstat{
     async fillStat(parsedMessage) {
         const { type, potValue, stats } = parsedMessage;
         const statTranslate = {
-            "A%": "ATK+%25",
+        "A%": "ATK+%25",
 		 "A": "ATK",
 		 "M%": "MATK+%25",
 		 "M": "MATK",
