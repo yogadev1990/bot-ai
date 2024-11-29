@@ -31,6 +31,7 @@ class Chizurubot {
 
     // Context for handlers
     const context = {
+      device,
       groupname,
       from,
       name,
@@ -167,7 +168,7 @@ class Chizurubot {
             response = await handlers.randomQuote();
             break;
           case "reqfitur":
-            response = await handlers.reqFitur({ args });
+            response = await handlers.reqFitur(context);
             break;
           case "infobot":
             response = await handlers.infoBot();
@@ -176,7 +177,7 @@ class Chizurubot {
             response = await handlers.help();
             break;
           case "ai":
-            response = await handlers.ai({ args });
+            response = await handlers.ai(context);
             break;
           case "sticker":
             response = await handlers.sticker(context);

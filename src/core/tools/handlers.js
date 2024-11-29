@@ -3,6 +3,8 @@ const StickerWa = require("./stickerWa");
 const GeminiAi = require("./geminiAi");
 const ToramNews = require("./infoMT");
 const hargaslot = require("./hargaslot");
+const moeAPI = require("./moeAPI");
+const downloaderApi = require("./downloaderApi");
 const axios = require("axios");
 const DyeExtractor = require("./dyeExtractor");
 const token = process.env.TORAM_API_TOKEN;
@@ -11,6 +13,8 @@ const auth = { headers: { Authorization: `Bearer ${token}` } };
 const toramnews = new ToramNews();
 const dyeExtractor = new DyeExtractor();
 const hargaSlot = new hargaslot();
+const moeApi = new moeAPI();
+const dowloaderAPI = new downloaderApi();
 
 const handlers = {
   async status({ groupname, from, statusVIP, sisaLangganan, participantCount }) {
@@ -1107,27 +1111,103 @@ https://drive.google.com/drive/folders/1CtXe-jDXEfsrpSwvrDbfBaA5un6X00ge`;
   },
 
   async cariAnime({ args }) {
+    if (args.length < 1) {
+      return "Tuliskan judul anime yang ingin dicari setelah /carianime.";
+    } else {
+      const query = args.join(" ");
+      const response = await moeApi.searchAnime(query);
+      return response;
+    }
   },
 
   async cariManga({ args }) {
+    if (args.length < 1) {
+      return "Tuliskan judul manga yang ingin dicari setelah /carimanga.";
+    } else {
+      const query = args.join(" ");
+      const response = await moeApi.searchManga(query);
+      return response;
+    }
   },
 
   async anime({ args }) {
+    if (args.length < 1) {
+      return "Format tidak lengkap. /anime recommendations/top/random";
+    } else if (args[0] === "recommendations" || args[0] === "random" || args[0] === "top") {
+      const query = args[0];
+      const response = await moeApi.getAnime(query);
+      return response;
+    } else {
+      return "Format tidak dikenali. /anime recommendations/top/random";
+    }
   },
 
   async manga({ args }) {
+    if (args.length < 1) {
+      return "Format tidak lengkap. /manga recommendations/top/random";
+    } else if (args[0] === "recommendations" || args[0] === "random" || args[0] === "top") {
+      const query = args[0];
+      const response = await moeApi.getManga(query);
+      return response;
+    } else {
+      return "Format tidak dikenali. /manga recommendations/top/random";
+    }
   },
 
   async ongoingAnime() {
+    const response = await moeApi.ongoingAnime();
+    return response;
   },
 
   async randomQuote() {
+    try {
+      const response = await axios.get(`https://katanime.vercel.app/api/getrandom`);
+      const quotes = response.data.result;
+      const formattedQuotes = quotes.map(quote => {
+        return `_"${quote.indo}"_   
+  *~${quote.character} (${quote.anime})*
+  `;
+      });
+      return `*Chizuru-chan🌸*
+      
+  ${formattedQuotes.join("\n")}`;
+    } catch (error) {
+      console.error('Terjadi kesalahan:', error.message);
+      return 'Terjadi kesalahan dalam pencarian.';
+    }
   },
 
-  async reqFitur({ args }) {
+  async reqFitur({ device, args }) {
+    if (args.length < 1) {
+      return "Tuliskan fitur yang ingin di request setelah /reqfitur.";
+    } else {
+      const query = args.join(" ");
+      try {
+        await axios.post(`${process.env.WA_BOT_URL}`, {
+          api_key: process.env.WA_BOT_API_KEY,
+          sender: device,
+          number: 6285159199040,
+          message: `Request fitur: ${query}`
+        });
+        return "Fitur berhasil direquest. Terima kasih.";
+      } catch (error) {
+        console.error('Terjadi kesalahan:', error.message);
+        return 'Terjadi kesalahan dalam request fitur.';
+      }
+    }
   },
 
   async infoBot() {
+    return `*Chizuru-chan🌸*
+
+Create with love by Revanda,
+Bot ini dibuat untuk membantumu dalam mencari informasi seputar Toram Online.
+Bot ini masih terus dikembangkan, jadi mohon maaf jika masih ada beberapa fitur yang belum berjalan dengan baik.
+Jika kamu memiliki saran atau pertanyaan, silakan chat Chizuru-chan.
+Terima kasih sudah menggunakan Chizuru-chan🌸
+
+Katalog bot: https://revandastore.com/katalog/11
+Owner Chizuru: https://github.com/yogadev1990`;
   },
 
   async help() {
@@ -1158,12 +1238,33 @@ Contoh: *lvling char miniboss 200*
   },  
 
   async tiktok({ args }) {
+    if (args.length < 1) {
+      return "Tuliskan link video yang ingin di download setelah /tiktok.";
+    } else {
+      const url = args[0];
+      const response = await dowloaderAPI.downloadtiktok(url);
+      return response;
+    }
   },
 
   async fb({ args }) {
+    if (args.length < 1) {
+      return "Tuliskan link video yang ingin di download setelah /fb.";
+    } else {
+      const url = args[0];
+      const response = await dowloaderAPI.downloadfb(url);
+      return response;
+    }
   },
 
   async ig({ args }) {
+    if (args.length < 1) {
+      return "Tuliskan link video yang ingin di download setelah /ig.";
+    } else {
+      const url = args[0];
+      const response = await dowloaderAPI.downloadig(url);
+      return response;
+    }
   },
 
   async add({ admin, botadmin, args }) {

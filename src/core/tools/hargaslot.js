@@ -19,6 +19,60 @@ class HargaSlot {
           piercer: "25m",
           aliases: ["ths", "two handed sword", "pedang 2 tangan"],
         },
+        bow: {
+          title: "Senjata Bow",
+          prime: "250m",
+          piercer: "30m",
+          aliases: ["bow", "busur"],
+        },
+        staff: {
+          title: "Senjata Staff",
+          prime: "200m",
+          piercer: "20m",
+          aliases: ["staff", "tongkat"],
+        },
+        halberd: {
+          title: "Senjata Halberd",
+          prime: "150m",
+          piercer: "15m",
+          aliases: ["halberd", "tombak"],
+        },
+        katana: {
+          title: "Senjata Katana",
+          prime: "200m",
+          piercer: "20m",
+          aliases: ["katana"],
+        },
+        bowgun: {
+          title: "Senjata Bowgun",
+          prime: "200m",
+          piercer: "20m",
+          aliases: ["bowgun", "senjata peluru"],
+        },
+        magicdevice: {
+          title: "Senjata Magic Device",
+          prime: "200m",
+          piercer: "20m",
+          aliases: ["magic device", "senjata sihir"],
+        },
+        armor: {
+          title: "Armor",
+          prime: "150m",
+          piercer: "15m",
+          aliases: ["armor", "baju"],
+        },
+        helmet: {
+          title: "Helmet",
+          prime: "100m",
+          piercer: "10m",
+          aliases: ["helm", "topi"],
+        },
+        ring: {
+          title: "",
+          prime: "100m",
+          piercer: "10m",
+          aliases: ["ring", "cincin"],
+        }
       };
     }
   
