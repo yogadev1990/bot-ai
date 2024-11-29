@@ -104,7 +104,12 @@ class fillstat{
     
     async buildData(positiveStats, negativeStats, potValue, type) {
         const paramLevel = 290; // Ubah jika ada logika berbeda
-        let data = `properBui=${type}&paramLevel=${paramLevel}`;
+        let jenis;
+        if (type === "armor" || type === "weapon") {
+            jenis = type.charAt(0).toUpperCase() + type.slice(1); 
+          }
+
+        let data = `properBui=${jenis}&paramLevel=${paramLevel}`;
     
         positiveStats.forEach((stat, index) => {
             data += `&plusProperList%5B${index}%5D.properName=${stat.stat}&plusProperList%5B${index}%5D.properLvHyoji=${stat.value}`;
