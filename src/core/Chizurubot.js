@@ -191,6 +191,17 @@ class Chizurubot {
           case "ig":
             response = await handlers.ig({ args });
             break;
+          case ("weapon" || "armor"):
+            const parsedMessage = parseFillStatMessage(message);
+            if (parsedMessage) {
+              response = `Tipe: ${parsedMessage.type}\nPot: ${parsedMessage.potValue}\nStats:\n` +
+                parsedMessage.stats
+                  .map(({ stat, value }) => `- ${stat}: ${value}`)
+                  .join("\n");
+            } else {
+              response = `Pesan tidak sesuai pola ${command}.`;
+            }
+          break; 
         }
     } else {
       res.send(
@@ -211,6 +222,27 @@ class Chizurubot {
   async processGrup(req, res) {
 
   }
+  
+}
+
+function parseFillStatMessage(message) {
+  const potRegex = /\/(weapon|armor) pot:\s*(\d+)/i;
+  const statRegex = /^([A-Z]+%?)\s+(-?\d+)/gm;
+
+  const potMatch = message.match(potRegex);
+  const stats = [...message.matchAll(statRegex)];
+
+  if (!potMatch || stats.length < 3) return null;
+
+  const type = potMatch[1]; // weapon atau armor
+  const potValue = parseInt(potMatch[2], 10); // Nilai pot
+
+  const parsedStats = stats.map(([, stat, value]) => ({
+    stat,
+    value: parseInt(value, 10),
+  }));
+
+  return { type, potValue, stats: parsedStats };
 }
 
 module.exports = Chizurubot;

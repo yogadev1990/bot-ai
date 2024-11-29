@@ -1242,7 +1242,7 @@ Contoh: *lvling char miniboss 200*
       return "Tuliskan link video yang ingin di download setelah /tiktok.";
     } else {
       const url = args[0];
-      const response = await dowloaderAPI.downloadtiktok(url);
+      const response = await dowloaderAPI.tiktok(url);
       return response;
     }
   },
@@ -1252,7 +1252,7 @@ Contoh: *lvling char miniboss 200*
       return "Tuliskan link video yang ingin di download setelah /fb.";
     } else {
       const url = args[0];
-      const response = await dowloaderAPI.downloadfb(url);
+      const response = await dowloaderAPI.facebook(url);
       return response;
     }
   },
@@ -1262,7 +1262,7 @@ Contoh: *lvling char miniboss 200*
       return "Tuliskan link video yang ingin di download setelah /ig.";
     } else {
       const url = args[0];
-      const response = await dowloaderAPI.downloadig(url);
+      const response = await dowloaderAPI.instagram(url);
       return response;
     }
   },
