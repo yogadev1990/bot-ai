@@ -191,7 +191,7 @@ class Chizurubot {
           case "ig":
             response = await handlers.ig({ args });
             break;
-          case ("weapon" || "armor"):
+          case "weapon":
             const parsedMessage = parseFillStatMessage(message);
             if (parsedMessage) {
               response = `Tipe: ${parsedMessage.type}\nPot: ${parsedMessage.potValue}\nStats:\n` +
