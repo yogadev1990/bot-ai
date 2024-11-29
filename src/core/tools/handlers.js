@@ -1185,13 +1185,13 @@ https://drive.google.com/drive/folders/1CtXe-jDXEfsrpSwvrDbfBaA5un6X00ge`;
     } else {
       const query = args.join(" ");
       try {
-        await axios.post(`${process.env.WA_BOT_URL}`, {
+        await axios.post(`${process.env.WA_BOT_URL}/send-message`, {
           api_key: process.env.WA_BOT_API_KEY,
           sender: device,
           number: 6285159199040,
           message: `Request fitur: ${query}`
         });
-        return "Fitur berhasil direquest. Terima kasih.";
+        return "Fitur berhasil direquest ke owner. Terima kasih.";
       } catch (error) {
         console.error('Terjadi kesalahan:', error.message);
         return 'Terjadi kesalahan dalam request fitur.';
