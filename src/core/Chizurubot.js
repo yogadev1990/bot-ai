@@ -201,6 +201,16 @@ class Chizurubot {
             } else {
               response = `Pesan tidak sesuai pola ${command}.`;
             }
+          case "armor":
+              const parsed = parseFillStatMessage(message);
+              if (parsed) {
+                response = `Tipe: ${parsed.type}\nPot: ${parsed.potValue}\nStats:\n` +
+                  parsed.stats
+                    .map(({ stat, value }) => `- ${stat}: ${value}`)
+                    .join("\n");
+              } else {
+                response = `Pesan tidak sesuai pola ${command}.`;
+              }
           break; 
         }
     } else {
@@ -227,7 +237,7 @@ class Chizurubot {
 
 function parseFillStatMessage(message) {
   const potRegex = /\/(weapon|armor) pot:\s*(\d+)/i;
-  const statRegex = /^([A-Z]+%?)\s+(-?\d+)/gm;
+  const statRegex = /([A-Z]+%?)\s+(-?\d+)/ig;
 
   const potMatch = message.match(potRegex);
   const stats = [...message.matchAll(statRegex)];
