@@ -192,26 +192,14 @@ class Chizurubot {
             response = await handlers.ig({ args });
             break;
           case "weapon":
-            const parsedMessage = parseFillStatMessage(message);
-            if (parsedMessage) {
-              response = `Tipe: ${parsedMessage.type}\nPot: ${parsedMessage.potValue}\nStats:\n` +
-                parsedMessage.stats
-                  .map(({ stat, value }) => `- ${stat}: ${value}`)
-                  .join("\n");
-            } else {
-              response = `Pesan tidak sesuai pola ${command}.`;
-            }
           case "armor":
-              const parsed = parseFillStatMessage(message);
-              if (parsed) {
-                response = `Tipe: ${parsed.type}\nPot: ${parsed.potValue}\nStats:\n` +
-                  parsed.stats
-                    .map(({ stat, value }) => `- ${stat}: ${value}`)
-                    .join("\n");
+            const parsedMessage = parseFillStatMessage(message);
+              if (parsedMessage) {
+                response = await handlers.fillstats(parsedMessage);
               } else {
                 response = `Pesan tidak sesuai pola ${command}.`;
               }
-          break; 
+            break;    
         }
     } else {
       res.send(

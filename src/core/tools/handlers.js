@@ -7,6 +7,7 @@ const moeAPI = require("./moeAPI");
 const downloaderApi = require("./downloaderApi");
 const axios = require("axios");
 const DyeExtractor = require("./dyeExtractor");
+const fillstat = require("./fillstat");
 const token = process.env.TORAM_API_TOKEN;
 const auth = { headers: { Authorization: `Bearer ${token}` } };
 
@@ -15,6 +16,7 @@ const dyeExtractor = new DyeExtractor();
 const hargaSlot = new hargaslot();
 const moeApi = new moeAPI();
 const dowloaderAPI = new downloaderApi();
+const fillStat = new fillstat();
 
 const handlers = {
   async status({ groupname, from, statusVIP, sisaLangganan, participantCount }) {
@@ -1401,6 +1403,11 @@ Contoh: *lvling char miniboss 200*
   
     const number = args[0];
     return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
+  },
+
+  async fillstats(parsedmessage) {
+    const response = await fillStat.fillStat(parsedmessage);
+    return response;
   },
 
   async default() {
