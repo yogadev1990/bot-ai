@@ -37,6 +37,7 @@ ${pesanAcak}
 - Buy Spina PM Rate, terima ecer
 - Sell Spina & Top up Orb Via Login (https://revandastore.com/games/toram-online)
 - Joki Main Quest NO MOD ft. Harriet
+- Akun Toram 30k-300k (https://revandastore.com/katalog)
 - Akun 1k Stack SS II / SS I
 
 𝐋𝐚𝐲𝐚𝐧𝐚𝐧 𝐋𝐚𝐢𝐧:
@@ -45,7 +46,7 @@ ${pesanAcak}
 
 ⚠ torampedia.my.id/scammerlist
 ╔ >> ${hari}, ${jam}:${menit} WIB <<
-╚〘 𝐑𝐞𝐯𝐚𝐧𝐝𝐚 𝐒𝐭𝐨𝐫𝐞 𝐱 𝐂𝐡𝐢𝐳𝐮𝐫𝐮 〙`;
+╚〘 𝐑𝐞𝐯𝐚𝐧𝐝𝐚 𝐒𝐭𝐨𝐫𝐞 〙`;
     }
   
     getIklan() {

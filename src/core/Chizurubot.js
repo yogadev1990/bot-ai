@@ -1,6 +1,6 @@
 const { checkSubscription } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
-const handlers = require("./tools/handlers.js");
+const handlers = require("./Chizuru/handlers.js");
 const PREFIX = "/";
 
 class Chizurubot {
@@ -20,16 +20,13 @@ class Chizurubot {
 
     const responFormatter = new ResponFormatter();
 
-    // Extract command and args
     if (!message.startsWith(PREFIX)) return;
     const [command, ...args] = message.slice(PREFIX.length).trim().split(" ");
 
-    // Subscription Check
     const { isActive, remainingTime } = await checkSubscription(from);
     const statusVIP = isActive ? "Aktif" : "Tidak Aktif";
     const sisaLangganan = isActive ? remainingTime : "Tidak ada";
 
-    // Context for handlers
     const context = {
       device,
       groupname,

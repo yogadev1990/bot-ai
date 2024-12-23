@@ -1,13 +1,13 @@
-const { formatMenu } = require("./formatmenu");
-const StickerWa = require("./stickerWa");
-const GeminiAi = require("./geminiAi");
-const ToramNews = require("./infoMT");
-const hargaslot = require("./hargaslot");
-const moeAPI = require("./moeAPI");
-const downloaderApi = require("./downloaderApi");
+const { formatMenu } = require("../Chizuru/formatmenu");
+const StickerWa = require("../Chizuru/stickerWa");
+const GeminiAi = require("../Chizuru/geminiAi");
+const ToramNews = require("../Chizuru/infoMT");
+const hargaslot = require("../Chizuru/hargaslot");
+const moeAPI = require("../Chizuru/moeAPI");
+const downloaderApi = require("../Chizuru/downloaderApi");
 const axios = require("axios");
-const DyeExtractor = require("./dyeExtractor");
-const fillstat = require("./fillstat");
+const DyeExtractor = require("../Chizuru/dyeExtractor");
+const fillstat = require("../Chizuru/fillstat");
 const token = process.env.TORAM_API_TOKEN;
 const auth = { headers: { Authorization: `Bearer ${token}` } };
 

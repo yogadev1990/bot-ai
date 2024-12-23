@@ -4,7 +4,6 @@ const cache = new Caching();
 const pathDelayed = `${__dirname}/../data/delayed.json`;
 const pathSubscription = `${__dirname}/../data/subscriptions.json`;
 
-// Memuat data langganan
 const loadSubscriptions = async () => {
   if (!fs.existsSync(pathSubscription)) {
     fs.writeFileSync(pathSubscription, JSON.stringify([]));
@@ -13,7 +12,6 @@ const loadSubscriptions = async () => {
   return JSON.parse(fileBuffer);
 };
 
-// Menyimpan data langganan baru atau memperbarui grup yang sudah ada
 const saveSubscription = async (from, durationInDays) => {
   const subscriptions = await loadSubscriptions();
   const now = new Date();
@@ -29,49 +27,38 @@ const saveSubscription = async (from, durationInDays) => {
       expiryDate: new Date(now.getTime() + durationInDays * 24 * 60 * 60 * 1000),
     });
   }
-
   fs.writeFileSync(pathSubscription, JSON.stringify(subscriptions));
 };
 
 const checkSubscription = async (from) => {
   const subscriptions = await loadSubscriptions();
   const existing = subscriptions.find((item) => item.from === from);
-
   if (!existing) {
-    return { isActive: false, remainingTime: "Tidak ada langganan" }; // Jika tidak ditemukan langganan
+    return { isActive: false, remainingTime: "Tidak ada langganan" };
   }
-
   const now = new Date();
   const expiryDate = new Date(existing.expiryDate);
-
   const isActive = now <= expiryDate;
-  const remainingTimeInMs = expiryDate - now; // Selisih waktu dalam milidetik
-
+  const remainingTimeInMs = expiryDate - now;
   if (!isActive) {
     return { isActive: false, remainingTime: "Tidak ada waktu tersisa" };
   }
-
-  // Hitung waktu tersisa
   const seconds = Math.floor((remainingTimeInMs / 1000) % 60);
   const minutes = Math.floor((remainingTimeInMs / (1000 * 60)) % 60);
   const hours = Math.floor((remainingTimeInMs / (1000 * 60 * 60)) % 24);
   const days = Math.floor(remainingTimeInMs / (1000 * 60 * 60 * 24));
-
   const remainingTime = `${days} hari, ${hours} jam, ${minutes} menit, ${seconds} detik`;
-
   return { isActive, remainingTime };
 };
 
-// Memuat data delay dari file
 const loadDelayed = async () => {
   if (!fs.existsSync(pathDelayed)) {
-    fs.writeFileSync(pathDelayed, JSON.stringify([])); // Buat file jika belum ada
+    fs.writeFileSync(pathDelayed, JSON.stringify([]));
   }
   const fileBuffer = fs.readFileSync(pathDelayed, "utf-8");
   return JSON.parse(fileBuffer);
 };
 
-// Simpan atau perbarui waktu delay untuk grup
 const saveDelayed = async (from) => {
   const delayedData = await loadDelayed();
   const now = new Date();

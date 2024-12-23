@@ -1,13 +1,5 @@
-const {
-  checkDelay,
-  saveDelayed,
-  checkSubscription,
-} = require("../lib/helpers");
+const { checkDelay, saveDelayed, checkSubscription, } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
-const Iklan = require("./tools/IklanChizu");
-const GeminiAi = require("./tools/geminiAi");
-const OpenAiLocal = require("./tools/openAi");
-const StickerWa = require("./tools/stickerWa");
 
 class Amamiyabot {
   async process(req, res) {
