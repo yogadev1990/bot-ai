@@ -54,7 +54,71 @@ app.post("/addsubs", async (req, res) => {
     return res.status(500).json({ message: "Terjadi kesalahan saat menambahkan langganan." });
   }
 });
+app.post("/notifyrevanda", async (req, res) => {
+  const { event, metadata } = req.body;
 
+  // Verifikasi X-CALLBACK-TOKEN
+  const expectedToken = process.env.XENDIT_TOKEN;
+  const callbackToken = req.headers["x-callback-token"];
+
+  if (!callbackToken || callbackToken !== expectedToken) {
+    return res.status(403).json({ message: "Invalid callback token" });
+  }
+
+  // Validasi parameter wajib
+  if (!event || !metadata || event !== "payment_method.activated") {
+    return res.status(400).json({ message: "Parameter 'event' dan 'metadata' wajib diisi." });
+  }
+
+  try {
+    // Data pengiriman pesan
+    const owner = "6881271481561"; // Nomor owner
+    const device = "6281539302056"; // Nomor pengirim WA bot
+    const customerPhone = metadata.costumer_phone;
+    const nickname = metadata.nickname;
+    const product = metadata.product || "Produk tidak disebutkan";
+    const orderId = metadata.order_id || "ID pesanan tidak ada";
+    const paymentMethod = metadata.channel || "Metode tidak disebutkan";
+
+    // Pesan untuk customer
+    const customerMessage = `Halo kak, Berikut adalah rincian pesanan Anda:
+- Produk: ${product}
+- No. Invoice: ${orderId}
+- Metode Pembayaran: ${paymentMethod}
+
+Untuk selengkapnya, silakan lihat pada link yang tertera di bawah ini:
+https://revandastore/payment/${orderId}
+
+Terima kasih.`;
+
+    // Pesan untuk owner
+    const ownerMessage = `Bos, ada pesanan baru:
+- Produk: ${product}
+- Nickname: ${nickname}
+- No. HP Customer: ${customerPhone}`;
+
+    // Kirim pesan ke customer
+    await axios.post(`${process.env.WA_BOT_URL}/send-message`, {
+      api_key: process.env.WA_BOT_API_KEY,
+      sender: device,
+      number: customerPhone,
+      message: customerMessage,
+    });
+
+    // Kirim pesan ke owner
+    await axios.post(`${process.env.WA_BOT_URL}/send-message`, {
+      api_key: process.env.WA_BOT_API_KEY,
+      sender: device,
+      number: owner,
+      message: ownerMessage,
+    });
+
+    return res.status(200).json({ message: "Pesan berhasil dikirim." });
+  } catch (error) {
+    console.error("Error:", error.message);
+    return res.status(500).json({ message: "Terjadi kesalahan pada server." });
+  }
+});
 //url static
 app.use(express.static("public"));
 app.use("/images", express.static("images"));
