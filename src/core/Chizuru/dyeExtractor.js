@@ -5,9 +5,7 @@ class DyeExtractor{
   async scrapeDye() {
     try {
       const { data } = await axios.get("https://tanaka0.work/AIO/en/DyePredictor/ColorWeapon");
-  
       const $ = cheerio.load(data);
-  
       const bosses = [];
       $('table tr').each((index, row) => {
         let bossName = $(row).find('td:nth-of-type(1)').text().trim();

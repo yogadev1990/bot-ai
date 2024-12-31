@@ -35,7 +35,7 @@ class HargaSlot {
           title: "Senjata Halberd",
           prime: "150m",
           piercer: "15m",
-          aliases: ["halberd", "tombak"],
+          aliases: ["halberd", "tombak", "hb"],
         },
         katana: {
           title: "Senjata Katana",

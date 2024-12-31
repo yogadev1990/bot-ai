@@ -6,7 +6,6 @@ class ToramNews {
     this.url = "https://id.toram.jp/?type_code=update";
   }
 
-  // Fungsi untuk mengumpulkan kategori berita
   async scrapeCategory() {
     try {
       const response = await axios.get(this.url);
@@ -27,7 +26,6 @@ class ToramNews {
     }
   }
 
-  // Fungsi untuk mengambil detail berita terbaru
   async scrapeLatestNews(newsUrl) {
     try {
       const response = await axios.get(newsUrl);
