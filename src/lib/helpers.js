@@ -3,9 +3,9 @@ const Caching = require("node-cache");
 const cache = new Caching();
 const pathDelayed = `${__dirname}/../data/delayed.json`;
 const pathSubscription = `${__dirname}/../data/subscriptions.json`;
+const fs = require("fs");
 const pathEnv = `${__dirname}/../../../.env`;
 
-// Fungsi untuk membaca file .env
 const loadEnv = () => {
   if (!fs.existsSync(pathEnv)) {
     fs.writeFileSync(pathEnv, "");
@@ -18,7 +18,6 @@ const loadEnv = () => {
   }, {});
 };
 
-// Fungsi untuk menyimpan ke file .env
 const saveEnv = (key, value) => {
   const envVars = loadEnv();
   envVars[key] = value;
@@ -28,9 +27,10 @@ const saveEnv = (key, value) => {
     .join("\n");
 
   fs.writeFileSync(pathEnv, newEnvContent, "utf-8");
+  console.log(`Menyimpan ${key}=${value} ke file .env`);
+  dotenv.config(); // Muat ulang file .env
 };
 
-// Fungsi untuk mengatur bot aktif
 const setBotStatus = (status, reason = "") => {
   if (status !== "on" && status !== "off") {
     throw new Error("Status harus 'on' atau 'off'");
