@@ -3,7 +3,6 @@ const Caching = require("node-cache");
 const cache = new Caching();
 const pathDelayed = `${__dirname}/../data/delayed.json`;
 const pathSubscription = `${__dirname}/../data/subscriptions.json`;
-const fs = require("fs");
 const pathEnv = `${__dirname}/../../../.env`;
 
 const loadEnv = () => {
