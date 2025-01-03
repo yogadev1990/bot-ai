@@ -1,4 +1,5 @@
 const fs = require("fs");
+const dotenv = require("dotenv");
 const Caching = require("node-cache");
 const cache = new Caching();
 const pathDelayed = `${__dirname}/../data/delayed.json`;
