@@ -13,11 +13,11 @@ class DyeExtractor{
   
         // Membersihkan teks bossName dan colorCode
         bossName = bossName
-          .replace(/\(Lv\.\s*\d+\s*\)/gi, '') // Menghapus level monster
+          .replace(/\(Lv\.\s*\d+\s*\)/gi, '')
           .trim()
   
         colorCode = colorCode
-          .replace(/■/g, '') // Menghapus tanda kotak (■)
+          .replace(/■/g, '')
           .trim()
           .replace(/\s+/g, ' '); 
   

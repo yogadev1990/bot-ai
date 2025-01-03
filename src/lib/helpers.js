@@ -3,6 +3,49 @@ const Caching = require("node-cache");
 const cache = new Caching();
 const pathDelayed = `${__dirname}/../data/delayed.json`;
 const pathSubscription = `${__dirname}/../data/subscriptions.json`;
+const pathEnv = `${__dirname}/../../../.env`;
+
+// Fungsi untuk membaca file .env
+const loadEnv = () => {
+  if (!fs.existsSync(pathEnv)) {
+    fs.writeFileSync(pathEnv, "");
+  }
+  const envContent = fs.readFileSync(pathEnv, "utf-8");
+  return envContent.split("\n").reduce((acc, line) => {
+    const [key, value] = line.split("=");
+    if (key) acc[key.trim()] = value ? value.trim() : "";
+    return acc;
+  }, {});
+};
+
+// Fungsi untuk menyimpan ke file .env
+const saveEnv = (key, value) => {
+  const envVars = loadEnv();
+  envVars[key] = value;
+
+  const newEnvContent = Object.entries(envVars)
+    .map(([k, v]) => `${k}=${v}`)
+    .join("\n");
+
+  fs.writeFileSync(pathEnv, newEnvContent, "utf-8");
+};
+
+// Fungsi untuk mengatur bot aktif
+const setBotStatus = (status, reason = "") => {
+  if (status !== "on" && status !== "off") {
+    throw new Error("Status harus 'on' atau 'off'");
+  }
+  saveEnv("BOT_ACTIVE", status);
+  saveEnv("BOT_REASON", reason);
+};
+
+const setON = async (reason) => {
+  setBotStatus("on", reason); // Menggunakan fungsi setBotStatus
+};
+
+const setOFF = async () => {
+  setBotStatus("off", "Bot dimatikan oleh OWNER"); // Alasan default
+};
 
 const loadSubscriptions = async () => {
   if (!fs.existsSync(pathSubscription)) {
@@ -117,4 +160,7 @@ module.exports = {
   loadSubscriptions,
   saveSubscription,
   checkSubscription,
+  setBotStatus,
+  setON, // Tambahkan ini ke ekspor
+  setOFF, // Tambahkan ini ke ekspor
 };

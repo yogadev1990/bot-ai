@@ -230,7 +230,7 @@ Tingkatan padu/lock & Prof minimum:
 
 Untuk menggunakan fitur ini, silahkan ketikkan stat yang ingin diisi, maksimal 8 list stat. PENTING: STAT MINUS WAJIB BERNILAI -1. Contoh:
 ---------------
-Weapon pot: 116
+/Weapon pot: 116
 
 LIGHT 1
 DTD% 22
@@ -241,7 +241,7 @@ HPREGEN -1
 MPREGEN -1
 DODGE -1
 ---------------
-Armor pot: 98
+/Armor pot: 98
 
 DTD% 22
 CD 22
