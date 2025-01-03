@@ -1,42 +1,47 @@
 const fs = require("fs");
-const dotenv = require("dotenv");
 const Caching = require("node-cache");
 const cache = new Caching();
 const pathDelayed = `${__dirname}/../data/delayed.json`;
 const pathSubscription = `${__dirname}/../data/subscriptions.json`;
-const pathEnv = `${__dirname}/../../../.env`;
+const pathOwner = `${__dirname}/../data/owner.json`;
 
-const loadEnv = () => {
-  if (!fs.existsSync(pathEnv)) {
-    fs.writeFileSync(pathEnv, "");
+// Fungsi untuk memuat data dari owner.json
+const loadOwnerData = () => {
+  if (!fs.existsSync(pathOwner)) {
+    // Jika file tidak ada, buat file dengan data default
+    const defaultData = {
+      BOT_ACTIVE: "off",
+      BOT_REASON: "",
+    };
+    fs.writeFileSync(pathOwner, JSON.stringify(defaultData, null, 2));
+    return defaultData;
   }
-  const envContent = fs.readFileSync(pathEnv, "utf-8");
-  return envContent.split("\n").reduce((acc, line) => {
-    const [key, value] = line.split("=");
-    if (key) acc[key.trim()] = value ? value.trim() : "";
-    return acc;
-  }, {});
+  const fileBuffer = fs.readFileSync(pathOwner, "utf-8");
+  return JSON.parse(fileBuffer);
 };
 
-const saveEnv = (key, value) => {
-  const envVars = loadEnv();
-  envVars[key] = value;
-
-  const newEnvContent = Object.entries(envVars)
-    .map(([k, v]) => `${k}=${v}`)
-    .join("\n");
-
-  fs.writeFileSync(pathEnv, newEnvContent, "utf-8");
-  console.log(`Menyimpan ${key}=${value} ke file .env`);
-  dotenv.config(); // Muat ulang file .env
+// Fungsi untuk menyimpan data ke owner.json
+const saveOwnerData = (key, value) => {
+  const ownerData = loadOwnerData();
+  ownerData[key] = value; // Update data
+  fs.writeFileSync(pathOwner, JSON.stringify(ownerData, null, 2));
 };
 
+// Fungsi untuk memeriksa status bot
+const checkBotStatus = () => {
+  const ownerData = loadOwnerData();
+  const isActive = ownerData.BOT_ACTIVE === "on";
+  const reason = ownerData.BOT_REASON;
+  return { isActive, reason };
+};
+
+// Fungsi untuk mengubah status bot ke "on" atau "off"
 const setBotStatus = (status, reason = "") => {
   if (status !== "on" && status !== "off") {
     throw new Error("Status harus 'on' atau 'off'");
   }
-  saveEnv("BOT_ACTIVE", status);
-  saveEnv("BOT_REASON", reason);
+  saveOwnerData("BOT_ACTIVE", status);
+  saveOwnerData("BOT_REASON", reason);
 };
 
 const setON = async (reason) => {
@@ -160,7 +165,7 @@ module.exports = {
   loadSubscriptions,
   saveSubscription,
   checkSubscription,
-  setBotStatus,
+  checkBotStatus,
   setON, // Tambahkan ini ke ekspor
   setOFF, // Tambahkan ini ke ekspor
 };

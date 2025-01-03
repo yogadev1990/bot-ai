@@ -1,4 +1,4 @@
-const { checkDelay, saveDelayed, setOFF, setON } = require("../lib/helpers.js");
+const { checkDelay, saveDelayed, checkBotStatus, setOFF, setON } = require("../lib/helpers.js");
 const ResponFormatter = require("../lib/responFormatter.js");
 const Iklan = require("./Revanda/Iklan.js");
 const GeminiAi = require("./Revanda/geminiAi.js");
@@ -40,7 +40,7 @@ class Revandabot {
     }
 
     // Jika pesan berasal dari pengguna lain dan bot aktif
-    if (process.env.BOT_ACTIVE === "on") {
+    if (checkBotStatus().isActive) {
       const response = await GeminiAi.run(from, message);
       return res.send(responFormatter.line(response).responAsText());
     }
