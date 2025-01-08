@@ -224,7 +224,7 @@ class Chizurubot {
     } = req.body;
   
     const responFormatter = new ResponFormatter();
-    const { isActive, groupSettings} = await checkSubscription(from);
+    const { isActive, groupSettings} =  await checkSubscription(from);
   
     const context = {
       from,
@@ -234,7 +234,7 @@ class Chizurubot {
       participantsCount,
     };
   
-    if (isActive) {
+    if (!isActive) {
       let response;
       if (action === "add" && groupSettings.welcome === true) {
         try {
