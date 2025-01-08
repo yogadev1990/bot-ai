@@ -69,7 +69,14 @@ const saveSubscription = async (from, durationInDays, groupSettings = {}) => {
   if (existing) {
     existing.startDate = now;
     existing.expiryDate = new Date(now.getTime() + durationInDays * 24 * 60 * 60 * 1000);
-    existing.groupSettings = { ...existing.groupSettings, ...groupSettings }; // Update pengaturan grup
+    existing.groupSettings = { 
+      rules: groupSettings.rules || existing.groupSettings.rules || "Tidak ada aturan.",
+      antiLink: groupSettings.antiLink ?? existing.groupSettings.antiLink ?? false,
+      antiToxic: groupSettings.antiToxic ?? existing.groupSettings.antiToxic ?? false,
+      welcome: groupSettings.welcome ?? existing.groupSettings.welcome ?? false,
+      out: groupSettings.out ?? existing.groupSettings.out ?? false,
+      welcomeMsg: groupSettings.welcomeMsg || existing.groupSettings.welcomeMsg || "Selamat datang di grup!"
+    };
   } else {
     subscriptions.push({
       from,
@@ -77,15 +84,14 @@ const saveSubscription = async (from, durationInDays, groupSettings = {}) => {
       expiryDate: new Date(now.getTime() + durationInDays * 24 * 60 * 60 * 1000),
       groupSettings: {
         rules: groupSettings.rules || "Tidak ada aturan.",
-        antiLink: groupSettings.antiLink || false,
-        antiToxic: groupSettings.antiToxic || false,
-        welcome: groupSettings.welcome || false,
-        out: groupSettings.out || false,
+        antiLink: groupSettings.antiLink ?? false,
+        antiToxic: groupSettings.antiToxic ?? false,
+        welcome: groupSettings.welcome ?? false,
+        out: groupSettings.out ?? false,
         welcomeMsg: groupSettings.welcomeMsg || "Selamat datang di grup!",
       },
     });
   }
-
   fs.writeFileSync(pathSubscription, JSON.stringify(subscriptions, null, 2));
 };
 
@@ -128,17 +134,29 @@ const checkSubscription = async (from) => {
 };
 
 // Menyimpan pengaturan grup
-const saveGroupSettings = async (from, groupSettings) => {
-  const subscriptions = await loadSubscriptions();
-  const existing = subscriptions.find((item) => item.from === from);
+const saveGroupSettings = async (from, newGroupSettings) => {
+  try {
+    const subscriptions = await loadSubscriptions();
+    const existing = subscriptions.find((item) => item.from === from);
 
-  if (existing) {
-    existing.groupSettings = { ...existing.groupSettings, ...groupSettings };
+    if (!existing) {
+      throw new Error(`Langganan untuk ${from} tidak ditemukan.`);
+    }
+
+    existing.groupSettings = {
+      ...existing.groupSettings, // Pengaturan lama
+      ...newGroupSettings,      // Pengaturan baru
+    };
+
     fs.writeFileSync(pathSubscription, JSON.stringify(subscriptions, null, 2));
-  } else {
-    throw new Error("Grup belum memiliki langganan.");
+    console.log(`Pengaturan grup untuk ${from} berhasil diperbarui.`);
+    return existing.groupSettings;
+  } catch (error) {
+    console.error("Gagal menyimpan pengaturan grup:", error);
+    throw new Error("Gagal menyimpan pengaturan grup.");
   }
 };
+
 
 const loadDelayed = async () => {
   if (!fs.existsSync(pathDelayed)) {

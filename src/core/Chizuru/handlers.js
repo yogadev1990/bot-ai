@@ -10,7 +10,7 @@ const DyeExtractor = require("./dyeExtractor");
 const fillstat = require("./fillstat");
 const token = process.env.TORAM_API_TOKEN;
 const auth = { headers: { Authorization: `Bearer ${token}` } };
-const { checkSubscription } = require("../../lib/helpers");
+const { checkSubscription, saveGroupSettings } = require("../../lib/helpers");
 
 const toramnews = new ToramNews();
 const dyeExtractor = new DyeExtractor();
@@ -1392,24 +1392,43 @@ Contoh: *lvling char miniboss 200*
     return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
   },
 
-  async welcomeMsg({ admin, botadmin, args }) {
+  async welcomeMsg({ admin, botadmin, args, from }) {
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
-    
+  
     if (!admin) {
       return "Maaf, perintah ini hanya bisa diakses oleh admin grup.";
     }
   
-    const status = args[0];
+    const status = args[0]?.toLowerCase();
+    const customMessage = args.slice(1).join(" "); // Pesan opsional setelah 'on' atau 'off'
+  
     if (status === "on") {
-      return `Menyalakan pesan selamat datang...`; // Ganti dengan logika yang sesuai
+      try {
+        await saveGroupSettings(from, {
+          welcome: true,
+          welcomeMsg: customMessage || "Selamat datang di grup!",
+        });
+        return `Pesan selamat datang diaktifkan. Pesan: "${customMessage || "Selamat datang di grup!"}"`;
+      } catch (error) {
+        console.error("Error mengaktifkan pesan selamat datang:", error);
+        return "Gagal mengaktifkan pesan selamat datang.";
+      } 
     } else if (status === "off") {
-      return `Mematikan pesan selamat datang...`; // Ganti dengan logika yang sesuai
+      try {
+        await saveGroupSettings(from, {
+          welcome: false,
+        });
+        return "Pesan selamat datang dimatikan.";
+      } catch (error) {
+        console.error("Error mematikan pesan selamat datang:", error);
+        return "Gagal mematikan pesan selamat datang.";
+      }
     } else {
-      return "Tuliskan *on* atau *off* setelah /welcomemsg.";
+      return "Tuliskan *on* atau *off* setelah /welcomemsg. Opsional: tambahkan pesan setelah 'on'.";
     }
-  },
+  },  
 
   async outMsg({ admin, botadmin, args }) {
     if (!botadmin) {
