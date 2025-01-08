@@ -224,11 +224,7 @@ class Chizurubot {
     } = req.body;
   
     const responFormatter = new ResponFormatter();
-    const { isActive, groupSettings } = await checkSubscription(from).catch((error) => {
-      console.error("Error checking subscription:", error);
-      res.status(500).send("Internal server error");
-      return {};
-    });
+    const { isActive, groupSettings} = await checkSubscription(from);
   
     const context = {
       from,
