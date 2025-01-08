@@ -20,9 +20,9 @@ const dowloaderAPI = new downloaderApi();
 const fillStat = new fillstat();
 
 const handlers = {
-  async welcome({ groupname, groupId, participants, participantsCount }) {
+  async welcome({ groupname, from, participants, participantsCount }) {
 				const taggedParticipants = participants.map((participants) => `@${participants.split("@")[0]}`).join(" ");
-				const {groupSettings} = await checkSubscription(groupId);
+				const {groupSettings} = await checkSubscription(from);
 				const welcomeMessage = groupSettings.welcomeMsg;
     return `*Chizuru-chan🌸*
 							

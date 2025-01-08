@@ -216,7 +216,7 @@ class Chizurubot {
   };
   async processGrup(req, res) {
     const {
-      groupId,
+      from,
       participants,
       action,
       groupname,
@@ -224,14 +224,14 @@ class Chizurubot {
     } = req.body;
   
     const responFormatter = new ResponFormatter();
-    const { isActive, groupSettings } = await checkSubscription(groupId).catch((error) => {
+    const { isActive, groupSettings } = await checkSubscription(from).catch((error) => {
       console.error("Error checking subscription:", error);
       res.status(500).send("Internal server error");
       return {};
     });
   
     const context = {
-      groupId,
+      from,
       participants,
       action,
       groupname,
