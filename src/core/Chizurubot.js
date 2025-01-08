@@ -217,7 +217,7 @@ class Chizurubot {
   };
   async processGrup(req, res) {
     const {
-      groupId,
+      from,
       participants,
       action,
       groupname,
@@ -225,7 +225,7 @@ class Chizurubot {
     } = req.body;
   
     const responFormatter = new ResponFormatter();
-    const from = groupId.split("@")[0];
+    // const from = groupId.split("@")[0];
     const { isActive, groupSettings } = await checkSubscription(from).catch((error) => {
       console.error("Error checking subscription:", error);
       res.status(500).send("Internal server error");
@@ -243,20 +243,10 @@ class Chizurubot {
     if (isActive) {
       let response;
       if (action === "add" && groupSettings.welcome === true) {
-        try {
-          response = await handlers.welcome(context);
-        } catch (error) {
-          console.error("Error in welcome handler:", error);
-          res.status(500).send("Error processing welcome handler");
-        }
+        response = await handlers.welcome(context);
       } else if (action === "remove" && groupSettings.out === true) {
-        try {
-          response = await handlers.out(context);
-        } catch (error) {
-          console.error("Error in out handler:", error);
-          res.status(500).send("Error processing out handler");
-        }
-      }      
+        response = await handlers.out(context);
+      }
   
       res.send(responFormatter.line(response).responAsText());
     } else {
