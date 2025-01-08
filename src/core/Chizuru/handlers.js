@@ -20,9 +20,9 @@ const dowloaderAPI = new downloaderApi();
 const fillStat = new fillstat();
 
 const handlers = {
-  async welcome({ groupname, from, participant, participantCount }) {
-				const taggedParticipants = participant.map((participant) => `@${participant.split("@")[0]}`).join(" ");
-				const {groupSettings} = await checkSubscription(from);
+  async welcome({ groupname, groupId, participants, participantsCount }) {
+				const taggedParticipants = participants.map((participants) => `@${participants.split("@")[0]}`).join(" ");
+				const {groupSettings} = await checkSubscription(groupId);
 				const welcomeMessage = groupSettings.welcomeMsg;
     return `*Chizuru-chan🌸*
 							
@@ -31,7 +31,7 @@ Selamat datang di *${groupname}* kak ${taggedParticipants}. Semoga betah disini 
 ${welcomeMessage}
           
 Grup: ${groupname}
-Jumlah member: ${participantCount} member`;
+Jumlah member: ${participantsCount} member`;
   },
 
   async out({ participant }) {

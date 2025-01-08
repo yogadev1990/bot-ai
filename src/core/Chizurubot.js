@@ -222,10 +222,14 @@ class Chizurubot {
       groupname,
       participantsCount,
     } = req.body;
-
+  
     const responFormatter = new ResponFormatter();
-    const { isActive, groupSettings} = await checkSubscription(from);
-    
+    const { isActive, groupSettings } = await checkSubscription(groupId).catch((error) => {
+      console.error("Error checking subscription:", error);
+      res.status(500).send("Internal server error");
+      return {};
+    });
+  
     const context = {
       groupId,
       participants,
@@ -233,18 +237,30 @@ class Chizurubot {
       groupname,
       participantsCount,
     };
-
+  
     if (isActive) {
-    let response;
-    if (action === "add" && groupSettings.welcome === true) {
-      response = await handlers.welcome(context);
-    } else if (action === "remove" && groupSettings.out === true) {
-      response = await handlers.out(context);
+      let response;
+      if (action === "add" && groupSettings.welcome === true) {
+        try {
+          response = await handlers.welcome(context);
+        } catch (error) {
+          console.error("Error in welcome handler:", error);
+          res.status(500).send("Error processing welcome handler");
+        }
+      } else if (action === "remove" && groupSettings.out === true) {
+        try {
+          response = await handlers.out(context);
+        } catch (error) {
+          console.error("Error in out handler:", error);
+          res.status(500).send("Error processing out handler");
+        }      
+      }
+  
+      res.send(responFormatter.line(response).responAsText());
+    } else {
+      res.status(200).send("No active subscription for this group."); // Respons default
     }
-
-    res.send(responFormatter.line(response).responAsText());
-  }
-  }
+  }  
   
 }
 
