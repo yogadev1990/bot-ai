@@ -243,10 +243,20 @@ class Chizurubot {
     if (isActive) {
       let response;
       if (action === "add" && groupSettings.welcome === true) {
-        response = await handlers.welcome(context);
+        try {
+          response = await handlers.welcome(context);
+        } catch (error) {
+          console.error("Error in welcome handler:", error);
+          res.status(500).send("Error processing welcome handler");
+        }
       } else if (action === "remove" && groupSettings.out === true) {
-        response = await handlers.out(context);
-      }
+        try {
+          response = await handlers.out(context);
+        } catch (error) {
+          console.error("Error in out handler:", error);
+          res.status(500).send("Error processing out handler");
+        }
+      }      
   
       res.send(responFormatter.line(response).responAsText());
     } else {

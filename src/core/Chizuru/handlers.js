@@ -34,8 +34,8 @@ Grup: ${groupname}
 Jumlah member: ${participantsCount} member`;
   },
 
-  async out({ participant }) {
-    const taggedParticipants = participant.map((participant) => `@${participant.split("@")[0]}`).join(" ");
+  async out({ participants }) {
+    const taggedParticipants = participants.map((participant) => `@${participant.split("@")[0]}`).join(" ");
     return `*Chizuru-chan🌸*
 
 Selamat jalan kak ${taggedParticipants}, karangan bunganya Chizu titip admin ya...🌸`;},
