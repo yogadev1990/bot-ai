@@ -217,10 +217,10 @@ class Chizurubot {
   async processGrup(req, res) {
     const {
       groupId,
-      participant,
+      participants,
       action,
       groupname,
-      participantCount,
+      participantsCount,
     } = req.body;
 
     const responFormatter = new ResponFormatter();
@@ -228,10 +228,10 @@ class Chizurubot {
     
     const context = {
       groupId,
-      participant,
+      participants,
       action,
       groupname,
-      participantCount,
+      participantsCount,
     };
 
     if (isActive) {
