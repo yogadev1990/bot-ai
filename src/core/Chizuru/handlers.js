@@ -1400,13 +1400,15 @@ Contoh: *lvling char miniboss 200*
     if (!admin) {
       return "Maaf, perintah ini hanya bisa diakses oleh admin grup.";
     }
-    
-    if (args.length < 1) {
-      return "Tuliskan nomor HP yang ingin ditambahkan setelah /add.";
-    }
   
-    const number = args[0];
-    return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
+    const status = args[0];
+    if (status === "on") {
+      return `Menyalakan pesan selamat datang...`; // Ganti dengan logika yang sesuai
+    } else if (status === "off") {
+      return `Mematikan pesan selamat datang...`; // Ganti dengan logika yang sesuai
+    } else {
+      return "Tuliskan *on* atau *off* setelah /welcomemsg.";
+    }
   },
 
   async outMsg({ admin, botadmin, args }) {
