@@ -240,7 +240,7 @@ class Chizurubot {
       participantsCount,
     };
   
-    if (!isActive) {
+    if (isActive) {
       let response;
       if (action === "add" && groupSettings.welcome === true) {
         response = await handlers.welcome(context);
