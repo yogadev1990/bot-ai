@@ -60,7 +60,8 @@ const loadSubscriptions = async () => {
   return JSON.parse(fileBuffer);
 };
 
-const saveSubscription = async (from, durationInDays) => {
+// Menyimpan data langganan dan pengaturan grup
+const saveSubscription = async (from, durationInDays, groupSettings = {}) => {
   const subscriptions = await loadSubscriptions();
   const now = new Date();
   const existing = subscriptions.find((item) => item.from === from);
@@ -68,35 +69,75 @@ const saveSubscription = async (from, durationInDays) => {
   if (existing) {
     existing.startDate = now;
     existing.expiryDate = new Date(now.getTime() + durationInDays * 24 * 60 * 60 * 1000);
+    existing.groupSettings = { ...existing.groupSettings, ...groupSettings }; // Update pengaturan grup
   } else {
     subscriptions.push({
       from,
       startDate: now,
       expiryDate: new Date(now.getTime() + durationInDays * 24 * 60 * 60 * 1000),
+      groupSettings: {
+        rules: groupSettings.rules || "Tidak ada aturan.",
+        antiLink: groupSettings.antiLink || false,
+        antiToxic: groupSettings.antiToxic || false,
+        welcome: groupSettings.welcome || false,
+        out: groupSettings.out || false,
+        welcomeMsg: groupSettings.welcomeMsg || "Selamat datang di grup!",
+      },
     });
   }
-  fs.writeFileSync(pathSubscription, JSON.stringify(subscriptions));
+
+  fs.writeFileSync(pathSubscription, JSON.stringify(subscriptions, null, 2));
 };
 
 const checkSubscription = async (from) => {
   const subscriptions = await loadSubscriptions();
   const existing = subscriptions.find((item) => item.from === from);
+
   if (!existing) {
-    return { isActive: false, remainingTime: "Tidak ada langganan" };
+    return {
+      isActive: false,
+      remainingTime: "Tidak ada langganan",
+      groupSettings: null,
+    };
   }
+
   const now = new Date();
   const expiryDate = new Date(existing.expiryDate);
   const isActive = now <= expiryDate;
   const remainingTimeInMs = expiryDate - now;
+
   if (!isActive) {
-    return { isActive: false, remainingTime: "Tidak ada waktu tersisa" };
+    return {
+      isActive: false,
+      remainingTime: "Langganan sudah berakhir",
+      groupSettings: existing.groupSettings,
+    };
   }
+
   const seconds = Math.floor((remainingTimeInMs / 1000) % 60);
   const minutes = Math.floor((remainingTimeInMs / (1000 * 60)) % 60);
   const hours = Math.floor((remainingTimeInMs / (1000 * 60 * 60)) % 24);
   const days = Math.floor(remainingTimeInMs / (1000 * 60 * 60 * 24));
   const remainingTime = `${days} hari, ${hours} jam, ${minutes} menit, ${seconds} detik`;
-  return { isActive, remainingTime };
+
+  return {
+    isActive,
+    remainingTime,
+    groupSettings: existing.groupSettings,
+  };
+};
+
+// Menyimpan pengaturan grup
+const saveGroupSettings = async (from, groupSettings) => {
+  const subscriptions = await loadSubscriptions();
+  const existing = subscriptions.find((item) => item.from === from);
+
+  if (existing) {
+    existing.groupSettings = { ...existing.groupSettings, ...groupSettings };
+    fs.writeFileSync(pathSubscription, JSON.stringify(subscriptions, null, 2));
+  } else {
+    throw new Error("Grup belum memiliki langganan.");
+  }
 };
 
 const loadDelayed = async () => {
@@ -168,4 +209,5 @@ module.exports = {
   checkBotStatus,
   setON, // Tambahkan ini ke ekspor
   setOFF, // Tambahkan ini ke ekspor
+  saveGroupSettings,
 };

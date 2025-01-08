@@ -37,7 +37,7 @@ ${pesanAcak}
 - Buy Spina PM Rate, terima ecer
 - Sell Spina & Top up Orb Via Login (https://revandastore.com/games/toram-online)
 - Joki Main Quest NO MOD ft. Harriet
-- Sell Akun Toram 30k-350k (https://revandastore.com/katalog)
+- Sell Akun Toram 100k-350k (https://revandastore.com/katalog)
 - Sell Akun done MQ
 - Sell Akun 1k Stack SS II / SS I
 

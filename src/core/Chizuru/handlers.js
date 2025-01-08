@@ -10,6 +10,7 @@ const DyeExtractor = require("./dyeExtractor");
 const fillstat = require("./fillstat");
 const token = process.env.TORAM_API_TOKEN;
 const auth = { headers: { Authorization: `Bearer ${token}` } };
+const { checkSubscription } = require("../../lib/helpers");
 
 const toramnews = new ToramNews();
 const dyeExtractor = new DyeExtractor();
@@ -19,8 +20,28 @@ const dowloaderAPI = new downloaderApi();
 const fillStat = new fillstat();
 
 const handlers = {
-  async status({ groupname, from, statusVIP, sisaLangganan, participantCount }) {
-    return `*𝐂𝐡𝐢𝐳𝐮𝐫𝐮-𝐜𝐡𝐚𝐧🌸*\n\n*${groupname}* (${from}@g.us)\nStatus VIP: ${statusVIP}\nSisa Langganan: ${sisaLangganan}\nJumlah Member: ${participantCount}\n\nPerpanjang durasi layanan Chizu hanya di revandastore.com`;
+  async welcome({ groupname, from, participant, participantCount }) {
+				const taggedParticipants = participant.map((participant) => `@${participant.split("@")[0]}`).join(" ");
+				const {groupSettings} = await checkSubscription(from);
+				const welcomeMessage = groupSettings.welcomeMsg;
+    return `*Chizuru-chan🌸*
+							
+Selamat datang di *${groupname}* kak ${taggedParticipants}. Semoga betah disini ya🌸
+        
+${welcomeMessage}
+          
+Grup: ${groupname}
+Jumlah member: ${participantCount} member`;
+  },
+
+  async out({ participant }) {
+    const taggedParticipants = participant.map((participant) => `@${participant.split("@")[0]}`).join(" ");
+    return `*Chizuru-chan🌸*
+
+Selamat jalan kak ${taggedParticipants}, karangan bunganya Chizu titip admin ya...🌸`;},
+
+  async status({ groupname, from, statusVIP, remainingTime, participantCount }) {
+    return `*𝐂𝐡𝐢𝐳𝐮𝐫𝐮-𝐜𝐡𝐚𝐧🌸*\n\n*${groupname}* (${from}@g.us)\nStatus VIP: ${statusVIP}\nSisa Langganan: ${remainingTime}\nJumlah Member: ${participantCount}\n\nPerpanjang durasi layanan Chizu hanya di revandastore.com`;
   },
   
   async menu() {

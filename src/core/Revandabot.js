@@ -23,10 +23,10 @@ class Revandabot {
         const args = message.slice(3).trim(); // Mengambil args setelah "/on"
         if (args) {
           await setON(args);
-          const msg = responFormatter.line(`Bot aktif dengan args: ${args}`).responAsText();
+          const msg = responFormatter.line(`Bot aktif, Reason: ${args}`).responAsText();
           return res.send(msg);
         } else {
-          const msg = responFormatter.line("Tolong sertakan args untuk perintah /on").responAsText();
+          const msg = responFormatter.line("Tolong sertakan alasan untuk perintah /on").responAsText();
           return res.send(msg);
         }
       } else if (message === "/off") {
