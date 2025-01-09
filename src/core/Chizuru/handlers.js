@@ -1309,7 +1309,7 @@ Contoh: *lvling char miniboss 200*
           api_key: process.env.WA_BOT_API_KEY,
           sender: process.env.WA_BOT_DEVICE,
           number: number,
-          group: from,
+          group_id: from,
           action: "add",
         });
 
@@ -1335,7 +1335,7 @@ Contoh: *lvling char miniboss 200*
           api_key: process.env.WA_BOT_API_KEY,
           sender: process.env.WA_BOT_DEVICE,
           number: number,
-          group: from,
+          group_id: from,
           action: "remove",
         });
         
