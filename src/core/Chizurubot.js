@@ -224,7 +224,7 @@ class Chizurubot {
       participantsCount,
     } = req.body;
 
-    if (!groupId || !participants || !action) {
+    if (!from || !participants || !action) {
       return res.status(400).json({ message: "Parameter wajib diisi. Data yang didapat:" + JSON.stringify(req.body) });
     }
 
