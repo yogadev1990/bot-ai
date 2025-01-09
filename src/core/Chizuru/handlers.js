@@ -1307,7 +1307,7 @@ Contoh: *lvling char miniboss 200*
 
     axios.post(`${process.env.WA_BOT_URL}/participant`, {
           api_key: process.env.WA_BOT_API_KEY,
-          sender: device,
+          sender: process.env.WA_BOT_DEVICE,
           number: number,
           group: from,
           action: "add",
@@ -1333,7 +1333,7 @@ Contoh: *lvling char miniboss 200*
 
     axios.post(`${process.env.WA_BOT_URL}/participant`, {
           api_key: process.env.WA_BOT_API_KEY,
-          sender: device,
+          sender: process.env.WA_BOT_DEVICE,
           number: number,
           group: from,
           action: "remove",
