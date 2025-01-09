@@ -1290,7 +1290,7 @@ Contoh: *lvling char miniboss 200*
     }
   },
 
-  async add({ admin, botadmin, args }) {
+  async add({ admin, botadmin, args, from }) {
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
@@ -1307,24 +1307,7 @@ Contoh: *lvling char miniboss 200*
     return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
   },
   
-  async kick({ admin, botadmin, args }) {
-    if (!botadmin) {
-      return "Maaf, bot belum diangkat menjadi admin.";
-    }
-    
-    if (!admin) {
-      return "Maaf, perintah ini hanya bisa diakses oleh admin grup.";
-    }
-    
-    if (args.length < 1) {
-      return "Tuliskan nomor HP yang ingin ditambahkan setelah /add.";
-    }
-  
-    const number = args[0];
-    return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
-  },
-
-  async promote({ admin, botadmin, args }) {
+  async kick({ admin, botadmin, args, from }) {
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
@@ -1341,7 +1324,7 @@ Contoh: *lvling char miniboss 200*
     return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
   },
 
-  async demote({ admin, botadmin, args }) {
+  async promote({ admin, botadmin, args, from }) {
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
@@ -1358,7 +1341,7 @@ Contoh: *lvling char miniboss 200*
     return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
   },
 
-  async antiToxic({ admin, botadmin, args }) {
+  async demote({ admin, botadmin, args, from }) {
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
@@ -1375,7 +1358,24 @@ Contoh: *lvling char miniboss 200*
     return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
   },
 
-  async antiLink({ admin, botadmin, args }) {
+  async antiToxic({ admin, botadmin, args, from }) {
+    if (!botadmin) {
+      return "Maaf, bot belum diangkat menjadi admin.";
+    }
+    
+    if (!admin) {
+      return "Maaf, perintah ini hanya bisa diakses oleh admin grup.";
+    }
+    
+    if (args.length < 1) {
+      return "Tuliskan nomor HP yang ingin ditambahkan setelah /add.";
+    }
+  
+    const number = args[0];
+    return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
+  },
+
+  async antiLink({ admin, botadmin, args, from }) {
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
@@ -1430,7 +1430,7 @@ Contoh: *lvling char miniboss 200*
     }
   },  
 
-  async outMsg({ admin, botadmin, args }) {
+  async outMsg({ admin, botadmin, args, from }) {
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
