@@ -1434,17 +1434,36 @@ Contoh: *lvling char miniboss 200*
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
-    
+  
     if (!admin) {
       return "Maaf, perintah ini hanya bisa diakses oleh admin grup.";
     }
-    
-    if (args.length < 1) {
-      return "Tuliskan nomor HP yang ingin ditambahkan setelah /add.";
-    }
   
-    const number = args[0];
-    return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
+    const status = args[0]?.toLowerCase();
+  
+    if (status === "on") {
+      try {
+        await saveGroupSettings(from, {
+          out: true,
+        });
+        return `Pesan keluar diaktifkan.`;
+      } catch (error) {
+        console.error("Error mengaktifkan pesan keluar:", error);
+        return "Gagal mengaktifkan pesan keluar.";
+      } 
+    } else if (status === "off") {
+      try {
+        await saveGroupSettings(from, {
+          welcome: false,
+        });
+        return "Pesan keluar dimatikan.";
+      } catch (error) {
+        console.error("Error mematikan pesan keluar:", error);
+        return "Gagal mematikan pesan keluar.";
+      }
+    } else {
+      return "Tuliskan *on* atau *off* setelah /outmsg.";
+    }
   },
 
   async fillstats(parsedmessage) {
