@@ -1333,7 +1333,7 @@ Contoh: *lvling char miniboss 200*
     }
   
     const number = args[0];
-    const mention = [...number.matchAll(/@(\d{0,16})/g)].map((v) => v[1] + "@s.whatsapp.net");
+    const mention = number.replace(/@/g, "") + "@s.whatsapp.net";
     const grupid = from + "@g.us";
 
     axios.post(`${process.env.WA_BOT_URL}/participant`, {
@@ -1361,7 +1361,7 @@ Contoh: *lvling char miniboss 200*
     }
   
     const number = args[0];
-    const mention = [...number.matchAll(/@(\d{0,16})/g)].map((v) => v[1] + "@s.whatsapp.net");
+    const mention = number.replace(/@/g, "") + "@s.whatsapp.net";
     const grupid = from + "@g.us";
 
     axios.post(`${process.env.WA_BOT_URL}/participant`, {
@@ -1389,7 +1389,7 @@ Contoh: *lvling char miniboss 200*
     }
   
     const number = args[0];
-    const mention = [...number.matchAll(/@(\d{0,16})/g)].map((v) => v[1] + "@s.whatsapp.net");
+    const mention = number.replace(/@/g, "") + "@s.whatsapp.net";
     const grupid = from + "@g.us";
 
     axios.post(`${process.env.WA_BOT_URL}/participant`, {
