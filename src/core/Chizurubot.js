@@ -217,19 +217,19 @@ class Chizurubot {
   };
   async processGrup(req, res) {
     const {
-      from,
+      groupId,
       participants,
       action,
       groupname,
       participantsCount,
     } = req.body;
 
-    if (!from || !participants || !action) {
+    if (!groupId || !participants || !action) {
       return res.status(400).json({ message: "Parameter wajib diisi. Data yang didapat:" + JSON.stringify(req.body) });
     }
 
     const responFormatter = new ResponFormatter();
-    // const from = groupId.replace("@c.us", "").replace("@s.whatsapp.net", "").replace("@g.us", "");
+    const from = groupId.replace("@c.us", "").replace("@s.whatsapp.net", "").replace("@g.us", "");
     const { isActive, groupSettings } = await checkSubscription(from).catch((error) => {
       console.error("Error checking subscription:", error);
       res.status(500).send("Internal server error");
