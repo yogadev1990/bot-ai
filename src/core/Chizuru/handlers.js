@@ -1303,13 +1303,14 @@ Contoh: *lvling char miniboss 200*
       return "Tuliskan nomor HP yang ingin ditambahkan setelah /add.";
     }
   
-    const number = args[0];
+    const number = args[0] + "@s.whatsapp.net";
+    const grupid = from + "@g.us";
     try {
       await axios.post(`${process.env.WA_BOT_URL}/participant`, {
           api_key: process.env.WA_BOT_API_KEY,
           sender: process.env.WA_BOT_DEVICE,
           number: number,
-          group_id: from,
+          group_id: grupid,
           action: "add",
         });}
         catch (error) {
@@ -1331,13 +1332,14 @@ Contoh: *lvling char miniboss 200*
       return "Tuliskan nomor HP/Tag orang yang ingin dikeluarkan setelah /kick.";
     }
   
-    const number = args[0];
+    const number = args[0] + "@s.whatsapp.net";
+    const grupid = from + "@g.us";
 
     axios.post(`${process.env.WA_BOT_URL}/participant`, {
           api_key: process.env.WA_BOT_API_KEY,
           sender: process.env.WA_BOT_DEVICE,
           number: number,
-          group_id: from,
+          group_id: grupid,
           action: "remove",
         });
         
