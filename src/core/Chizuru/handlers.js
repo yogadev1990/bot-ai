@@ -1304,7 +1304,16 @@ Contoh: *lvling char miniboss 200*
     }
   
     const number = args[0];
-    return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
+
+    axios.post(`${process.env.WA_BOT_URL}/participant`, {
+          api_key: process.env.WA_BOT_API_KEY,
+          sender: device,
+          number: number,
+          group: from,
+          action: "add",
+        });
+
+        return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
   },
   
   async kick({ admin, botadmin, args, from }) {
@@ -1317,11 +1326,20 @@ Contoh: *lvling char miniboss 200*
     }
     
     if (args.length < 1) {
-      return "Tuliskan nomor HP yang ingin ditambahkan setelah /add.";
+      return "Tuliskan nomor HP/Tag orang yang ingin dikeluarkan setelah /kick.";
     }
   
     const number = args[0];
-    return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
+
+    axios.post(`${process.env.WA_BOT_URL}/participant`, {
+          api_key: process.env.WA_BOT_API_KEY,
+          sender: device,
+          number: number,
+          group: from,
+          action: "remove",
+        });
+        
+        return `Mengeluarkan nomor ${number} dari grup...`; // Ganti dengan logika yang sesuai
   },
 
   async promote({ admin, botadmin, args, from }) {
