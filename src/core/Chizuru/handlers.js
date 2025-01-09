@@ -1304,16 +1304,18 @@ Contoh: *lvling char miniboss 200*
     }
   
     const number = args[0];
-
-    axios.post(`${process.env.WA_BOT_URL}/participant`, {
+    try {
+      await axios.post(`${process.env.WA_BOT_URL}/participant`, {
           api_key: process.env.WA_BOT_API_KEY,
           sender: process.env.WA_BOT_DEVICE,
           number: number,
           group_id: from,
           action: "add",
-        });
-
-        return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
+        });}
+        catch (error) {
+          console.error("Error menambahkan peserta:", error);
+          return "Gagal menambahkan peserta.";
+        }
   },
   
   async kick({ admin, botadmin, args, from }) {
