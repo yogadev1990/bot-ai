@@ -223,7 +223,9 @@ class Chizurubot {
       groupname,
       participantsCount,
     } = req.body;
-  
+    
+    console.log("incoming message", req.body);
+
     const responFormatter = new ResponFormatter();
     const from = groupId.replace("@c.us", "").replace("@s.whatsapp.net", "").replace("@g.us", "");
     const { isActive, groupSettings } = await checkSubscription(from).catch((error) => {
