@@ -1332,13 +1332,14 @@ Contoh: *lvling char miniboss 200*
       return "Tuliskan nomor HP/Tag orang yang ingin dikeluarkan setelah /kick.";
     }
   
-    const number = args[0] + "@s.whatsapp.net";
+    const number = args[0];
+    const mention = [...number.matchAll(/@(\d{0,16})/g)].map((v) => v[1] + "@s.whatsapp.net");
     const grupid = from + "@g.us";
 
     axios.post(`${process.env.WA_BOT_URL}/participant`, {
           api_key: process.env.WA_BOT_API_KEY,
           sender: process.env.WA_BOT_DEVICE,
-          number: number,
+          number: mention,
           group_id: grupid,
           action: "remove",
         });
@@ -1356,11 +1357,22 @@ Contoh: *lvling char miniboss 200*
     }
     
     if (args.length < 1) {
-      return "Tuliskan nomor HP yang ingin ditambahkan setelah /add.";
+      return "Tuliskan nomor HP/Tag orang yang ingin di promote setelah /promote.";
     }
   
     const number = args[0];
-    return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
+    const mention = [...number.matchAll(/@(\d{0,16})/g)].map((v) => v[1] + "@s.whatsapp.net");
+    const grupid = from + "@g.us";
+
+    axios.post(`${process.env.WA_BOT_URL}/participant`, {
+          api_key: process.env.WA_BOT_API_KEY,
+          sender: process.env.WA_BOT_DEVICE,
+          number: mention,
+          group_id: grupid,
+          action: "promote",
+        });
+        
+        return `Nomor ${number} berhasil di promote dari grup...`; // Ganti dengan logika yang sesuai
   },
 
   async demote({ admin, botadmin, args, from }) {
@@ -1373,11 +1385,22 @@ Contoh: *lvling char miniboss 200*
     }
     
     if (args.length < 1) {
-      return "Tuliskan nomor HP yang ingin ditambahkan setelah /add.";
+      return "Tuliskan nomor HP/Tag orang yang ingin demote setelah /demote.";
     }
   
     const number = args[0];
-    return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
+    const mention = [...number.matchAll(/@(\d{0,16})/g)].map((v) => v[1] + "@s.whatsapp.net");
+    const grupid = from + "@g.us";
+
+    axios.post(`${process.env.WA_BOT_URL}/participant`, {
+          api_key: process.env.WA_BOT_API_KEY,
+          sender: process.env.WA_BOT_DEVICE,
+          number: mention,
+          group_id: grupid,
+          action: "demote",
+        });
+        
+        return `Nomor ${number} berhasil di demote dari grup...`; // Ganti dengan logika yang sesuai
   },
 
   async antiToxic({ admin, botadmin, args, from }) {
