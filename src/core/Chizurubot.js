@@ -1,5 +1,4 @@
 const { fromURL } = require("cheerio");
-const axios = require("axios");
 const { checkSubscription } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
 const handlers = require("./Chizuru/handlers.js");
@@ -253,13 +252,7 @@ class Chizurubot {
         response = await handlers.out(context);
       }
   
-      axios.post(`${process.env.WA_BOT_URL}/send-message`, {
-          api_key: process.env.WA_BOT_API_KEY,
-          sender: process.env.WA_BOT_API_DEVICE,
-          number: groupId,
-          message: responFormatter.line(response),
-      });
-      
+      res.send(responFormatter.line(response).responAsText());
     } else {
       res.status(200).send("No active subscription for this group."); // Respons default
     }
