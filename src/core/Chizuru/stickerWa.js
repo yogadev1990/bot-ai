@@ -1,5 +1,6 @@
 const fs = require("fs");
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
+
 class StickerWa {
   static async create(bufferImage) {
     const tempPath = `${__dirname}/../../data/temp/test.png`;
@@ -19,7 +20,10 @@ class StickerWa {
     });
 
     const converted = await sticker.toFile(pathWebp);
-    return 'https://chizuru.torampedia.my.id/public/test.webp';
+
+    // Tambahkan parameter timestamp untuk menghindari cache
+    const stickerUrl = `https://chizuru.torampedia.my.id/public/test.webp?timestamp=${Date.now()}`;
+    return stickerUrl;
   }
 }
 
