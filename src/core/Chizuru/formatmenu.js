@@ -35,7 +35,7 @@ const menus = {
       "/tiktok [link]",
       "/fb [link]",
       "/ig [link]",
-      "/stikerin (dengan gambar)",
+      "/stiker (dengan gambar)",
       "/reqfitur [pesan kamu]",
       "/infobot",
       "/help",
