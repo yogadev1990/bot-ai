@@ -1,8 +1,10 @@
 const { fromURL } = require("cheerio");
 const { checkSubscription } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
+const axios = require("axios");
 const handlers = require("./Chizuru/handlers.js");
 const PREFIX = "/";
+const validator = require("./Chizuru/validator.js");
 
 class Chizurubot {
   async process(req, res) {
@@ -17,15 +19,38 @@ class Chizurubot {
       botadmin,
       participantCount,
       groupname,
+      key,
     } = req.body;
 
     const responFormatter = new ResponFormatter();
 
-    if (!message.startsWith(PREFIX)) return;
-    const [command, ...args] = message.slice(PREFIX.length).trim().split(" ");
-
     const { isActive, remainingTime, groupSettings} = await checkSubscription(from);
     const statusVIP = isActive ? "Aktif" : "Tidak Aktif";
+
+    if (!message.startsWith(PREFIX))
+      {
+        if (validator.containsLink(message) && groupSettings.antiLink) {
+          axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
+            api_key: process.env.WA_BOT_API_KEY,
+            device: device,
+            number: from + "@g.us",
+            key: key,
+          });
+          res.send(responFormatter.line("Maaf, link tidak diizinkan di grup ini.").responAsText());
+        } else if (validator.containsBadWords(message) && groupSettings.antiToxic) {
+          axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
+            api_key: process.env.WA_BOT_API_KEY,
+            device: device,
+            number: from + "@g.us",
+            key: key,
+          });
+          res.send(responFormatter.line("Maaf, pesan toxic tidak diizinkan di grup ini.").responAsText());
+        } else {
+          return;
+        }
+      };
+
+    const [command, ...args] = message.slice(PREFIX.length).trim().split(" ");
 
     const context = {
       device,
@@ -78,8 +103,20 @@ class Chizurubot {
           case "menu":
             response = await handlers.menu();
             break;
+          case "rulesgc":
+            response = await handlers.rulesedit();
+            break;
+          case "rules":
+            response = await handlers.rules();
+            break;
+          case "alltag":
+            response = await handlers.alltag();
+            break;
           case "chizu":
             response = await handlers.chizu(context);
+            break;
+          case "rules":
+            response = await handlers.rules();
             break;
           case "lvlchar":
             response = await handlers.lvlingChar({ args });

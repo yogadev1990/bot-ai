@@ -1,5 +1,6 @@
 const fs = require("fs");
 const Caching = require("node-cache");
+const { out } = require("../core/Chizuru/handlers");
 const cache = new Caching();
 const pathDelayed = `${__dirname}/../data/delayed.json`;
 const pathSubscription = `${__dirname}/../data/subscriptions.json`;
@@ -75,7 +76,8 @@ const saveSubscription = async (from, durationInDays, groupSettings = {}) => {
       antiToxic: groupSettings.antiToxic ?? existing.groupSettings.antiToxic ?? false,
       welcome: groupSettings.welcome ?? existing.groupSettings.welcome ?? false,
       out: groupSettings.out ?? existing.groupSettings.out ?? false,
-      welcomeMsg: groupSettings.welcomeMsg || existing.groupSettings.welcomeMsg || "Selamat datang di grup!"
+      welcomeMsg: groupSettings.welcomeMsg || existing.groupSettings.welcomeMsg || "Selamat datang di grup!",
+      outMsg: groupSettings.outMsg || existing.groupSettings.outMsg || "Selamat tinggal!",
     };
   } else {
     subscriptions.push({
@@ -89,6 +91,7 @@ const saveSubscription = async (from, durationInDays, groupSettings = {}) => {
         welcome: groupSettings.welcome ?? false,
         out: groupSettings.out ?? false,
         welcomeMsg: groupSettings.welcomeMsg || "Selamat datang di grup!",
+        outMsg: groupSettings.outMsg || "Selamat tinggal!",
       },
     });
   }

@@ -1290,7 +1290,7 @@ Contoh: *lvling char miniboss 200*
     }
   },
 
-  async add({ admin, botadmin, args, from }) {
+  async add({ admin, botadmin, args, from, device }) {
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
@@ -1308,7 +1308,7 @@ Contoh: *lvling char miniboss 200*
     try {
       await axios.post(`${process.env.WA_BOT_URL}/participant`, {
           api_key: process.env.WA_BOT_API_KEY,
-          sender: process.env.WA_BOT_DEVICE,
+          sender: device,
           number: number,
           group_id: grupid,
           action: "add",
@@ -1319,7 +1319,7 @@ Contoh: *lvling char miniboss 200*
         }
   },
   
-  async kick({ admin, botadmin, args, from }) {
+  async kick({ admin, botadmin, args, from, device }) {
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
@@ -1338,7 +1338,7 @@ Contoh: *lvling char miniboss 200*
 
     axios.post(`${process.env.WA_BOT_URL}/participant`, {
           api_key: process.env.WA_BOT_API_KEY,
-          sender: process.env.WA_BOT_DEVICE,
+          sender: device,
           number: mention,
           group_id: grupid,
           action: "remove",
@@ -1347,7 +1347,7 @@ Contoh: *lvling char miniboss 200*
         return `Mengeluarkan nomor ${number} dari grup...`; // Ganti dengan logika yang sesuai
   },
 
-  async promote({ admin, botadmin, args, from }) {
+  async promote({ admin, botadmin, args, from, device }) {
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
@@ -1366,7 +1366,7 @@ Contoh: *lvling char miniboss 200*
 
     axios.post(`${process.env.WA_BOT_URL}/participant`, {
           api_key: process.env.WA_BOT_API_KEY,
-          sender: process.env.WA_BOT_DEVICE,
+          sender: device,
           number: mention,
           group_id: grupid,
           action: "promote",
@@ -1375,7 +1375,7 @@ Contoh: *lvling char miniboss 200*
         return `Nomor ${number} berhasil di promote dari grup...`; // Ganti dengan logika yang sesuai
   },
 
-  async demote({ admin, botadmin, args, from }) {
+  async demote({ admin, botadmin, args, from, device }) {
     if (!botadmin) {
       return "Maaf, bot belum diangkat menjadi admin.";
     }
@@ -1394,7 +1394,7 @@ Contoh: *lvling char miniboss 200*
 
     axios.post(`${process.env.WA_BOT_URL}/participant`, {
           api_key: process.env.WA_BOT_API_KEY,
-          sender: process.env.WA_BOT_DEVICE,
+          sender: device,
           number: mention,
           group_id: grupid,
           action: "demote",
@@ -1411,13 +1411,32 @@ Contoh: *lvling char miniboss 200*
     if (!admin) {
       return "Maaf, perintah ini hanya bisa diakses oleh admin grup.";
     }
+
+    const status = args[0]?.toLowerCase();
     
-    if (args.length < 1) {
-      return "Tuliskan nomor HP yang ingin ditambahkan setelah /add.";
-    }
-  
-    const number = args[0];
-    return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
+    if (status === "on") {
+      try {
+        await saveGroupSettings(from, {
+          antiToxic: true,
+        });
+        return `Anti toxic diaktifkan.`;
+      } catch (error) {
+        console.error("Error mengaktifkan pesan keluar:", error);
+        return "Gagal mengaktifkan Anti toxic.";
+      } 
+    } else if (status === "off") {
+      try {
+        await saveGroupSettings(from, {
+          antiToxic: false,
+        });
+        return "Anti toxic dimatikan.";
+      } catch (error) {
+        console.error("Error mematikan pesan keluar:", error);
+        return "Gagal mematikan Anti toxic.";
+      }
+    } else {
+      return "Tuliskan *on* atau *off* setelah /antitoxic.";
+    } // Ganti dengan logika yang sesuai
   },
 
   async antiLink({ admin, botadmin, args, from }) {
@@ -1428,13 +1447,32 @@ Contoh: *lvling char miniboss 200*
     if (!admin) {
       return "Maaf, perintah ini hanya bisa diakses oleh admin grup.";
     }
-    
-    if (args.length < 1) {
-      return "Tuliskan nomor HP yang ingin ditambahkan setelah /add.";
-    }
   
-    const number = args[0];
-    return `Menambahkan nomor ${number} ke grup...`; // Ganti dengan logika yang sesuai
+    const status = args[0]?.toLowerCase();
+
+    if (status === "on") {
+      try {
+        await saveGroupSettings(from, {
+          antiLink: true,
+        });
+        return `Anti link diaktifkan.`;
+      } catch (error) {
+        console.error("Error mengaktifkan pesan keluar:", error);
+        return "Gagal mengaktifkan Anti link.";
+      } 
+    } else if (status === "off") {
+      try {
+        await saveGroupSettings(from, {
+          antiLink: false,
+        });
+        return "Anti link dimatikan.";
+      } catch (error) {
+        console.error("Error mematikan pesan keluar:", error);
+        return "Gagal mematikan Anti link.";
+      }
+    } else {
+      return "Tuliskan *on* atau *off* setelah /antilink.";
+    } // Ganti dengan logika yang sesuai
   },
 
   async welcomeMsg({ admin, botadmin, args, from }) {
@@ -1485,11 +1523,13 @@ Contoh: *lvling char miniboss 200*
     }
   
     const status = args[0]?.toLowerCase();
+    const customMessage = args.slice(1).join(" ");
   
     if (status === "on") {
       try {
         await saveGroupSettings(from, {
           out: true,
+          outMsg: customMessage || "Selamat tinggal!",
         });
         return `Pesan keluar diaktifkan.`;
       } catch (error) {
@@ -1499,7 +1539,7 @@ Contoh: *lvling char miniboss 200*
     } else if (status === "off") {
       try {
         await saveGroupSettings(from, {
-          welcome: false,
+          out: false,
         });
         return "Pesan keluar dimatikan.";
       } catch (error) {
@@ -1507,8 +1547,62 @@ Contoh: *lvling char miniboss 200*
         return "Gagal mematikan pesan keluar.";
       }
     } else {
-      return "Tuliskan *on* atau *off* setelah /outmsg.";
+      return "Tuliskan *on* atau *off* setelah /outmsg. Opsional: tambahkan pesan setelah 'on'.";
     }
+  },
+
+  async rulesedit({ admin, botadmin, args, from }) {
+    if (!botadmin) {
+      return "Maaf, bot belum diangkat menjadi admin.";
+    }
+  
+    if (!admin) {
+      return "Maaf, perintah ini hanya bisa diakses oleh admin grup.";
+    }
+  
+    const customMessage = args.slice(0).join(" "); // Pesan opsional setelah 'on' atau 'off'
+      try {
+        await saveGroupSettings(from, {
+          rules: customMessage || "Rules belum diatur.",
+        });
+        return `Rules diaktifkan. Pesan: "${customMessage || "Rules belum diatur."}"`;
+      } catch (error) {
+        console.error("Error mengaktifkan rules:", error);
+        return "Gagal mengaktifkan rules.";
+      }
+  },
+
+  async rules({ from }) {
+    const {groupSettings} = await checkSubscription(from);
+    return groupSettings.rules || "Rules belum diatur.";
+  },
+
+  async alltag({ admin, botadmin, args, from, device }) {
+    if (!botadmin) {
+      return "Maaf, bot belum diangkat menjadi admin.";
+    }
+  
+    if (!admin) {
+      return "Maaf, perintah ini hanya bisa diakses oleh admin grup.";
+    }
+
+    if (args.length < 1) {
+      return "Tuliskan pesan yang ingin disampaikan setelah /alltag.";
+    }
+
+    const customMessage = args.slice(0).join(" ");
+    const grupid = from + "@g.us";
+      try {
+        await axios.post(`${process.env.WA_BOT_URL}/tagall`, {
+          api_key: process.env.WA_BOT_API_KEY,
+          sender: device,
+          number: grupid,
+          message: customMessage,
+        });
+      } catch (error) {
+        console.error("Error mengaktifkan tags:", error);
+        return "Gagal mengaktifkan tags.";
+      }
   },
 
   async fillstats(parsedmessage) {
