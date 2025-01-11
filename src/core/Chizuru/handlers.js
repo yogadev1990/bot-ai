@@ -10,7 +10,7 @@ const DyeExtractor = require("./dyeExtractor");
 const fillstat = require("./fillstat");
 const token = process.env.TORAM_API_TOKEN;
 const auth = { headers: { Authorization: `Bearer ${token}` } };
-const { checkSubscription, saveGroupSettings } = require("../../lib/helpers.js");
+const { checkSubscription, saveGroupSettings } = require("../../lib/helpers");
 
 const toramnews = new ToramNews();
 const dyeExtractor = new DyeExtractor();

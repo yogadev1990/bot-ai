@@ -1,4 +1,7 @@
 const fs = require("fs");
+const Caching = require("node-cache");
+const { out } = require("../core/Chizuru/handlers");
+const cache = new Caching();
 const pathDelayed = `${__dirname}/../data/delayed.json`;
 const pathSubscription = `${__dirname}/../data/subscriptions.json`;
 const pathOwner = `${__dirname}/../data/owner.json`;
@@ -196,7 +199,28 @@ const checkDelay = async (from) => {
   return now - lastSent >= fourHours; // Jika sudah lebih dari 4 jam, boleh kirim
 };
 
+const manageMessagesCache = (number, role, content, isGemini = true) => {
+  const newContent = isGemini
+    ? { parts: [{ text: content }] }
+    : { content: content };
+
+  let msgs = cache.get("messages" + number) ?? [];
+
+  const messages = [
+    ...msgs,
+    {
+      role,
+      ...newContent,
+    },
+  ];
+
+  cache.set("messages" + number, messages, 1800);
+
+  return messages;
+};
+
 module.exports = {
+  manageMessagesCache,
   loadDelayed,
   saveDelayed,
   checkDelay,
