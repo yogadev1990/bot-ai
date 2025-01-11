@@ -19,7 +19,7 @@ class StickerWa {
     });
 
     const converted = await sticker.toFile(pathWebp);
-    return pathWebp;
+    return converted;
   }
 }
 
