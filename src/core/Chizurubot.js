@@ -30,7 +30,7 @@ class Chizurubot {
         if (containsLink(message) && groupSettings.antiLink) {
           await axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
             api_key: process.env.WA_BOT_API_KEY,
-            device: device,
+            sender: device,
             number: from + "@g.us",
             key: key,
           });
@@ -38,7 +38,7 @@ class Chizurubot {
         } else if (containsBadWords(message) && groupSettings.antiToxic) {
           await axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
             api_key: process.env.WA_BOT_API_KEY,
-            device: device,
+            sender: device,
             number: from + "@g.us",
             key: key,
           });
