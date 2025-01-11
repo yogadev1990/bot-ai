@@ -19,7 +19,7 @@ class StickerWa {
     });
 
     const converted = await sticker.toFile(pathWebp);
-    return converted;
+    return 'https://chizuru.torampedia.my.id/public/test.webp';
   }
 }
 

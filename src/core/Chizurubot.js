@@ -246,9 +246,8 @@ class Chizurubot {
     
     if (response) {
       if (command === "sticker" && bufferImage) {
-        await StickerWa.create(bufferImage)
         return res.send(
-          responFormatter.responSticker('https://chizuru.torampedia.my.id/public/test.webp')
+          responFormatter.responSticker(await StickerWa.create(bufferImage))
         ); // Kirim stiker, eksekusi berhenti di sini
       } else {
         return res.send(responFormatter.line(response).responAsText()); // Kirim teks, eksekusi berhenti di sini
