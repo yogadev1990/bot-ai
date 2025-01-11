@@ -24,9 +24,6 @@ class Chizurubot {
 
     const responFormatter = new ResponFormatter();
 
-    const { isActive, remainingTime, groupSettings} = await checkSubscription(from);
-    const statusVIP = isActive ? "Aktif" : "Tidak Aktif";
-
     if (!message.startsWith(PREFIX))
       {
         if (validator.containsLink(message) && groupSettings.antiLink) {
@@ -51,6 +48,9 @@ class Chizurubot {
       };
 
     const [command, ...args] = message.slice(PREFIX.length).trim().split(" ");
+
+    const { isActive, remainingTime, groupSettings} = await checkSubscription(from);
+    const statusVIP = isActive ? "Aktif" : "Tidak Aktif";
 
     const context = {
       device,
