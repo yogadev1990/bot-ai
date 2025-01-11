@@ -2,8 +2,8 @@ const fs = require("fs");
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 class StickerWa {
   static async create(bufferImage) {
-    const tempPath = `${__dirname}/../../../data/temp/test.png`;
-    const pathWebp = `${__dirname}/../../../data/temp/test.webp`;
+    const tempPath = `../../data/temp/${Date.now()}.png`;
+    const pathWebp = `../../data/temp/${Date.now()}.webp`;
     const stream = Buffer.from(bufferImage, "base64");
     fs.writeFileSync(tempPath, stream);
     if (fs.existsSync(pathWebp)) fs.unlinkSync(pathWebp);
