@@ -3,8 +3,6 @@ const { checkSubscription } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
 const handlers = require("./Chizuru/handlers.js");
 const PREFIX = "/";
-const validator = require("./Chizuru/validator.js");
-const {default: axios} = require("axios");
 
 class Chizurubot {
   async process(req, res) {
@@ -23,33 +21,12 @@ class Chizurubot {
     } = req.body;
 
     const responFormatter = new ResponFormatter();
-    const { isActive, remainingTime, groupSettings} = await checkSubscription(from);
-    
-    if (!message.startsWith(PREFIX))
-      {
-        if (validator.containsLink(message) && groupSettings.antiLink) {
-          axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
-            api_key: process.env.WA_BOT_API_KEY,
-            device: device,
-            number: from + "@g.us",
-            key: key,
-          });
-          res.send(responFormatter.line("Maaf, link tidak diizinkan di grup ini.").responAsText());
-        } else if (validator.containsBadWords(message) && groupSettings.antiToxic) {
-          axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
-            api_key: process.env.WA_BOT_API_KEY,
-            device: device,
-            number: from + "@g.us",
-            key: key,
-          });
-          res.send(responFormatter.line("Maaf, pesan toxic tidak diizinkan di grup ini.").responAsText());
-        } else {
-          return;
-        }
-      };
+
+    if (!message.startsWith(PREFIX)) return;
 
     const [command, ...args] = message.slice(PREFIX.length).trim().split(" ");
 
+    const { isActive, remainingTime, groupSettings} = await checkSubscription(from);
     const statusVIP = isActive ? "Aktif" : "Tidak Aktif";
 
     const context = {
