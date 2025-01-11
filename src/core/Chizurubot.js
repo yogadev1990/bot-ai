@@ -246,11 +246,14 @@ class Chizurubot {
     
     if (response) {
       if (command === "sticker" && bufferImage) {
-        res.send(responFormatter.responSticker(await StickerWa.create(bufferImage))); // Kirim stiker
+        return res.send(
+          responFormatter.responSticker(await StickerWa.create(bufferImage))
+        ); // Kirim stiker, eksekusi berhenti di sini
       } else {
-        res.send(responFormatter.line(response).responAsText()); // Kirim teks
+        return res.send(responFormatter.line(response).responAsText()); // Kirim teks, eksekusi berhenti di sini
       }
-    }    
+    }
+        
   };
   async processGrup(req, res) {
     const {
