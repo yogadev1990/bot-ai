@@ -27,7 +27,7 @@ class Chizurubot {
     if (!message.startsWith(PREFIX))
       {
         if (containsLink(message) && groupSettings.antiLink) {
-          axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
+          await axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
             api_key: process.env.WA_BOT_API_KEY,
             device: device,
             number: from + "@g.us",
@@ -35,7 +35,7 @@ class Chizurubot {
           });
           res.send(responFormatter.line("Maaf, link tidak diizinkan di grup ini.").responAsText());
         } else if (containsBadWords(message) && groupSettings.antiToxic) {
-          axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
+          await axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
             api_key: process.env.WA_BOT_API_KEY,
             device: device,
             number: from + "@g.us",
@@ -106,7 +106,7 @@ class Chizurubot {
             response = await handlers.rulesedit(context);
             break;
           case "rules":
-            response = await handlers.rules();
+            response = await handlers.rules(context);
             break;
           case "alltag":
             response = await handlers.alltag(context);
