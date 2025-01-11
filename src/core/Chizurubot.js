@@ -104,13 +104,13 @@ class Chizurubot {
             response = await handlers.menu();
             break;
           case "rulesgc":
-            response = await handlers.rulesedit();
+            response = await handlers.rulesedit(context);
             break;
           case "rules":
             response = await handlers.rules();
             break;
           case "alltag":
-            response = await handlers.alltag();
+            response = await handlers.alltag(context);
             break;
           case "chizu":
             response = await handlers.chizu(context);
