@@ -4,6 +4,7 @@ const handlers = require("./Chizuru/handlers.js");
 const PREFIX = "/";
 const { containsBadWords, containsLink } = require("./Chizuru/validator.js");
 const axios = require("axios");
+const StickerWa = require("./Chizuru/stickerWa");
 
 class Chizurubot {
   async process(req, res) {
@@ -245,7 +246,7 @@ class Chizurubot {
     
     if (response) {
       if (command === "sticker" && bufferImage) {
-        res.send(responFormatter.responSticker(response)); // Kirim stiker
+        res.send(responFormatter.responSticker(await StickerWa.create(bufferImage))); // Kirim stiker
       } else {
         res.send(responFormatter.line(response).responAsText()); // Kirim teks
       }
