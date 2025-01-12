@@ -82,14 +82,26 @@ Selamat jalan kak ${taggedParticipants}, karangan bunganya Chizu titip admin ya.
         `https://torampedia.my.id/api/v1/leveling?level=${rawlv}&tipe=${typem}&range=9`,
         auth
       );
-      const users = response.data.data.slice(0, 10);
-      const sorted = users.sort((a, b) => b.exp - a.exp);
+      const users = response.data.data;
   
-      if (sorted.length === 0) {
+      if (users.length === 0) {
         return "Tidak ada hasil untuk pencarian ini.";
       }
   
-      return `*𝐂𝐡𝐢𝐳𝐮𝐫𝐮-𝐜𝐡𝐚𝐧🌸*\n\nSiap tuan, data ini diambil dari torampedia.my.id, sesuai permintaan<3\n╔═════════════\n${sorted
+      // Hitung bonus EXP terlebih dahulu
+      const usersWithBonus = users.map((data) => {
+        const bonusExp = bonusexp(data.exp, rawlv, data.level);
+        return { ...data, bonusExp }; // Tambahkan bonusExp ke data
+      });
+  
+      // Urutkan berdasarkan bonus EXP (descending)
+      const sorted = usersWithBonus.sort((a, b) => b.bonusExp - a.bonusExp);
+  
+      // Ambil 10 hasil teratas setelah diurutkan
+      const topResults = sorted.slice(0, 10);
+  
+      // Buat template output
+      return `*𝐂𝐡𝐢𝐳𝐮𝐫𝐮-𝐜𝐡𝐚𝐧🌸*\n\nSiap tuan, data ini diambil dari torampedia.my.id, sesuai permintaan<3\n╔═════════════\n${topResults
         .map((data) => bosstemplate(data, rawlv))
         .join("\n")}\n╚══〘 *Torampedia Database* 〙══`;
     } catch (error) {
@@ -1640,19 +1652,20 @@ Contoh: *lvling char miniboss 200*
 };
 
 function bonusexp(exp, PlayerLv, BossLv) {
-    if (BossLv <= PlayerLv + 5 && PlayerLv - 5 <= BossLv) return exp * 11;
-    if (BossLv <= PlayerLv + 6 && PlayerLv - 6 <= BossLv) return exp * 10;
-    if (BossLv <= PlayerLv + 7 && PlayerLv - 7 <= BossLv) return exp * 9;
-    if (BossLv <= PlayerLv + 8 && PlayerLv - 8 <= BossLv) return exp * 7;
-    if (BossLv <= PlayerLv + 9 && PlayerLv - 9 <= BossLv) return exp * 3;
-    return exp;
-  };  
-  // Template format untuk setiap boss
-  function bosstemplate(RawData, rawlv) {
-    return `╠➥ *${RawData.name.id} [${RawData.mode}]*\n║ Level: ${RawData.level}\n║ EXP: ${bonusexp(
-RawData.exp,
-rawlv,
-RawData.level)}\n║ HP: ${RawData.hp}\n║ 📌 ${RawData.map.name_id}`;
-  };
+  if (BossLv <= PlayerLv + 5 && PlayerLv - 5 <= BossLv) return exp * 11;
+  if (BossLv <= PlayerLv + 6 && PlayerLv - 6 <= BossLv) return exp * 10;
+  if (BossLv <= PlayerLv + 7 && PlayerLv - 7 <= BossLv) return exp * 9;
+  if (BossLv <= PlayerLv + 8 && PlayerLv - 8 <= BossLv) return exp * 7;
+  if (BossLv <= PlayerLv + 9 && PlayerLv - 9 <= BossLv) return exp * 3;
+  return exp;
+}
+
+function formatNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function bosstemplate(RawData) {
+  return `╠➥ *${RawData.name.id} [${RawData.mode}]*\n║ Level: ${RawData.level}\n║ EXP: ${formatNumber(RawData.bonusExp)}\n║ HP: ${formatNumber(RawData.hp)}\n║ 📌 ${RawData.map.name_id}`;
+}
 
 module.exports = handlers;
