@@ -69,8 +69,8 @@ Selamat jalan kak ${taggedParticipants}, karangan bunganya Chizu titip admin ya.
     const rawlv = parseInt(args[1], 10);
     let typem = "";
   
-    if (type === "boss") typem = "3";
-    else if (type === "miniboss") typem = "2";
+    if (type === "boss") typem = "Boss";
+    else if (type === "miniboss") typem = "Miniboss";
     else return "Tipe harus 'boss' atau 'miniboss'.";
   
     if (isNaN(rawlv)) {
@@ -79,17 +79,17 @@ Selamat jalan kak ${taggedParticipants}, karangan bunganya Chizu titip admin ya.
   
     try {
       const response = await axios.get(
-        `https://toram-id.com/api/v1/monsters/${typem}?level=${rawlv}&bonusexp=0&between=9`,
+        `https://torampedia.my.id/api/v1/leveling?level=${rawlv}&tipe=${typem}&range=9`,
         auth
       );
       const users = response.data.data.slice(0, 10);
-      const sorted = users.sort((a, b) => b.xp - a.xp);
+      const sorted = users.sort((a, b) => b.exp - a.exp);
   
       if (sorted.length === 0) {
         return "Tidak ada hasil untuk pencarian ini.";
       }
   
-      return `*𝐂𝐡𝐢𝐳𝐮𝐫𝐮-𝐜𝐡𝐚𝐧🌸*\n\nSiap tuan, sesuai permintaan<3\n╔═════════════\n${sorted
+      return `*𝐂𝐡𝐢𝐳𝐮𝐫𝐮-𝐜𝐡𝐚𝐧🌸*\n\nSiap tuan, data ini diambil dari torampedia.my.id, sesuai permintaan<3\n╔═════════════\n${sorted
         .map((data) => bosstemplate(data, rawlv))
         .join("\n")}\n╚══〘 *Toram Database* 〙══`;
     } catch (error) {
@@ -1639,20 +1639,20 @@ Contoh: *lvling char miniboss 200*
   },
 };
 
-function bonusexp(xp, PlayerLv, BossLv) {
-    if (BossLv <= PlayerLv + 5 && PlayerLv - 5 <= BossLv) return xp * 11;
-    if (BossLv <= PlayerLv + 6 && PlayerLv - 6 <= BossLv) return xp * 10;
-    if (BossLv <= PlayerLv + 7 && PlayerLv - 7 <= BossLv) return xp * 9;
-    if (BossLv <= PlayerLv + 8 && PlayerLv - 8 <= BossLv) return xp * 7;
-    if (BossLv <= PlayerLv + 9 && PlayerLv - 9 <= BossLv) return xp * 3;
-    return xp;
+function bonusexp(exp, PlayerLv, BossLv) {
+    if (BossLv <= PlayerLv + 5 && PlayerLv - 5 <= BossLv) return exp * 11;
+    if (BossLv <= PlayerLv + 6 && PlayerLv - 6 <= BossLv) return exp * 10;
+    if (BossLv <= PlayerLv + 7 && PlayerLv - 7 <= BossLv) return exp * 9;
+    if (BossLv <= PlayerLv + 8 && PlayerLv - 8 <= BossLv) return exp * 7;
+    if (BossLv <= PlayerLv + 9 && PlayerLv - 9 <= BossLv) return exp * 3;
+    return exp;
   };  
   // Template format untuk setiap boss
   function bosstemplate(RawData, rawlv) {
-    return `╠➥ *${RawData.name}*\n║ Level: ${RawData.level}\n║ EXP: ${bonusexp(
-RawData.xp,
+    return `╠➥ *${RawData.name.id} ${RawData.mode}*\n║ Level: ${RawData.level}\n║ EXP: ${bonusexp(
+RawData.exp,
 rawlv,
-RawData.level)}\n║ HP: ${RawData.hp}\n║ 📌 ${RawData.map.name}`;
+RawData.level)}\n║ HP: ${RawData.hp}\n║ 📌 ${RawData.map.name_id}`;
   };
 
 module.exports = handlers;
