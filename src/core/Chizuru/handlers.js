@@ -184,39 +184,56 @@ Tingkatan padu/lock & Prof minimum:
 ╚═════════════`
   },
 
-  async cariItem ({ args }) {
+  async cariItem({ args }) {
     if (args.length < 1) {
-      return "Tuliskan nama item yang ingin dicari setelah /item."; 
-    } else {
-      const item = args.join("%20");
-      try {
-        const response = await axios.get(`https://toram-id.com/api/v1/items/search/${item}`, auth);
-        const items = response.data.data;
-        
-        let itemDetails = `*Chizuru-chan🌸*\n`;
-
-        items.forEach(item => {
-                const itemName = item.name;
-				const itemLink = item.id;
-                const itemStat = item.note && item.note.monster ? item.note.monster : 'Tidak ada informasi stat';
-                const itemType = item.drop_type && item.drop_type.name ? item.drop_type.name : 'Tidak ada informasi tipe';
-
-                const monsterList = item.monsters.map(monster => {
-                    return `• ${monster.name} (${monster.map_id})`;
-                }).join('\n');
-
-                itemDetails += `\n*Nama* ${itemName}\n`;
-                itemDetails += `*Stat:* ${itemStat}\n`;
-                itemDetails += `*Type:* ${itemType}\n`;
-                itemDetails += `*Drop dari:*\n${monsterList}\n`;
-				itemDetails += `*Link:* https://toram-id.com/item/${itemLink}\n`;
-        });
-
-        return itemDetails;
-    } catch (error) {;
-        return `Terjadi kesalahan dalam pencarian item. ${error.message}`;
-    }}
-  },
+      return "Tuliskan nama item yang ingin dicari setelah /item.";
+    }
+  
+    const item = args.join("%20");
+  
+    try {
+      const response = await axios.get(`https://torampedia.my.id/api/v1/item/${item}`, auth);
+      const items = response.data.data;
+  
+      if (!items || items.length === 0) {
+        return "Item tidak ditemukan.";
+      }
+  
+      let itemDetails = `*Chizuru-chan🌸*\n\nBerikut informasi item yang ditemukan:\n`;
+  
+      items.forEach(item => {
+        const nameId = item.name_id || "Tidak ada nama ID";
+        const nameEn = item.name_en || "Tidak ada nama EN";
+        const rarity = item.rarity || "Tidak ada informasi rarity";
+        const sellPrice = item.sell_price ? `💰 ${item.sell_price}` : "Tidak ada informasi harga jual";
+        const amountPrice = item.amount_price ? `💰 ${item.amount_price}` : "Tidak ada informasi harga produksi";
+        const dyes = item.dye
+          ? `🎨 Dye A: ${item.dye.A}, Dye B: ${item.dye.B}, Dye C: ${item.dye.C}`
+          : "Tidak ada informasi dye";
+        const stats = item.stats.length
+          ? item.stats.map(stat => `• ${stat.name}: ${stat.value}`).join("\n")
+          : "Tidak ada informasi statistik";
+        const droppedBy = item.dropped_by.length
+          ? item.dropped_by.map(monster => `• ${monster.name_id} (${monster.level}, ${monster.type})`).join("\n")
+          : "Tidak ada informasi monster drop";
+  
+        itemDetails += `\n*🗡 Nama ID:* ${nameId}\n`;
+        itemDetails += `*🗡 Nama EN:* ${nameEn}\n`;
+        itemDetails += `*✨ Rarity:* ${rarity}\n`;
+        itemDetails += `*💰 Harga Jual:* ${sellPrice}\n`;
+        itemDetails += `*💰 Harga Produksi:* ${amountPrice}\n`;
+        itemDetails += `${dyes}\n`;
+        itemDetails += `*📊 Statistik:*\n${stats}\n`;
+        itemDetails += `*📍 Dijatuhkan Oleh:*\n${droppedBy}\n`;
+        itemDetails += `*🔗 Link:* https://torampedia.my.id/item/${item.slug}\n`;
+        itemDetails += `══════════════════════════\n`;
+      });
+  
+      return itemDetails;
+    } catch (error) {
+      return `Terjadi kesalahan dalam pencarian item. ${error.message}`;
+    }
+  },  
 
   async cariMonster ({ args }) {
     if (args.length < 1) {
