@@ -1176,7 +1176,31 @@ https://drive.google.com/drive/folders/1CtXe-jDXEfsrpSwvrDbfBaA5un6X00ge`;
       return "Format tidak dikenali. /manga recommendations/top/random";
     }
   },
-
+  
+  async cariRegistlet({ args }) {
+    if (args.length < 1) {
+      return "Tuliskan nama registlet yang ingin dicari setelah /cariregistlet.";
+    }
+    const query = args.join(" ");
+    try {
+      const response = await axios.get(`https://torampedia.my.id/api/registlet/search/${query}`);
+      const data = response.data;
+      if (data.length === 0) {
+          return "Tidak ada hasil yang ditemukan untuk pencarian ini.";
+      }
+      let resultMessage = "*Chizuru-chan🌸*\nSiap kak, ajak member lain kalau mau Stoodie:\n";
+      data.forEach((item, index) => {
+          resultMessage += `\n*Nama:* ${item.name_en}\n`;
+          resultMessage += `*Max Lv:* ${item.max}\n`;
+          resultMessage += `*Efek:* ${item.effect_en}\n`;
+          resultMessage += `*Dari:* Stoodie ${item.from}\n`;
+      });
+      return resultMessage;
+  } catch (error) {
+      console.error('Error fetching registlet data:', error.message);
+      return 'Terjadi kesalahan dalam pencarian registlet.';
+  }
+  },
   async ongoingAnime() {
     const response = await moeApi.ongoingAnime();
     return response;
