@@ -206,7 +206,7 @@ Tingkatan padu/lock & Prof minimum:
         const nameEn = item.name_en || "Tidak ada nama EN";
         const rarity = item.rarity || "Tidak ada informasi rarity";
         const proc = item.proc_to || "Tidak ada informasi";
-        const sellPrice = item.sell_price ? `💰 ${item.sell_price}` : "Tidak ada informasi harga jual";
+        const sellPrice = item.sell_price ? `${item.sell_price} Spina` : "Tidak ada informasi harga jual";
         const amountPrice = item.amount_price ? `${item.amount_price} pt` : "";
         const dyes = item.dye
           ? `🎨 Dye A: ${item.dye.A}, Dye B: ${item.dye.B}, Dye C: ${item.dye.C}`
@@ -220,9 +220,9 @@ Tingkatan padu/lock & Prof minimum:
   
         itemDetails += `\n*Nama:* ${nameId} (${nameEn})\n`;
         itemDetails += `*✨ Rarity:* ${rarity}\n`;
-        itemDetails += `*💰 Harga Jual:* ${sellPrice} Spina\n`;
+        itemDetails += `*💰 Harga Jual:* ${sellPrice}\n`;
         itemDetails += `*⏳ Dapat diproses:* ${proc} ${amountPrice}\n`;
-        itemDetails += `${dyes}\n`;
+       // itemDetails += `${dyes}\n`;
         itemDetails += `*📊 Stat:*\n${stats}\n`;
         itemDetails += `*📍 Diperoleh Dari:*\n${droppedBy}\n`;
         itemDetails += `*🔗 Link:* https://torampedia.my.id/item/${item.slug}\n`;
