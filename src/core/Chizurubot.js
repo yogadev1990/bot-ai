@@ -80,16 +80,16 @@ class Chizurubot {
         case "broadcast":
           break;
         case "addbadword":
-          response = await validator.BadWords({ args, add : true });
+          response = await validator.BadWords( args, true );
           break;
         case "deletebadword":
-          response = await validator.BadWords({ args, add : false });
+          response = await validator.BadWords( args, false );
           break;
         case "addwhitelist":
-          response = await validator.whitelist({ args, add : true });
+          response = await validator.whitelist( args, true );
           break;
         case "deletewhitelist":
-          response = await validator.whitelist({ args, add : false });
+          response = await validator.whitelist( args, false );
           break;
         default:
           response = await handlers.default();
