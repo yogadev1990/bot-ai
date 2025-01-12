@@ -1,4 +1,10 @@
-// Import modul yang dibutuhkan
+const { Profanity, CensorType } = require('@2toad/profanity');
+
+const profanity = new Profanity({
+    languages: ["id"],
+    wholeword: false,
+});
+
 const badWords = [
     "ancuk",
     "ancok",
@@ -322,12 +328,33 @@ function containsLink(message) {
 
 // Fungsi untuk memeriksa apakah pesan mengandung kata-kata kotor
 function containsBadWords(message) {
-    const lowerCasedMessage = message.toLowerCase(); // Konversi ke huruf kecil untuk pemeriksaan
-    return badWords.some((word) => lowerCasedMessage.includes(word));
+    const censored = profanity.exists(message); // Sensor pesan
+    return censored;
 }
 
+function BadWords(args, add) {
+    if (add) {
+        profanity.addWords([args]);
+        return "Kata-kata kotor berhasil ditambahkan.";
+    } else {
+        profanity.removeWords([args]);
+        return "Kata-kata kotor berhasil dihapus.";
+    }
+}
+
+function whitelist(args, add) {
+    if (add) {
+        profanity.whitelist.addWords([args]);
+        return "Kata-kata berhasil ditambahkan ke whitelist.";
+    } else {
+        profanity.whitelist.removeWords([args]);
+        return "Kata-kata berhasil dihapus dari whitelist.";
+    }
+}
 // Ekspor fungsi
 module.exports = {
     containsLink,
     containsBadWords,
+    BadWords,
+    whitelist
 };

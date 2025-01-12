@@ -2,7 +2,7 @@ const { checkSubscription } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
 const handlers = require("./Chizuru/handlers.js");
 const PREFIX = "/";
-const { containsBadWords, containsLink } = require("./Chizuru/validator.js");
+const { containsBadWords, containsLink, BadWords, whitelist } = require("./Chizuru/validator.js");
 const axios = require("axios");
 const StickerWa = require("./Chizuru/stickerWa");
 
@@ -71,6 +71,29 @@ class Chizurubot {
     let response;
     if (command === "status") {
       response = await handlers.status(context);
+    } else if (from === process.env.OWNER) {
+      switch (command) {
+        case "addvip":
+        case "deletevip":
+        case "listvip":
+        case "broadcast":
+          break;
+        case "addbadword":
+          response = BadWords({ args, add : true });
+          break;
+        case "deletebadword":
+          response = BadWords({ args, add : false });
+          break;
+        case "addwhitelist":
+          response = whitelist({ args, add : true });
+          break;
+        case "deletewhitelist":
+          response = whitelist({ args, add : false });
+          break;
+        default:
+          response = await handlers.default();
+          break;
+      }
     } else if (isActive) {
         switch (command) {
           case "add":
@@ -242,8 +265,7 @@ class Chizurubot {
           .line("Mohon maaf, layanan ini hanya untuk grup VIP. Silahkan langganan di revandastore.com")
           .responAsText()
       );
-    }
-    
+    }  
     if (response) {
       if (command === "sticker" && bufferImage) {
         return res.send(
