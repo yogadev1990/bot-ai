@@ -1193,7 +1193,7 @@ https://drive.google.com/drive/folders/1CtXe-jDXEfsrpSwvrDbfBaA5un6X00ge`;
           resultMessage += `\n*Nama:* ${item.name_en}\n`;
           resultMessage += `*Max Lv:* ${item.max}\n`;
           resultMessage += `*Efek:* ${item.effect_en}\n`;
-          resultMessage += `*Dari:* Stoodie ${item.from}\n`;
+          resultMessage += `*Dari:* Stoodie ${item.froms}\n`;
       });
       return resultMessage;
   } catch (error) {
