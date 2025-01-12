@@ -205,8 +205,9 @@ Tingkatan padu/lock & Prof minimum:
         const nameId = item.name_id || "Tidak ada nama ID";
         const nameEn = item.name_en || "Tidak ada nama EN";
         const rarity = item.rarity || "Tidak ada informasi rarity";
+        const proc = item.proc_to || "Tidak ada informasi";
         const sellPrice = item.sell_price ? `💰 ${item.sell_price}` : "Tidak ada informasi harga jual";
-        const amountPrice = item.amount_price ? `💰 ${item.amount_price}` : "Tidak ada informasi harga produksi";
+        const amountPrice = item.amount_price ? `${item.amount_price} pt` : "";
         const dyes = item.dye
           ? `🎨 Dye A: ${item.dye.A}, Dye B: ${item.dye.B}, Dye C: ${item.dye.C}`
           : "Tidak ada informasi dye";
@@ -214,19 +215,18 @@ Tingkatan padu/lock & Prof minimum:
           ? item.stats.map(stat => `• ${stat.name}: ${stat.value}`).join("\n")
           : "Tidak ada informasi statistik";
         const droppedBy = item.dropped_by.length
-          ? item.dropped_by.map(monster => `• ${monster.name_id} (${monster.level}, ${monster.type})`).join("\n")
+          ? item.dropped_by.map(monster => `• ${monster.name_id} (Lv ${monster.level}, ${monster.type})`).join("\n")
           : "Tidak ada informasi monster drop";
   
-        itemDetails += `\n*🗡 Nama ID:* ${nameId}\n`;
-        itemDetails += `*🗡 Nama EN:* ${nameEn}\n`;
+        itemDetails += `\n*Nama:* ${nameId} (${nameEn})\n`;
         itemDetails += `*✨ Rarity:* ${rarity}\n`;
-        itemDetails += `*💰 Harga Jual:* ${sellPrice}\n`;
-        itemDetails += `*💰 Harga Produksi:* ${amountPrice}\n`;
+        itemDetails += `*💰 Harga Jual:* ${sellPrice} Spina\n`;
+        itemDetails += `*⏳ Dapat diproses:* ${proc} ${amountPrice}\n`;
         itemDetails += `${dyes}\n`;
-        itemDetails += `*📊 Statistik:*\n${stats}\n`;
-        itemDetails += `*📍 Dijatuhkan Oleh:*\n${droppedBy}\n`;
+        itemDetails += `*📊 Stat:*\n${stats}\n`;
+        itemDetails += `*📍 Diperoleh Dari:*\n${droppedBy}\n`;
         itemDetails += `*🔗 Link:* https://torampedia.my.id/item/${item.slug}\n`;
-        itemDetails += `══════════════════════════\n`;
+        itemDetails += `═════════════════════\n`;
       });
   
       return itemDetails;
