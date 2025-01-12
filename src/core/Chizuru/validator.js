@@ -90,20 +90,20 @@ class Validator {
 
     async BadWords(args, add) {
         if (add) {
-            profanity.addWords([args]);
+            profanity.addWords(args);
             return "Kata-kata kotor berhasil ditambahkan.";
         } else {
-            profanity.removeWords([args]);
+            profanity.removeWords(args);
             return "Kata-kata kotor berhasil dihapus.";
         }
     }
 
     async whitelist(args, add) {
         if (add) {
-            profanity.whitelist.addWords([args]);
+            profanity.whitelist.addWords(args);
             return "Kata-kata berhasil ditambahkan ke whitelist.";
         } else {
-            profanity.whitelist.removeWords([args]);
+            profanity.whitelist.removeWords(args);
             return "Kata-kata berhasil dihapus dari whitelist.";
         }
     }
