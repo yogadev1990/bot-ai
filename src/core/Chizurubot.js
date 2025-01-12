@@ -35,7 +35,7 @@ class Chizurubot {
             number: from + "@g.us",
             key: key,
           });
-          res.send(responFormatter.line("Maaf, link tidak diizinkan di grup ini.").responAsText());
+          return res.send(responFormatter.line("Maaf, link tidak diizinkan di grup ini.").responAsText());
         } else if (await validator.containsBadWords(message) && groupSettings.antiToxic) {
           await axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
             api_key: process.env.WA_BOT_API_KEY,
@@ -43,7 +43,7 @@ class Chizurubot {
             number: from + "@g.us",
             key: key,
           });
-          res.send(responFormatter.line("Maaf, pesan toxic tidak diizinkan di grup ini.").responAsText());
+          return res.send(responFormatter.line("Maaf, pesan toxic tidak diizinkan di grup ini.").responAsText());
         } else {
           return;
         }
