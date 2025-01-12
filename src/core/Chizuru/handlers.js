@@ -91,7 +91,7 @@ Selamat jalan kak ${taggedParticipants}, karangan bunganya Chizu titip admin ya.
   
       return `*𝐂𝐡𝐢𝐳𝐮𝐫𝐮-𝐜𝐡𝐚𝐧🌸*\n\nSiap tuan, data ini diambil dari torampedia.my.id, sesuai permintaan<3\n╔═════════════\n${sorted
         .map((data) => bosstemplate(data, rawlv))
-        .join("\n")}\n╚══〘 *Toram Database* 〙══`;
+        .join("\n")}\n╚══〘 *Torampedia Database* 〙══`;
     } catch (error) {
       return `Terjadi kesalahan dalam pencarian. ${error.message}`;
     }
@@ -1649,7 +1649,7 @@ function bonusexp(exp, PlayerLv, BossLv) {
   };  
   // Template format untuk setiap boss
   function bosstemplate(RawData, rawlv) {
-    return `╠➥ *${RawData.name.id} ${RawData.mode}*\n║ Level: ${RawData.level}\n║ EXP: ${bonusexp(
+    return `╠➥ *${RawData.name.id} [${RawData.mode}]*\n║ Level: ${RawData.level}\n║ EXP: ${bonusexp(
 RawData.exp,
 rawlv,
 RawData.level)}\n║ HP: ${RawData.hp}\n║ 📌 ${RawData.map.name_id}`;
