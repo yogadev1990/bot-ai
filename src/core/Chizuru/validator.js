@@ -5,250 +5,6 @@ const profanity = new Profanity({
     wholeword: false,
 });
 
-const badWords = [
-    "ancuk",
-    "ancok",
-    "ajig",
-    "anjay",
-    "anjing",
-    "anjeng",
-    "ajg",
-    "anying",
-    "asu",
-    "wasu",
-    "4su",
-    "asyu",
-    "babangus",
-    "bngst",
-    "b4ngs4t",
-    "bajing",
-    "bgst",
-    "yatim",
-    "yteam",
-    "ytim",
-    "babi",
-    "b4b1",
-    "babik",
-    "bacol",
-    "bacot",
-    "bagong",
-    "bajingan",
-    "balegug",
-    "banci",
-    "bangke",
-    "bangsat",
-    "bedebah",
-    "bedegong",
-    "bego",
-    "belegug",
-    "beloon",
-    "bencong",
-    "bloon",
-    "blo'on",
-    "bodoh",
-    "boloho",
-    "buduk",
-    "budug",
-    "celeng",
-    "cibai",
-    "cibay",
-    "cocot",
-    "cocote",
-    "kuntul",
-    "cok",
-    "cokil",
-    "colai",
-    "colay",
-    "coli",
-    "colmek",
-    "conge",
-    "congean",
-    "congek",
-    "congor",
-    "cuk",
-    "cukima",
-    "cukimai",
-    "cukimay",
-    "dancok",
-    "entot",
-    "entotan",
-    "ewe",
-    "ewean",
-    "gelo",
-    "genjik",
-    "germo",
-    "gigolo",
-    "goblo",
-    "goblog",
-    "goblok",
-    "hencet",
-    "henceut",
-    "heunceut",
-    "homo",
-    "idiot",
-    "itil",
-    "jancuk",
-    "jancok",
-    "jablay",
-    "jalang",
-    "jembut",
-    "jiancok",
-    "jilmek",
-    "jurig",
-    "kacung",
-    "kampang",
-    "kampret",
-    "kampungan",
-    "kehed",
-    "kenthu",
-    "kentot",
-    "kentu",
-    "keparat",
-    "kimak",
-    "kintil",
-    "kirik",
-    "kunyuk",
-    "kurap",
-    "konti",
-    "kontol",
-    "kopet",
-    "koplok",
-    "lacur",
-    "lebok",
-    "lonte",
-    "maho",
-    "meki",
-    "memek",
-    "monyet",
-    "ndas",
-    "ndasmu",
-    "ngehe",
-    "ngentot",
-    "nggateli",
-    "nyepong",
-    "ngewe",
-    "ngocok",
-    "pante",
-    "pantek", 
-    "patek",
-    "pathek",
-    "peju",
-    "pejuh",
-    "pecun",
-    "pecundang",
-    "pelacur",
-    "pelakor",
-    "peler",
-    "pepek",
-    "puki",
-    "pukima",
-    "pukimae",
-    "pukimak",
-    "pukimay",
-    "sepong",
-    "sial",
-    "sialan",
-    "silit",
-    "sinting",
-    "sontoloyo",
-    "tai",
-    "taik",
-    "tempek",
-    "tempik",
-    "tete",
-    "tetek",
-    "tiembokne",
-    "titit",
-    "toket",
-    "tolol",
-    "tll",
-    "ublag",
-    "udik",
-    "wingkeng",
-    "jomok",
-    "fuck",
-    "fak",
-    "kkk",
-    "kelamin",
-        "anal",
-        "anus",
-        "assfuck",
-        "asshole",
-        "assfucker",
-        "black cock",
-        "blackface",
-        "chink",
-        "clit",
-        "cock",
-        "cockfucker",
-        "cocksuck",
-        "cocksucker",
-        "coonnass",
-        "creampie",
-        "cum",
-        "cumming",
-        "cumslut",
-        "cunt",
-        "cunt",
-        "cyberfuck",
-        "ddos",
-        "dildo",
-        "douche",
-        "doxx",
-        "dyke",
-        "erection",
-        "erotic",
-        "fag",
-        "fag",
-        "faggot",
-        "fingering",
-        "fuckass",
-        "fuckhole",
-        "fucktoy",
-        "gook",
-        "hitler",
-        "hentai",
-        "homoerotic",
-        "hore",
-        "kike",
-        "killmyself",
-        "killurself",
-        "killyourself",
-        "kms",
-        "kys",
-        "mongoloid",
-        "motherfuck",
-        "motherfucker",
-        "negro",
-        "negroid",
-        "nigga",
-        "niggas",
-        "nigger",
-        "niggers",
-        "oralsex",
-        "orgasim",
-        "orgasm",
-        "pegging",
-        "penis",
-        "penisfucker",
-        "piss",
-        "porn",
-        "porno",
-        "pornography",
-        "pussy",
-        "pussyfuck",
-        "sadist",
-        "sex",
-        "shit",
-        "slut",
-        "sperm",
-        "tiddyfuck",
-        "vagina",
-        "viagra",
-        "whore",
-        "pedo"
-]   ; // Tambahkan kata-kata yang dianggap toxic
-
 const link = [
     ".com",
     ".net",
@@ -320,41 +76,36 @@ const link = [
     ".id",
     "http"
 ] ;
-// Fungsi untuk memeriksa apakah pesan mengandung link
-function containsLink(message) {
-    const lowerCasedMessage = message.toLowerCase(); // Konversi ke huruf kecil untuk pemeriksaan
-    return link.some((word) => lowerCasedMessage.includes(word));
-}
 
-// Fungsi untuk memeriksa apakah pesan mengandung kata-kata kotor
-function containsBadWords(message) {
-    const censored = profanity.exists(message); // Sensor pesan
-    return censored;
-}
+class Validator {
+    async containsLink(message) {
+        const lowerCasedMessage = message.toLowerCase(); // Konversi ke huruf kecil untuk pemeriksaan
+        return link.some((word) => lowerCasedMessage.includes(word));
+    }
 
-function BadWords(args, add) {
-    if (add) {
-        profanity.addWords([args]);
-        return "Kata-kata kotor berhasil ditambahkan.";
-    } else {
-        profanity.removeWords([args]);
-        return "Kata-kata kotor berhasil dihapus.";
+    async containsBadWords(message) {
+        const censored = profanity.exists(message); // Sensor pesan
+        return censored;
+    }
+
+    async BadWords(args, add) {
+        if (add) {
+            profanity.addWords([args]);
+            return "Kata-kata kotor berhasil ditambahkan.";
+        } else {
+            profanity.removeWords([args]);
+            return "Kata-kata kotor berhasil dihapus.";
+        }
+    }
+
+    async whitelist(args, add) {
+        if (add) {
+            profanity.whitelist.addWords([args]);
+            return "Kata-kata berhasil ditambahkan ke whitelist.";
+        } else {
+            profanity.whitelist.removeWords([args]);
+            return "Kata-kata berhasil dihapus dari whitelist.";
+        }
     }
 }
-
-function whitelist(args, add) {
-    if (add) {
-        profanity.whitelist.addWords([args]);
-        return "Kata-kata berhasil ditambahkan ke whitelist.";
-    } else {
-        profanity.whitelist.removeWords([args]);
-        return "Kata-kata berhasil dihapus dari whitelist.";
-    }
-}
-// Ekspor fungsi
-module.exports = {
-    containsLink,
-    containsBadWords,
-    BadWords,
-    whitelist
-};
+module.exports = Validator;

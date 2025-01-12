@@ -2,7 +2,8 @@ const { checkSubscription } = require("../lib/helpers");
 const ResponFormatter = require("../lib/responFormatter");
 const handlers = require("./Chizuru/handlers.js");
 const PREFIX = "/";
-const { containsBadWords, containsLink, BadWords, whitelist } = require("./Chizuru/validator.js");
+const Validator = require("./Chizuru/validator.js");
+const validator = new Validator();
 const axios = require("axios");
 const StickerWa = require("./Chizuru/stickerWa");
 
@@ -27,7 +28,7 @@ class Chizurubot {
     
     if (!message.startsWith(PREFIX))
       {
-        if (containsLink(message) && groupSettings.antiLink) {
+        if (await validator.containsLink(message) && groupSettings.antiLink) {
           await axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
             api_key: process.env.WA_BOT_API_KEY,
             sender: device,
@@ -35,7 +36,7 @@ class Chizurubot {
             key: key,
           });
           res.send(responFormatter.line("Maaf, link tidak diizinkan di grup ini.").responAsText());
-        } else if (containsBadWords(message) && groupSettings.antiToxic) {
+        } else if (await validator.containsBadWords(message) && groupSettings.antiToxic) {
           await axios.post(`${process.env.WA_BOT_URL}/delete-message`, {
             api_key: process.env.WA_BOT_API_KEY,
             sender: device,
@@ -79,16 +80,16 @@ class Chizurubot {
         case "broadcast":
           break;
         case "addbadword":
-          response = BadWords({ args, add : true });
+          response = await validator.BadWords({ args, add : true });
           break;
         case "deletebadword":
-          response = BadWords({ args, add : false });
+          response = await validator.BadWords({ args, add : false });
           break;
         case "addwhitelist":
-          response = whitelist({ args, add : true });
+          response = await validator.whitelist({ args, add : true });
           break;
         case "deletewhitelist":
-          response = whitelist({ args, add : false });
+          response = await validator.whitelist({ args, add : false });
           break;
         default:
           response = await handlers.default();
@@ -272,7 +273,7 @@ class Chizurubot {
           responFormatter.responSticker(await StickerWa.create(bufferImage))
         ); // Kirim stiker, eksekusi berhenti di sini
       } else {
-        return res.send(responFormatter.line(response).responAsText()); // Kirim teks, eksekusi berhenti di sini
+        return res.send(responFormatter.line(response).responAsText()); // line 275
       }
     }
         
