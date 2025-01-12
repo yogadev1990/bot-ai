@@ -89,6 +89,9 @@ class Validator {
     }
 
     async BadWords(args, add) {
+        if (!Array.isArray(args) || args.length === 0) {
+            return "Tidak ada kata untuk diproses.";
+        }
         if (add) {
             profanity.addWords(args);
             return "Kata-kata kotor berhasil ditambahkan.";
@@ -99,6 +102,9 @@ class Validator {
     }
 
     async whitelist(args, add) {
+        if (!Array.isArray(args) || args.length === 0) {
+            return "Tidak ada kata untuk diproses.";
+        }
         if (add) {
             profanity.whitelist.addWords(args);
             return "Kata-kata berhasil ditambahkan ke whitelist.";
