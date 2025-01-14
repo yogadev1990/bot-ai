@@ -235,45 +235,52 @@ Tingkatan padu/lock & Prof minimum:
     }
   },  
 
-  async cariMonster ({ args }) {
+  async cariMonster({ args }) {
     if (args.length < 1) {
-      return "Tuliskan nama monster yang ingin dicari setelah /monster."; 
+        return "Tuliskan nama monster yang ingin dicari setelah /monster."; 
     } else {
-      const monster = args.join("%20");
-      try {
-        const response = await axios.get(`https://toram-id.com/api/v1/monsters/search/${monster}`, auth);
-        const monsters = response.data.data;
-        
-        let monsterDetails = `*Chizuru-chan🌸*\n`;
+        const monsterName = args.join("%20");
+        try {
+            const response = await axios.get(`https://torampedia.my.id/api/v1/monster/${monsterName}`, auth);
+            const monsters = response.data.data;
 
-        monsters.forEach(monster => {
-            const name = monster.name;
-            const level = monster.level;
-			const element = monster.element.name;
-            const exp = monster.xp;
-            const hp = monster.hp;
-			const link = monster.id;
-            const location = monster.map.name;
+            if (!monsters || monsters.length === 0) {
+                return "Monster tidak ditemukan.";
+            }
 
-            const drops = monster.drops.map(drop => {
-                return `• ${drop.name} (${drop.drop_type.name})`;
-            }).join('\n');
+            let monsterDetails = `*Chizuru-chan🌸*\n\nBerikut informasi monster yang ditemukan:\n`;
 
-            monsterDetails += `\n*Nama:* ${name}\n`;
-            monsterDetails += `*Level:* ${level}\n`;
-			monsterDetails += `*Elemen:* ${element}\n`;
-            monsterDetails += `*Base Exp:* ${exp}\n`;
-            monsterDetails += `*HP:* ${hp}\n`;
-            monsterDetails += `*Lokasi:* ${location}\n`;
-            monsterDetails += `*Drops:*\n${drops}\n`;
-			monsterDetails += `*Link:* https://toram-id.com/monster/${link}\n`;
-        });
+            monsters.forEach(monster => {
+                const name = monster.name_en || monster.name_id;
+                const level = monster.level;
+                const element = monster.element || "Tidak diketahui";
+                const exp = monster.exp || "0";
+                const hp = monster.hp || "0";
+                const mapName = monster.map ? (monster.map.name_en || monster.map.name_id) : "Tidak diketahui";
+                const link = monster.id;
 
-        return monsterDetails;
-       } catch (error) {
-        return `Terjadi kesalahan dalam pencarian monster. ${error.message}`;
-    }}
+                const drops = monster.items.map(item => {
+                    return `• ${item.name_en || item.name_id} (${item.rarity || "Tidak diketahui"})`;
+                }).join('\n') || "Tidak ada informasi drop.";
+
+                monsterDetails += `\n*👹 Nama:* ${name}\n`;
+                monsterDetails += `*🎚️ Level:* ${level}\n`;
+                monsterDetails += `*🔥 Elemen:* ${element}\n`;
+                monsterDetails += `*🎖️ Base Exp:* ${exp}\n`;
+                monsterDetails += `*❤️ HP:* ${hp}\n`;
+                monsterDetails += `*📍 Lokasi:* ${mapName}\n`;
+                monsterDetails += `*📦 Drops:*\n${drops}\n`;
+                monsterDetails += `*🔗 Link:* https://toram-id.com/monster/${link}\n`;
+                monsterDetails += `═════════════════════\n`;
+            });
+
+            return monsterDetails;
+        } catch (error) {
+            return `Terjadi kesalahan dalam pencarian monster. ${error.message}`;
+        }
+    }
   },
+
 
   async racikRumus() {
     return `*Chizuru-chan🌸*
