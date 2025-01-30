@@ -24,9 +24,15 @@ class Amamiyabot {
       response = await handlers.ai(message);
     } else if (command === "analisis") {
       response = await handlers.analisis(bufferImage);
+    } else {
+      response = await handlers.default();
     }
 
-    return res.send(responFormatter.line(response).responAsText());
+    if (response) {
+      return res.send(responFormatter.line(response).responAsText());
+    } else {
+      return;
+    }
   }
 }
 
