@@ -24,7 +24,8 @@ const handlers = {
     if (!bufferImage) {
       return "Tolong kirimkan pesan dan gambar dan command /analisis.";
     }
-    const predict = await IPM.predict(bufferImage);
+    const ipm = new IPM();
+    const predict = await ipm.predict(imageBuffer);
 
     let result = "Amamiya-san\n\n";
     result += `Hasil Analisis dari gambar yang diberikan:\n`;
