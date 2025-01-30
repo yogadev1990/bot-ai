@@ -31,7 +31,8 @@ class IPM {
 
     // Jalankan prediksi
     const predictions = this.model.predict(tensor);
-    const probabilities = await predictions.data(); // Konversi tensor menjadi array
+    const softmaxPredictions = tf.softmax(predictions);
+    const probabilities = await softmaxPredictions.data(); // Konversi tensor menjadi array
 
     // Kelas yang diprediksi
     const classNames = ["Tumor Ganas (Kanker)", "Tumor Jinak"];

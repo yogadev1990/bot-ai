@@ -13,7 +13,7 @@ const handlers = {
   },
 
   async amamiya() {
-    return `*Amamiya-san*\n\nHalo rekan sejawat,\nKetik */menu* untuk membuka list command ya.`;
+    return `*Amamiya-san🩺*\n\nHalo rekan sejawat,\nKetik */menu* untuk membuka list command ya.`;
   },
 
   async ai(message) {
@@ -27,7 +27,7 @@ const handlers = {
     const ipm = new IPM();
     const predict = await ipm.predict(imageBuffer);
 
-    let result = "Amamiya-san\n\n";
+    let result = "*Amamiya-san🩺*\n\n";
     result += `Hasil Analisis dari gambar yang diberikan:\n`;
     result += `*Terdeteksi*: ${predict.prediksi}\n`;
     result += `*Kemungkinan*: ${predict.prob}\n`;
