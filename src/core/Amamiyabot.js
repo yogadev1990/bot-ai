@@ -32,6 +32,9 @@ class Amamiyabot {
         case "analisis":
           response = await handlers.analisis(bufferImage);
           break;
+        case "obat":
+          response = await handlers.obat(args.join(" "));
+          break;
         default:
           response = await handlers.default();
           break;

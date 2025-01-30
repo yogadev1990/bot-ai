@@ -1,6 +1,8 @@
 const { formatMenu } = require("./formatmenu");
 const GeminiAi = require("./geminiAI");
 const IPM = require("./ipm");
+const SatuSehatAPI = require("./satusehat");
+const obat = new SatuSehatAPI();
 
 const handlers = {
   async status() {
@@ -30,6 +32,12 @@ const handlers = {
     result += `*Terdeteksi*: ${predict.prediksi}\n`;
     result += `*Kemungkinan*: ${predict.prob}\n`;
 
+    return result;
+  },
+
+  async obat(args){
+    if (!args) return "Tolong sertakan nama obat yang ingin dicari.";
+    const result = await obat.search(args);
     return result;
   },
 
