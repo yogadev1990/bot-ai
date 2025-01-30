@@ -1,6 +1,7 @@
 const { formatMenu } = require("./formatmenu");
 const GeminiAi = require("./geminiAI");
 const IPM = require("./ipm");
+const axios = require("axios");
 
 const handlers = {
   async status() {
