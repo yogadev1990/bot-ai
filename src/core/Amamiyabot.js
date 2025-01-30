@@ -14,24 +14,31 @@ class Amamiyabot {
     const [command, ...args] = message.slice(PREFIX.length).trim().split(" ");
 
     let response;
-    if (command === "status") {
-      response = await handlers.status();
-    } else if (command === "menu") {
-      response = await handlers.menu();
-    } else if (command === "amamiya") {
-      response = await handlers.amamiya();
-    } else if (command === "ai") {
-      response = await handlers.ai(message);
-    } else if (command === "analisis") {
-      response = await handlers.analisis(bufferImage);
-    } else {
-      response = await handlers.default();
+    if (from === process.env.OWNER) {
+      switch (command) {
+        case "status":
+          response = await handlers.status();
+          break;
+        case "menu":
+          response = await handlers.menu();
+          break;
+        case "amamiya":
+          response = await handlers.amamiya();
+          break;
+        case "ai":
+          response = await handlers.ai(message);
+          break;
+        case "analisis":
+          response = await handlers.analisis(bufferImage);
+          break;
+        default:
+          response = await handlers.default();
+        break;
+      }
     }
 
     if (response) {
       return res.send(responFormatter.line(response).responAsText());
-    } else {
-      return;
     }
   }
 }
