@@ -35,7 +35,7 @@ class IPM {
     const probabilities = await softmaxPredictions.data(); // Konversi tensor menjadi array
 
     // Kelas yang diprediksi
-    const classNames = ["Tumor Ganas (Kanker)", "Tumor Jinak"];
+    const classNames = ["Tumor Ganas (Kanker)", "Bukan Tumor Ganas/Tidak terdeteksi"];
     const predictedIndex = probabilities.indexOf(Math.max(...probabilities));
 
     return {
