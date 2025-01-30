@@ -1,5 +1,6 @@
 const tf = require("@tensorflow/tfjs-node");
 const path = require("path");
+const fs = require("fs");
 
 class IPM {
   constructor() {
@@ -19,8 +20,11 @@ class IPM {
       await this.loadModel();
     }
 
-    // Ubah gambar menjadi tensor
-    const tensor = tf.node.decodeImage(imageBuffer)
+    const tempPath = `${__dirname}/../../data/temp/ipm.png`;
+    const stream = Buffer.from(imageBuffer, "base64");
+    fs.writeFileSync(tempPath, stream);
+
+    const tensor = tf.node.decodeImage(fs.readFileSync(tempPath))
       .resizeNearestNeighbor([100, 100])
       .expandDims()
       .toFloat();
