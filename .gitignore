@@ -4,5 +4,8 @@ node_modules/*
 package-lock.json
 package.json
 yarn.lock
-
+.vs
 .codegpt
+package-lock.json
+package.json
+yarn.lock
