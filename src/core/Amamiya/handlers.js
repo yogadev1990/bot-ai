@@ -21,7 +21,7 @@ const handlers = {
   },
 
   async analisis(imageBuffer) {
-    if (!bufferImage) {
+    if (!imageBuffer) {
       return "Tolong kirimkan pesan dan gambar dan command /analisis.";
     }
     const ipm = new IPM();
