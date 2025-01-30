@@ -1,15 +1,15 @@
 const ResponFormatter = require("../lib/responFormatter");
 const handlers = require("./Amamiya/handlers");
-const PREFIX = ">";
+const PREFIX = "/";
 
 class Amamiyabot {
   async process(req, res) {
-    const {
-      message,
-      bufferImage,
-      from,
-      participant,
-    } = req.body;
+    const { message, bufferImage } = req.body;
+
+    // Pastikan pesan ada dan diawali dengan prefix
+    if (!message || !message.startsWith(PREFIX)) {
+      return res.status(400).json({ error: "Invalid command or missing prefix" });
+    }
 
     const responFormatter = new ResponFormatter();
     const [command, ...args] = message.slice(PREFIX.length).trim().split(" ");
@@ -34,7 +34,7 @@ class Amamiyabot {
           break;
         default:
           response = await handlers.default();
-        break;
+          break;
       }
     }
 

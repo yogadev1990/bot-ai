@@ -6,7 +6,7 @@ class IPM {
   }
 
   static async loadModel() {
-    this.model = await tf.loadLayersModel("../../data/model_ipm/model.json");
+    this.model = await tf.loadGraphModel("../../data/model_ipm/model.json");
   }
 
   static async predict(imageBuffer) {
