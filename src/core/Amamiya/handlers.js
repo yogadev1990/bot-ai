@@ -20,7 +20,7 @@ const handlers = {
     return await GeminiAi.run(message);
   },
 
-  async analisis(bufferImage) {
+  async analisis(imageBuffer) {
     if (!bufferImage) {
       return "Tolong kirimkan pesan dan gambar dan command /analisis.";
     }
