@@ -4,7 +4,7 @@ const PREFIX = "/";
 
 class Amamiyabot {
   async process(req, res) {
-    const { message, bufferImage } = req.body;
+    const { from, message, bufferImage } = req.body;
 
     // Pastikan pesan ada dan diawali dengan prefix
     if (!message || !message.startsWith(PREFIX)) {
@@ -27,7 +27,7 @@ class Amamiyabot {
           response = await handlers.amamiya();
           break;
         case "ai":
-          response = await handlers.ai(message);
+          response = await handlers.ai(from, message);
           break;
         case "analisis":
           response = await handlers.analisis(bufferImage);

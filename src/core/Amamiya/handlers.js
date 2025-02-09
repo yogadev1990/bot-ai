@@ -13,11 +13,11 @@ const handlers = {
   },
 
   async amamiya() {
-    return `*Amamiya-san🩺*\n\nHalo rekan sejawat,\nKetik */menu* untuk membuka list command ya.`;
+    return `*𝐀𝐦𝐚𝐦𝐢𝐲𝐚-𝐒𝐞𝐧𝐬𝐞𝐢🩺*\n\nHalo rekan sejawat,\nKetik */menu* untuk membuka list command ya.`;
   },
 
-  async ai(message) {
-    return await GeminiAi.run(message);
+  async ai(from, message) {
+    return await GeminiAi.run(from, message);
   },
 
   async analisis(imageBuffer) {
@@ -27,7 +27,7 @@ const handlers = {
     const ipm = new IPM();
     const predict = await ipm.predict(imageBuffer);
 
-    let result = "*Amamiya-san🩺*\n\n";
+    let result = "*𝐀𝐦𝐚𝐦𝐢𝐲𝐚-𝐒𝐞𝐧𝐬𝐞𝐢🩺*\n\n";
     result += `Hasil Analisis dari gambar yang diberikan:\n`;
     result += `*Terdeteksi*: ${predict.prediksi}\n`;
     result += `*Kemungkinan*: ${predict.prob}\n`;
@@ -54,7 +54,7 @@ const search = async (query) => {
       const response = await axios.get(`https://api-satusehat-stg.dto.kemkes.go.id/kfa-v2/products/all?page=1&size=10&product_type=farmasi&keyword=${query}`, auth);
       const items = response.data.items.data;
 
-      let itemDetails = `*Amamiya-San*\n`;
+      let itemDetails = `*𝐀𝐦𝐚𝐦𝐢𝐲𝐚-𝐒𝐞𝐧𝐬𝐞𝐢*\n`;
 
       items.forEach(item => {
           const itemName = item.name; // Accessing the name correctly
