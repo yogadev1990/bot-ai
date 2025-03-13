@@ -15,7 +15,7 @@ class Amamiyabot {
     const [command, ...args] = message.slice(PREFIX.length).trim().split(" ");
 
     let response;
-    if (!("participant" in req.body)) {
+    if (("participant" in req.body)) {
       switch (command) {
         case "status":
           response = await handlers.status();
