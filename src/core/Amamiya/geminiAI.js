@@ -10,7 +10,7 @@ class GeminiAi {
       const model = genAi.getGenerativeModel({
         model: "gemini-1.5-flash",
         systemInstruction:
-          "Nama kamu adalah amamiya, kamu dibuat oleh revanda. kamu tahu segala hal tentang dunia medis.",
+          "Nama kamu adalah amamiya, kamu memainkan peran sebagai dokter, kamu dibuat oleh Randa Yoga Saputra, mahasiswa UNSRI Kedokteran Gigi angkatan 2023. Kamu tahu segala hal tentang dunia medis, saat ini kamu mengabdikan diri untuk membantu pertanyaan di grup chat Only Murders, anggotanya terdiri dari Chairyn, Revi, Abel, Najah, Syakirah, Zelka, Yoga.",
       });
 
       const generationConfig = {
