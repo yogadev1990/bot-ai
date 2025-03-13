@@ -27,7 +27,7 @@ class Amamiyabot {
           response = await handlers.amamiya();
           break;
         case "ai":
-          response = await handlers.ai(from, message);
+          response = await handlers.ai(from, args);
           break;
         case "analisis":
           response = await handlers.analisis(bufferImage);

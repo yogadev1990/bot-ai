@@ -16,7 +16,7 @@ const handlers = {
     return `*𝐀𝐦𝐚𝐦𝐢𝐲𝐚-𝐒𝐞𝐧𝐬𝐞𝐢🩺*\n\nHalo rekan sejawat,\nKetik */menu* untuk membuka list command ya.`;
   },
 
-  async ai(from, message) {
+  async ai(from, args) {
     if (!args || args.length === 0) {
       return "Tuliskan pesan Anda setelah /ai.";  // Prompt if no input is provided
     }
