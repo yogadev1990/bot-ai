@@ -10,7 +10,7 @@ const DyeExtractor = require("./dyeExtractor");
 const fillstat = require("./fillstat");
 const token = process.env.TORAM_API_TOKEN;
 const auth = { headers: { Authorization: `Bearer ${token}` } };
-const { checkSubscription, saveGroupSettings } = require("../../lib/helpers.js");
+const { checkSubscription, saveGroupSettings, loadSubscriptions } = require("../../lib/helpers.js");
 
 const toramnews = new ToramNews();
 const dyeExtractor = new DyeExtractor();
@@ -1690,6 +1690,37 @@ Contoh: *lvling char miniboss 200*
   async fillstats(parsedmessage) {
     const response = await fillStat.fillStat(parsedmessage);
     return response;
+  },
+
+  async broadcast(args) {
+    if (args.length < 1) {
+      return "Tuliskan pesan yang ingin disampaikan setelah /broadcast.";
+    }
+  
+    const customMessage = args.join(" ");
+    const allGroups = await loadSubscriptions();
+  
+    // Filter hanya grup dengan langganan aktif
+    const now = new Date();
+    const activeGroups = allGroups.filter((group) => new Date(group.expiryDate) > now);
+  
+    if (activeGroups.length === 0) {
+      return "Tidak ada grup yang aktif untuk menerima broadcast.";
+    }
+  
+    try {
+      for (const group of activeGroups) {
+        await axios.post(`${process.env.WA_BOT_URL}/send-message`, {
+          api_key: process.env.WA_BOT_API_KEY,
+          to: group.from, // ID grup
+          message: customMessage,
+        });
+      }
+      return `Broadcast berhasil dikirim ke ${activeGroups.length} grup.`;
+    } catch (error) {
+      console.error("Error mengaktifkan broadcast:", error);
+      return "Gagal mengaktifkan broadcast.";
+    }
   },
 
   async default() {

@@ -78,7 +78,8 @@ class Chizurubot {
         case "deletevip":
         case "listvip":
         case "broadcast":
-          break;
+          response = await handlers.broadcast({ args });
+        break;
         case "addbadword":
           response = await validator.BadWords( args, true );
           break;
