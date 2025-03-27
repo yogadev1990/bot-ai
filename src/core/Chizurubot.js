@@ -136,6 +136,9 @@ class Chizurubot {
           case "alltag":
             response = await handlers.alltag(context);
             break;
+          case "randomtag":
+            response = await handlers.randomtag(context);
+            break;
           case "chizu":
             response = await handlers.chizu(context);
             break;

@@ -1665,6 +1665,28 @@ Contoh: *lvling char miniboss 200*
       }
   },
 
+  async randomtag({ admin, botadmin, from, device }) {
+    if (!botadmin) {
+      return "Maaf, bot belum diangkat menjadi admin.";
+    }
+  
+    if (!admin) {
+      return "Maaf, perintah ini hanya bisa diakses oleh admin grup.";
+    }
+
+    const grupid = from + "@g.us";
+      try {
+        await axios.post(`${process.env.WA_BOT_URL}/tagrandom`, {
+          api_key: process.env.WA_BOT_API_KEY,
+          sender: device,
+          number: grupid,
+        });
+      } catch (error) {
+        console.error("Error mengaktifkan tags:", error);
+        return "Gagal mengaktifkan tags.";
+      }
+  },
+
   async fillstats(parsedmessage) {
     const response = await fillStat.fillStat(parsedmessage);
     return response;
