@@ -1692,7 +1692,7 @@ Contoh: *lvling char miniboss 200*
     return response;
   },
 
-  async broadcast(args) {
+  async broadcast({args, device}) {
     if (args.length < 1) {
       return "Tuliskan pesan yang ingin disampaikan setelah /broadcast.";
     }
@@ -1712,7 +1712,8 @@ Contoh: *lvling char miniboss 200*
       for (const group of activeGroups) {
         await axios.post(`${process.env.WA_BOT_URL}/send-message`, {
           api_key: process.env.WA_BOT_API_KEY,
-          to: group.from, // ID grup
+          number: group.from, // ID grup
+          sender: device,
           message: customMessage,
         });
       }
