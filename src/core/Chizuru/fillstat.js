@@ -103,7 +103,7 @@ class fillstat{
     }    
     
     async buildData(positiveStats, negativeStats, potValue, type) {
-        const paramLevel = 290; // Ubah jika ada logika berbeda
+        const paramLevel = 300; // Ubah jika ada logika berbeda
         let jenis;
         if (type === "armor" || type === "weapon") {
             jenis = type.charAt(0).toUpperCase() + type.slice(1); 
@@ -146,7 +146,7 @@ class fillstat{
         return `*Chizuru-chan🌸*
 Jenis: ${type}
 Pot: ${potValue}
-Level Karakter: 290
+Level Karakter: 300
     
 Stat akhir: 
 ${formattedStat}
