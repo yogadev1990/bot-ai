@@ -1697,7 +1697,7 @@ Contoh: *lvling char miniboss 200*
       return "Tuliskan pesan yang ingin disampaikan setelah /broadcast.";
     }
   
-    const customMessage = args.join(" ");
+    const customMessage = args.slice(0).join(" ");
     const allGroups = await loadSubscriptions();
   
     // Filter hanya grup dengan langganan aktif
