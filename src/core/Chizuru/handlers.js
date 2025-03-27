@@ -1712,8 +1712,8 @@ Contoh: *lvling char miniboss 200*
       for (const group of activeGroups) {
         await axios.post(`${process.env.WA_BOT_URL}/send-message`, {
           api_key: process.env.WA_BOT_API_KEY,
-          number: group.from, // ID grup
-          sender: device,
+          number: group.from + "@g.us",
+          sender: process.env.WA_BOT_DEVICE,
           message: customMessage,
         });
       }
